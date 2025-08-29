@@ -310,6 +310,8 @@ footer {
   text-decoration: none;
   color: $text;
   border: 1px solid $border;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backface-visibility: hidden;
 
   &:hover {
     box-shadow: $shadow-md;
@@ -350,6 +352,23 @@ footer {
     color: gold;
     font-weight: 600;
   }
+}
+
+@keyframes float2 {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Apply float to project cards when NOT hovered */
+.project-card:not(:hover) {
+  animation: float2 6s ease-in-out infinite;
 }
 
 
@@ -543,18 +562,24 @@ footer {
 }
 
 .app-card-inner {
-  background: #f8f9fa; /* Slightly darker than white */
+  background: #f8f9fa;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: $shadow-sm; /* Soft shadow */
+  box-shadow: $shadow-sm;
   border: 1px solid $border;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-style: preserve-3d;
+  position: relative;
 }
 
 .app-card:hover .app-card-inner {
-  transform: translateY(-8px);
-  box-shadow: $shadow-lg; /* Stronger on hover */
+  transform: translateY(-12px) rotateX(8deg) rotateY(4deg) scale(1.02);
+  box-shadow: 
+    0 10px 20px rgba(0,0,0,0.15),
+    0 15px 35px rgba(74, 111, 165, 0.2),
+    0 0 20px rgba(74, 111, 165, 0.15); // Glow effect
   border-color: $primary;
+  filter: brightness(1.02);
 }
 
 .app-image {
@@ -590,4 +615,140 @@ footer {
   color: #555;
   font-size: 0.95rem;
   line-height: 1.5;
+}
+
+/* === Floating Animation === */
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.5deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+/* Apply float to card when NOT hovered */
+.app-card:not(:hover) .app-card-inner {
+  animation: float 6s ease-in-out infinite;
+}
+
+
+
+
+
+
+/* === Certificates Page === */
+.certificates-container {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  line-height: 1.7;
+}
+
+.certificates-container h1 {
+  color: $primary;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.certificates-container p {
+  color: #333;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Certificates Grid */
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Certificate Card */
+.cert-card {
+  perspective: 1000px;
+}
+
+.cert-inner {
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+  border: 1px solid $border;
+  transition: all 0.3s ease;
+}
+
+.cert-card:hover .cert-inner {
+  transform: translateY(-10px) rotate(-1deg);
+  box-shadow: $shadow-lg;
+  border-color: $primary;
+}
+
+/* Header */
+.cert-header {
+  padding: 1rem;
+  background: white;
+  border-bottom: 1px solid $border;
+  text-align: center;
+}
+
+.cert-header i {
+  color: $primary;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.cert-header h3 {
+  color: $primary;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Body */
+.cert-body {
+  padding: 1rem;
+  text-align: center;
+}
+
+.cert-body img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  box-shadow: $shadow-sm;
+}
+
+.cert-desc {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+}
+
+/* Link */
+.cert-link {
+  display: block;
+  text-align: center;
+  padding: 0.7rem;
+  background: $primary;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+
+  &:hover {
+    background: darken($primary, 20%);
+  }
 }
