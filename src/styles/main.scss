@@ -1,7 +1,8 @@
 // src/styles/main.scss
 $primary: #4a6fa5;
-$font-stack: 'Inter', 'Helvetica Neue', sans-serif;
-$spacing: 1rem;
+$text: #111;
+$bg: #fdfdfd;
+$border: #ddd;
 
 * {
   margin: 0;
@@ -10,24 +11,118 @@ $spacing: 1rem;
 }
 
 body {
-  font-family: $font-stack;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
-  color: #111;
-  background: #fdfdfd;
+  color: $text;
+  background: $bg;
+  min-height: 100vh;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: $spacing * 2;
+  padding: 2rem 1rem;
 }
 
-a {
+/* === Header & Navbar === */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  border-bottom: 1px solid $border;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: $primary;
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: darken($primary, 20%);
+    color: darken($primary, 15%);
   }
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: $text;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+/* === Profile Section === */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.profile-image {
+  flex: 0 0 auto;
+
+  img {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid $primary;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    @media (max-width: 768px) {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.profile-info {
+  flex: 1;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $primary;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .bio {
+    font-size: 1.1rem;
+    color: #444;
+    margin-top: 0.5rem;
+    max-width: 600px;
+  }
+}
+
+/* === Footer === */
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid $border;
+  color: #666;
+  font-size: 0.9rem;
 }

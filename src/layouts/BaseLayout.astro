@@ -1,6 +1,5 @@
 ---
-// src/layouts/BaseLayout.astro
-const title = Astro.props.title || 'My Personal Site';
+const title = Astro.props.title || 'YioRzHe-HotaaRu';
 ---
 
 <html lang="en">
@@ -9,27 +8,29 @@ const title = Astro.props.title || 'My Personal Site';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <link rel="stylesheet" href="/styles/main.scss" />
-    <!-- Optional: Google Fonts -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div class="container">
-      <header>
-        <h1><a href="/">Your Name</a></h1>
-        <nav>
-          <a href="/about">About</a>
-          <a href="/projects">Projects</a>
-          <a href="/contact">Contact</a>
+      <!-- === Header with Navbar === -->
+      <header class="header">
+        <h1><a href="/" class="logo">YioRzHe-HotaaRu</a></h1>
+        <nav class="nav">
+          <a href="/about" class="nav-link">About</a>
+          <a href="/projects" class="nav-link">Projects</a>
+          <a href="/contact" class="nav-link">Contact</a>
         </nav>
       </header>
 
+      <!-- === Main Content === -->
       <main>
         <slot />
       </main>
 
-      <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #eee; font-size: 0.9rem; color: #666;">
-        © {new Date().getFullYear()} Your Name. Built with Astro.
+      <!-- === Footer === -->
+      <footer>
+        © {new Date().getFullYear()} YioRzHe-HotaaRu. Built with Astro.
       </footer>
     </div>
   </body>
