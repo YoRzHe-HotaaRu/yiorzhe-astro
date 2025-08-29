@@ -1,46 +1,63 @@
-# Astro Starter Kit: Basics
+# YioRzHe-HotaaRu Personal Website 🌐
 
-```sh
-npm create astro@latest -- --template basics
-```
+A clean, modern, and interactive personal website built with **Astro**, showcasing my journey as a hobbyist developer and 2D game creator.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+🚀 Live at: [https://yiorzhe.netlify.app](https://yiorzhe.netlify.app) *(coming soon)*  
+🔧 Built with: **Astro + SCSS** — no Tailwind, no bloat  
+🎮 Focused on: **Hobby coding, 2D games, open-source**
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🎯 Features
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+- ✅ **GitHub-powered stats** (auto-fetched: repos, followers)
+- ✅ **Responsive design** (mobile & desktop friendly)
+- ✅ **Dynamic Projects & Apps sections**
+- ✅ **Skills & Certificates showcase**
+- ✅ **Social links** (GitHub, Discord, Steam, LinkedIn, YouTube)
+- ✅ **Clean, custom SCSS styling** — no framework bloat
+- ✅ **Interactive hover animations** on cards
+- ✅ **Idle float effect** for a dynamic feel
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
-## 🧞 Commands
+## 🛠️ Tech Stack
 
-All commands are run from the root of the project, from a terminal:
+| Tool       | Purpose                          |
+|----------|----------------------------------|
+| **Astro** | Fast, static-site framework      |
+| **SCSS**  | Custom styling, no utility CSS   |
+| **GitHub API** | Fetch real profile data     |
+| **Font Awesome** | Icons for social links  |
+| **Simple Icons** | Skill logos (CDN)       |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
 
-## 👀 Want to learn more?
+## 📸 Screenshots
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Homepage
+![Homepage](screenshots/home.png)
+
+### Projects Page
+![Projects](screenshots/projects.png)
+
+### Apps Page
+![Apps](screenshots/apps.png)
+
+> *Add these screenshots to a `screenshots/` folder in your repo.*
+
+---
+
+## 🚀 Run Locally
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/YoRzHe-HotaaRu/yiorzhe.git
+   cd yiorzhe
+2. Install dependencies:
+   ```bash
+    npm install
+3. Start dev server:
+   ```bash
+   npm run dev
+4. Open http://localhost:4321
