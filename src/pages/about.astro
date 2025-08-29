@@ -1,9 +1,51 @@
 ---
+// src/pages/about.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About Me">
-  <h2>About Me</h2>
-  <p>I'm passionate about clean design, thoughtful code, and creating digital experiences that matter.</p>
-  <p>When I'm not coding, I'm probably hiking, reading sci-fi, or experimenting with new tools.</p>
+  <div class="about-container">
+    <h1>About Me</h1>
+
+    <section class="about-intro">
+      <p>
+        Hi, I'm <strong>YioRzHe-HotaaRu</strong>, a hobbyist developer with a passion for <strong>coding fun projects</strong> and creating <strong>2D games</strong>.
+      </p>
+      <p>
+        I started coding because I wanted to bring my game ideas to life. Since then, I've fallen in love with building small tools, experimenting with engines like <strong>Godot</strong>, and playing around with bunch of open-source projects.
+      </p>
+    </section>
+
+    <section class="about-passion">
+      <h2>What I Love</h2>
+      <ul>
+        <li><strong>2D Game Development</strong> – Designing mechanics, pixel art, and small indie-style games.</li>
+        <li><strong>Hobby Coding</strong> – Building personal tools, websites, and automations just for fun.</li>
+        <li><strong>Open Source</strong> – Learning from others and giving back to the community.</li>
+        <li><strong>DIY Tech</strong> – I run modified version of Windows and enjoy tweaking my setup for performance and clean style.</li>
+      </ul>
+    </section>
+
+    <section class="about-tools">
+      <h2>Tools I Use</h2>
+      <p>
+        My go-to stack includes <strong>C++</strong>, <strong>C#</strong>, <strong>GDScript</strong>, and <strong>JavaScript</strong>.  
+        I build games in <strong>Unity</strong> and <strong>Godot</strong>, create UIs with <strong>Astro</strong> and <strong>Vue</strong>, and deploy everything on <strong>GitHub</strong>.
+      </p>
+      <p>
+        I also enjoy using <strong>Blender</strong> for simple 3D assets and <strong>Flask</strong> for lightweight backends.
+      </p>
+    </section>
+
+    <section class="about-outro">
+      <h2>Let's Connect</h2>
+      <p>
+        I'm always open to chatting about game dev, open-source, or cool tech.  
+        Feel free to reach out on <a href="https://github.com/YoRzHe-HotaaRu" target="_blank" rel="noopener">GitHub</a> or <a href="https://discord.com/users/330997221334056971" target="_blank" rel="noopener">Discord</a>.
+      </p>
+      <p>
+        When I'm not coding, I'm probably playing on <a href="https://steamcommunity.com/id/amirhafizi177013" target="_blank" rel="noopener">Steam</a>.
+      </p>
+    </section>
+  </div>
 </BaseLayout>
