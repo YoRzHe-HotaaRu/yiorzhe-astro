@@ -1,0 +1,33 @@
+// src/styles/main.scss
+$primary: #4a6fa5;
+$font-stack: 'Inter', 'Helvetica Neue', sans-serif;
+$spacing: 1rem;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-stack;
+  line-height: 1.6;
+  color: #111;
+  background: #fdfdfd;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $spacing * 2;
+}
+
+a {
+  color: $primary;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: darken($primary, 20%);
+  }
+}
