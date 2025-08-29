@@ -1,19 +1,203 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const response = await fetch('https://api.github.com/users/YoRzHe-HotaaRu');
+const userData = await response.json();
+
+const stats = {
+  repos: userData.public_repos,
+  followers: userData.followers,
+  following: userData.following,
+};
 ---
 
 <BaseLayout title="Home">
   <div class="profile-header">
     <div class="profile-image">
-      <img src="/src/assets/avatar.png" alt="YioRzHe-HotaaRu" />
+      <img
+        src={userData.avatar_url + "?s=120"}
+        alt={userData.name || 'YioRzHe-HotaaRu'}
+        width="120"
+        height="120"
+      />
     </div>
     <div class="profile-info">
-      <h1>YioRzHe-HotaaRu</h1>
-      <p class="bio">
-        Developer, designer, and lifelong learner building cool things on the web.
-        Passionate about clean code, minimal design, and open-source.
-      </p>
+		<h1>{userData.name || 'YioRzHe-HotaaRu'}</h1>
+		<p class="bio">
+			{userData.bio || 'Developer, designer, and lifelong learner building cool things on the web.'}
+		</p>
+
+      	<!-- === Social Links === -->
+		<div class="social-links">
+		<a href="https://github.com/YoRzHe-HotaaRu" target="_blank" rel="noopener" class="social-link github">
+			<i class="fab fa-github"></i>
+			<span>GitHub</span>
+		</a>
+		<a href="https://linkedin.com/in/amir-hafizi-musa-5530b9364" target="_blank" rel="noopener" class="social-link linkedin">
+			<i class="fab fa-linkedin"></i>
+			<span>LinkedIn</span>
+		</a>
+		<a href="https://x.com/VulKan42069" target="_blank" rel="noopener" class="social-link x">
+			<i class="fa-brands fa-x-twitter"></i>
+			<span>X</span>
+		</a>
+		<a href="https://facebook.com/muhammad.ameerool" target="_blank" rel="noopener" class="social-link facebook">
+			<i class="fab fa-facebook"></i>
+			<span>Facebook</span>
+		</a>
+		<a href="https://discord.com/users/330997221334056971" target="_blank" rel="noopener" class="social-link discord">
+			<i class="fab fa-discord"></i>
+			<span>Discord</span>
+		</a>
+		<a href="https://steamcommunity.com/id/amirhafizi177013" target="_blank" rel="noopener" class="social-link steam">
+			<i class="fab fa-steam"></i>
+			<span>Steam</span>
+		</a>
+		<a href="https://youtube.com/@VectorVulKan727" target="_blank" rel="noopener" class="social-link youtube">
+			<i class="fab fa-youtube"></i>
+			<span>YouTube</span>
+		</a>
+		</div>
     </div>
   </div>
+
+  <!-- === GitHub Stats Section === -->
+  <section class="stats-section">
+    <h2>GitHub Stats</h2>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number">{stats.repos}</span>
+        <span class="stat-label">Public Repos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{stats.followers}</span>
+        <span class="stat-label">Followers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{stats.following}</span>
+        <span class="stat-label">Following</span>
+      </div>
+    </div>
+  </section>
+
+  	<!-- === Skills Section === -->
+	<section class="skills-section">
+	<h2>Skills & Knowledge</h2>
+		<div class="skills-row">
+			<!-- C++ -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/c++" alt="C++" />
+			<span>C++</span>
+			</div>
+			
+			<!-- Unity -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/unity" alt="Unity" />
+			<span>Unity</span>
+			</div>
+
+			<!-- Eclispe IDE -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/eclipseide" alt="Eclispe IDE" />
+			<span>Eclispe</span>
+			</div>
+
+			<!-- GDScript -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/godotengine" alt="Godot" />
+			<span>Godot</span>
+			</div>
+
+			<!-- HTML5 -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/html5" alt="HTML5" />
+			<span>HTML5</span>
+			</div>
+
+			<!-- CSS3 -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/css" alt="CSS3" />
+			<span>CSS3</span>
+			</div>
+
+			<!-- Flask -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/flask" alt="FLask" />
+			<span>Flask</span>
+			</div>
+
+			<!-- JavaScript -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" />
+			<span>JavaScript</span>
+			</div>
+
+			<!-- React -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/react" alt="React" />
+			<span>React</span>
+			</div>
+
+			<!-- Vue.js -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/vuedotjs" alt="Vue.js" />
+			<span>Vue.js</span>
+			</div>
+
+			<!-- Astro -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/astro" alt="Astro" />
+			<span>Astro</span>
+			</div>
+
+			<!-- Sass (SCSS) -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/sass" alt="Sass" />
+			<span>SCSS</span>
+			</div>
+
+			<!-- Laravel -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/laravel" alt="Laravel" />
+			<span>Laravel</span>
+			</div>
+
+			<!-- PHP -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/php" alt="PHP" />
+			<span>PHP</span>
+			</div>
+
+			<!-- Docker -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/docker" alt="Docker" />
+			<span>Docker</span>
+			</div>
+
+			<!-- Wine -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/wine" alt="Wine" />
+			<span>Wine</span>
+			</div>
+
+			<!-- Arch Linux -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/archlinux" alt="Arch Linux" />
+			<span>Arch Linux</span>
+			</div>
+
+			<!-- ArcGIS -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/arcgis" alt="ArcGIS" />
+			<span>ArcGIS</span>
+			</div>
+
+			<!-- Blender -->
+			<div class="skill-icon">
+			<img src="https://cdn.simpleicons.org/blender" alt="Blender" />
+			<span>Blender</span>
+			</div>
+		</div>
+	</section>
 </BaseLayout>

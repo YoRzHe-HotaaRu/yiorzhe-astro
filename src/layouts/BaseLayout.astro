@@ -8,12 +8,21 @@ const title = Astro.props.title || 'YioRzHe-HotaaRu';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    
+    <!-- Add Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+    />
+
+    <!-- Your styles -->
     <link rel="stylesheet" href="/src/styles/global.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div class="container">
-      <!-- === Header with Navbar === -->
       <header class="header">
         <h1><a href="/" class="logo">YioRzHe-HotaaRu</a></h1>
         <nav class="nav">
@@ -23,12 +32,10 @@ const title = Astro.props.title || 'YioRzHe-HotaaRu';
         </nav>
       </header>
 
-      <!-- === Main Content === -->
       <main>
         <slot />
       </main>
 
-      <!-- === Footer === -->
       <footer>
         © {new Date().getFullYear()} YioRzHe-HotaaRu. Built with Astro.
       </footer>
