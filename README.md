@@ -1,5 +1,7 @@
 # YioRzHe-HotaaRu Personal Website 🌐
-
+[![GitHub stars](https://img.shields.io/github/stars/YoRzHe-HotaaRu/yiorzhe?style=social)](https://github.com/YoRzHe-HotaaRu/yiorzhe)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Built with Astro](https://img.shields.io/badge/built%20with-Astro-326DE6)](https://astro.build)
 A clean, modern, and interactive personal website built with **Astro**, showcasing my journey as a hobbyist developer and 2D game creator.
 
 🚀 Live at: [https://yiorzhe.netlify.app](https://yiorzhe.netlify.app) *(coming soon)*  
