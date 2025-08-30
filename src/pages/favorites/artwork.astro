@@ -1,0 +1,480 @@
+---
+// src/pages/favorites/artwork.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Define the type for an artwork
+interface Artwork {
+  id: string;
+  title: string;
+  artist: string;
+  artistHandle: string;
+  imageUrl: string;
+  link: string;
+  description?: string;
+  game: 'genshin' | 'wuthering-waves' | 'other';
+  size: 'small' | 'medium' | 'large' | 'wide' | 'tall';
+}
+
+// List of favorite artworks from X.com
+const favoriteArtworks: Artwork[] = [
+  {
+    id: "artwork-1",
+    title: "Wuthering Waves Character Art",
+    artist: "YaoYao",
+    artistHandle: "@Yaoyaobae",
+    imageUrl: "https://pbs.twimg.com/media/GzcbZgdaYAAzWFd?format=jpg&name=medium",
+    link: "https://x.com/Yaoyaobae/status/1961066301591318702",
+    description: "Daybreak",
+    game: "wuthering-waves",
+    size: "large"
+  },
+  {
+    id: "artwork-2",
+    title: "Augusta & Iuno",
+    artist: "眉稔",
+    artistHandle: "@aaapair",
+    imageUrl: "https://pbs.twimg.com/media/GzkXW1vawAEudxq?format=jpg&name=small",
+    link: "https://x.com/aaapair/status/1961624821508497545",
+    description: "Beautiful rendition of Genshin characters",
+    game: "wuthering-waves",
+    size: "wide"
+  },
+  {
+    id: "artwork-3",
+    title: "Cycle of Sun and Moon | Dawnlight",
+    artist: "Wuthering Waves",
+    artistHandle: "@Wuthering_Waves",
+    imageUrl: "https://pbs.twimg.com/media/GzgXYVHbYAACw98?format=jpg&name=small",
+    link: "https://x.com/Wuthering_Waves/status/1961730621232877818",
+    description: "As dawn arrives, she brightens the long night with her blade, sparking an unwavering flame of hope.",
+    game: "wuthering-waves",
+    size: "medium"
+  },
+  {
+    id: "artwork-4",
+    title: "Ineffa, Citlali, Mualani and Chasca",
+    artist: "茶の離❖",
+    artistHandle: "@cha_hanare",
+    imageUrl: "https://pbs.twimg.com/media/GytU_AyWkAATt1z?format=jpg&name=small",
+    link: "https://twitter.com/artvision/status/1234567893",
+    description: "Even though the seasons pass, our story continues.",
+    game: "genshin",
+    size: "medium"
+  },
+  {
+    id: "artwork-5",
+    title: "Majestic Shorekeeper",
+    artist: "Tam",
+    artistHandle: "@Tam1524",
+    imageUrl: "https://pbs.twimg.com/media/GyUu4Hza4AAZynO?format=jpg&name=small",
+    link: "https://x.com/Tam1524/status/1956021296116195544",
+    description: "Majestic view of Shorekeeper",
+    game: "wuthering-waves",
+    size: "medium"
+  },
+  {
+    id: "artwork-6",
+    title: "Yoimiya hanabi!!",
+    artist: "みず🌼通販公開中",
+    artistHandle: "@omiz_gnsn",
+    imageUrl: "https://pbs.twimg.com/media/Gt-NGQoboAA7LC2?format=jpg&name=small",
+    link: "https://x.com/omiz_gnsn/status/1936421736255533184",
+    description: "Beautiful artwork of Yoimiya!",
+    game: "genshin",
+    size: "small"
+  },
+  {
+    id: "artwork-7",
+    title: "Ciaccona",
+    artist: "Wuthering Waves",
+    artistHandle: "@Wuthering_Waves",
+    imageUrl: "https://pbs.twimg.com/media/GreDDwHawAEOAgW?format=jpg&name=small",
+    link: "https://x.com/Wuthering_Waves/status/1925386131258130927",
+    description: "I'll have the wind carry it across time's endless sea, echoing in eternity.",
+    game: "wuthering-waves",
+    size: "wide"
+  },
+  {
+    id: "artwork-8",
+    title: "Lynette Art",
+    artist: "Genshin Impact",
+    artistHandle: "@World1mpact",
+    imageUrl: "https://pbs.twimg.com/media/GzhogyVXAAApCNi?format=jpg&name=small",
+    link: "https://twitter.com/creativesoul/status/1234567897",
+    description: "Lynette embracing the world",
+    game: "genshin",
+    size: "small"
+  }
+];
+---
+
+<BaseLayout title="Favorite Artwork">
+  <div class="favorite-page-container">
+    <div class="favorite-header">
+      <h1>My Favorite Artwork 🌠</h1>
+      <p>A collection of stunning anime artwork from X.com featuring games like Genshin Impact and Wuthering Waves</p>
+    </div>
+    
+    <!-- Game Filters -->
+    <div class="artwork-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="genshin">Genshin Impact</button>
+      <button class="filter-btn" data-filter="wuthering-waves">Wuthering Waves</button>
+    </div>
+    
+    <div class="artwork-gallery">
+      {favoriteArtworks.map((artwork) => (
+        <a href={artwork.link} target="_blank" rel="noopener" class={`artwork-item artwork-${artwork.size} artwork-${artwork.game}`} data-id={artwork.id}>
+          <div class="artwork-image-container">
+            <img src={artwork.imageUrl} alt={artwork.title} />
+            <div class="artwork-overlay">
+              <div class="artwork-info">
+                <h3>{artwork.title}</h3>
+                <p class="artist">by {artwork.artist} <span class="handle">{artwork.artistHandle}</span></p>
+                {artwork.description && <p class="description">{artwork.description}</p>}
+              </div>
+              <button class="visit-btn">View on X.com</button>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="back-section">
+      <a href="/about" class="back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to About Me
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Simple filtering functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const artworkItems = document.querySelectorAll('.artwork-item');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          const filter = button.getAttribute('data-filter');
+          
+          // Show/hide artwork items
+          artworkItems.forEach(item => {
+            if (filter === 'all' || item.classList.contains(`artwork-${filter}`)) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .favorite-page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .favorite-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .favorite-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .favorite-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #637cce, #8da7f0);
+      border-radius: 2px;
+    }
+    
+    .favorite-header p {
+      color: #666;
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+    }
+    
+    /* Artwork Filters */
+    .artwork-filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border: none;
+      border-radius: 30px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: #e0e8ff;
+    }
+    
+    .filter-btn.active {
+      background: #637cce;
+      color: white;
+    }
+    
+    /* Artwork Gallery - Collage Style */
+    .artwork-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 15px;
+      grid-auto-flow: dense;
+    }
+    
+    .artwork-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .artwork-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    /* Different sizes for collage effect */
+    .artwork-small {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    
+    .artwork-medium {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+    
+    .artwork-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    
+    .artwork-wide {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    
+    .artwork-tall {
+      grid-column: span 1;
+      grid-row: span 3;
+    }
+    
+    .artwork-image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .artwork-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    
+    .artwork-item:hover .artwork-image-container img {
+      filter: blur(4px);
+      transform: scale(1.05);
+    }
+    
+    .artwork-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    
+    .artwork-item:hover .artwork-overlay {
+      opacity: 1;
+    }
+    
+    .artwork-info {
+      margin-bottom: 1rem;
+    }
+    
+    .artwork-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+      color: white;
+    }
+    
+    .artwork-info .artist {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.5rem;
+    }
+    
+    .artwork-info .handle {
+      color: #637cce;
+      font-weight: 500;
+    }
+    
+    .artwork-info .description {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+    }
+    
+    .visit-btn {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .visit-btn:hover {
+      background: white;
+      transform: scale(1.05);
+    }
+    
+    .back-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    
+    .back-btn:hover {
+      background: #e0e8ff;
+      transform: translateY(-2px);
+    }
+    
+    /* Game-specific styling */
+    .artwork-genshin {
+      border: 2px solid transparent;
+    }
+    
+    .artwork-genshin:hover {
+      border-color: #ffd700;
+    }
+    
+    .artwork-wuthering-waves {
+      border: 2px solid transparent;
+    }
+    
+    .artwork-wuthering-waves:hover {
+      border-color: #87ceeb;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .artwork-large {
+        grid-column: span 1;
+      }
+      
+      .artwork-wide {
+        grid-column: span 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .artwork-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 150px;
+      }
+      
+      .artwork-medium,
+      .artwork-tall {
+        grid-row: span 1;
+      }
+      
+      .artwork-info h3 {
+        font-size: 1rem;
+      }
+      
+      .artwork-info .artist {
+        font-size: 0.8rem;
+      }
+      
+      .artwork-info .description {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .favorite-header h1 {
+        font-size: 2rem;
+      }
+      
+      .artwork-gallery {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .artwork-filters {
+        gap: 0.5rem;
+      }
+      
+      .filter-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</BaseLayout>

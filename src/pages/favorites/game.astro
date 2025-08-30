@@ -1,0 +1,372 @@
+---
+// src/pages/favorites/game.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Define the type for a game
+interface Game {
+  id: string;
+  title: string;
+  steamId?: string; // Steam App ID
+  imageUrl?: string; // Custom image URL for non-Steam games
+  link: string;
+  description?: string;
+  size: 'small' | 'medium' | 'large' | 'wide' | 'tall';
+}
+
+// Helper function to generate Steam image URL
+const getSteamImageUrl = (steamId: string) => {
+  return `https://steamcdn-a.akamaihd.net/steam/apps/${steamId}/header.jpg`;
+};
+
+// List of favorite games
+const favoriteGames: Game[] = [
+  {
+    id: "zelda",
+    title: "The Legend of Zelda: Breath of the Wild",
+    imageUrl: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQjFusWuuyKxaaNq2UtI3tFyGueBbQl2k43k-P0tNWBR2STpExjD77pxK3Uy-47zPbTDNYXng", // Not on Steam, so we need a custom image
+    link: "https://www.zelda.com/breath-of-the-wild/",
+    description: "An open-world adventure that redefined exploration",
+    size: "large"
+  },
+  {
+    id: "horizon5",
+    title: "Forza Horizon 5",
+    steamId: "1551360", // Steam App ID
+    link: "https://store.steampowered.com/app/1551360/Forza_Horizon_5/",
+    description: "Explore the vibrant open world landscapes of Mexico with limitless, fun driving action in the world’s greatest cars.",
+    size: "wide"
+  },
+  {
+    id: "witcher",
+    title: "The Witcher 3: Wild Hunt",
+    steamId: "292030", // Steam App ID
+    link: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/",
+    description: "Epic fantasy RPG with rich storytelling",
+    size: "wide"
+  },
+  {
+    id: "dont-make-love",
+    title: "Don't Make Love",
+    steamId: "723890", // Steam App ID
+    link: "https://store.steampowered.com/app/723890/Dont_Make_Love/",
+    description: "Assume the role of a praying mantis in a relationship dilemma.",
+    size: "wide"
+  },
+  {
+    id: "red-dead",
+    title: "Red Dead Redemption 2",
+    steamId: "1174180", // Steam App ID
+    link: "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/",
+    description: "Immersive Wild West experience",
+    size: "wide"
+  },
+  {
+    id: "cyberpunk",
+    title: "Cyberpunk 2077",
+    steamId: "1091500", // Steam App ID
+    link: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/",
+    description: "Futuristic open-world RPG",
+    size: "small"
+  },
+  {
+    id: "minecraft",
+    title: "Minecraft",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/b/b6/Minecraft_2024_cover_art.png", // Not on Steam
+    link: "https://www.minecraft.net/",
+    description: "Creative sandbox with endless possibilities",
+    size: "small"
+  },
+  {
+    id: "among-us",
+    title: "Among Us",
+    steamId: "945360", // Steam App ID
+    link: "https://store.steampowered.com/app/945360/Among_Us/",
+    description: "Social deduction multiplayer fun",
+    size: "wide"
+  },
+  {
+    id: "wuthering-waves",
+    title: "Wuthering Waves",
+    steamId: "3513350", // Steam App ID
+    imageUrl: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3513350/c869241f46ebe61023a25a064bf2ab814c697587/header.jpg?t=1756342405",
+    link: "https://store.steampowered.com/app/3513350/Wuthering_Waves/",
+    description: "Story-rich open-world action RPG with a high degree of freedom.",
+    size: "wide"
+  }
+];
+
+// Process games to get image URLs
+const processedGames = favoriteGames.map(game => {
+  return {
+    ...game,
+    imageUrl: game.imageUrl || (game.steamId ? getSteamImageUrl(game.steamId) : "/images/default-game.jpg")
+  };
+});
+---
+
+<BaseLayout title="Favorite Games">
+  <div class="favorite-page-container">
+    <div class="favorite-header">
+      <h1>My Favorite Games 🎮</h1>
+      <p>A collection of games that have inspired me and provided countless hours of entertainment</p>
+    </div>
+    
+    <div class="games-gallery">
+      {processedGames.map((game) => (
+        <a href={game.link} target="_blank" rel="noopener" class={`game-item game-${game.size}`} data-id={game.id}>
+          <div class="game-image-container">
+            <img src={game.imageUrl} alt={game.title} />
+            <div class="game-overlay">
+              <div class="game-info">
+                <h3>{game.title}</h3>
+                {game.description && <p>{game.description}</p>}
+              </div>
+              <button class="visit-btn">Visit Game Page</button>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="back-section">
+      <a href="/about" class="back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to About Me
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .favorite-page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      padding-top: 0px;
+    }
+    
+    .favorite-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .favorite-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .favorite-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #637cce, #8da7f0);
+      border-radius: 2px;
+    }
+    
+    .favorite-header p {
+      color: #666;
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+    }
+    
+    /* Games Gallery - Collage Style */
+    .games-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 15px;
+      grid-auto-flow: dense;
+    }
+    
+    .game-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .game-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    /* Different sizes for collage effect */
+    .game-small {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    
+    .game-medium {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+    
+    .game-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    
+    .game-wide {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    
+    .game-tall {
+      grid-column: span 1;
+      grid-row: span 3;
+    }
+    
+    .game-image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .game-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    
+    .game-item:hover .game-image-container img {
+      filter: blur(4px);
+      transform: scale(1.05);
+    }
+    
+    .game-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    
+    .game-item:hover .game-overlay {
+      opacity: 1;
+    }
+    
+    .game-info {
+      margin-bottom: 1rem;
+    }
+    
+    .game-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+    
+    .game-info p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+    }
+    
+    .visit-btn {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .visit-btn:hover {
+      background: white;
+      transform: scale(1.05);
+    }
+    
+    .back-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    
+    .back-btn:hover {
+      background: #e0e8ff;
+      transform: translateY(-2px);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .game-large {
+        grid-column: span 1;
+      }
+      
+      .game-wide {
+        grid-column: span 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .games-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 150px;
+      }
+      
+      .game-medium,
+      .game-tall {
+        grid-row: span 1;
+      }
+      
+      .game-info h3 {
+        font-size: 1rem;
+      }
+      
+      .game-info p {
+        font-size: 0.8rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .favorite-header h1 {
+        font-size: 2rem;
+      }
+      
+      .games-gallery {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+  </style>
+</BaseLayout>

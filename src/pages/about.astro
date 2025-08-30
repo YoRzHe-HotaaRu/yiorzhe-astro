@@ -5,47 +5,379 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout title="About Me">
   <div class="about-container">
-    <h1>About Me</h1>
-
-    <section class="about-intro">
-      <p>
-        Hi, I'm <strong>YioRzHe-HotaaRu</strong>, a hobbyist developer with a passion for <strong>coding fun projects</strong> and creating <strong>2D games</strong>.
-      </p>
-      <p>
-        I started coding because I wanted to bring my game ideas to life. Since then, I've fallen in love with building small tools, experimenting with engines like <strong>Godot</strong>, and playing around with bunch of open-source projects.
-      </p>
+    <!-- About Me Section -->
+    <section class="about-section">
+      <div class="about-content">
+        <div class="about-image">
+          <img src="/images/profile.jpg" alt="Profile" />
+        </div>
+        <div class="about-text">
+          <h1>About Me 🎓</h1>
+          <p>Hello! I'm a passionate developer and researcher with a love for creating innovative solutions. My journey in tech started with a curiosity about how things work, and it has evolved into a career focused on building meaningful applications and contributing to research in various fields.</p>
+          <p>When I'm not coding or writing research papers, I enjoy exploring my favorite games, shows, and music. These interests not only provide entertainment but also inspire creativity and new perspectives in my professional work.</p>
+          <div class="about-skills">
+            <span>Web Development</span>
+            <span>Machine Learning</span>
+            <span>Research</span>
+            <span>UI/UX Design</span>
+            <span>Game Development</span>
+            <span>OS Tweaks</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="about-passion">
-      <h2>What I Love</h2>
-      <ul>
-        <li><strong>2D Game Development</strong> – Designing mechanics, pixel art, and small indie-style games.</li>
-        <li><strong>Hobby Coding</strong> – Building personal tools, websites, and automations just for fun.</li>
-        <li><strong>Open Source</strong> – Learning from others and giving back to the community.</li>
-        <li><strong>DIY Tech</strong> – I run modified version of Windows and enjoy tweaking my setup for performance and clean style.</li>
-      </ul>
-    </section>
+    <!-- Favorites Section -->
+    <section class="favorites-section">
+      <h2>My Favorites</h2>
+      <p>Here are some of my favorite games, shows, and songs that inspire me:</p>
+      
+      <div class="favorites-grid">
+        <!-- Favorite Game Card -->
+        <div class="favorite-card game-card">
+          <div class="card-background" style="background-image: url('https://pbs.twimg.com/media/GzVwOEca4AACEza?format=jpg&name=small')"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                <path d="M6 12h4"></path>
+                <path d="M14 12h4"></path>
+              </svg>
+            </div>
+            <h3>Favorite Game</h3>
+            <p>Digital Games Collection</p>
+            <p class="card-description">A selection of games that inspired my passion.</p>
+          </div>
+          <div class="card-hover-overlay">
+            <a href="/favorites/game" class="card-button">
+              Explore Game
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
 
-    <section class="about-tools">
-      <h2>Tools I Use</h2>
-      <p>
-        My go-to stack includes <strong>C++</strong>, <strong>C#</strong>, <strong>GDScript</strong>, and <strong>JavaScript</strong>.  
-        I build games in <strong>Unity</strong> and <strong>Godot</strong>, create UIs with <strong>Astro</strong> and <strong>Vue</strong>, and deploy everything on <strong>GitHub</strong>.
-      </p>
-      <p>
-        I also enjoy using <strong>Blender</strong> for simple 3D assets and <strong>Flask</strong> for lightweight backends.
-      </p>
-    </section>
+        <!-- Favorite Show Card -->
+        <div class="favorite-card show-card">
+          <div class="card-background" style="background-image: url('https://m.media-amazon.com/images/M/MV5BNmRhNzY1MjYtNTMzMy00YjQ4LWFmMDctMmY4ZWI1YjkxM2MyXkEyXkFqcGc@._V1_.jpg')"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </div>
+            <h3>Favorite Show</h3>
+            <p>Digital Shows Collection</p>
+            <p class="card-description">A collection of my all time favourite show to watch </p>
+          </div>
+          <div class="card-hover-overlay">
+            <a href="/favorites/show" class="card-button">
+              Explore Show
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
 
-    <section class="about-outro">
-      <h2>Let's Connect</h2>
-      <p>
-        I'm always open to chatting about game dev, open-source, or cool tech.  
-        Feel free to reach out on <a href="https://github.com/YoRzHe-HotaaRu" target="_blank" rel="noopener">GitHub</a> or <a href="https://discord.com/users/330997221334056971" target="_blank" rel="noopener">Discord</a>.
-      </p>
-      <p>
-        When I'm not coding, I'm probably playing on <a href="https://steamcommunity.com/id/amirhafizi177013" target="_blank" rel="noopener">Steam</a>.
-      </p>
+        <!-- Favorite Song Card -->
+        <div class="favorite-card song-card">
+          <div class="card-background" style="background-image: url('https://i.pinimg.com/736x/94/fd/dd/94fddde6c6ae46a9d30d2a3de8371dbc.jpg')"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+              </svg>
+            </div>
+            <h3>Favorite Song</h3>
+            <p>Song Playlist Collection</p>
+            <p class="card-description">A masterpiece that blends different musical styles seamlessly.</p>
+          </div>
+          <div class="card-hover-overlay">
+            <a href="/favorites/song" class="card-button">
+              Explore Song
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- NEW: Favorite Artwork Card -->
+        <div class="favorite-card artwork-card">
+          <div class="card-background" style="background-image: url('https://pbs.twimg.com/media/Gt8F78YWkAAFA5s?format=jpg&name=small')"></div>
+          <div class="card-content">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <h3>Favorite Artwork</h3>
+            <p>Digital Art Collection</p>
+            <p class="card-description">A curated selection of digital artworks that inspire my creativity.</p>
+          </div>
+          <div class="card-hover-overlay">
+            <a href="/favorites/artwork" class="card-button">
+              Explore Artwork
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
     </section>
   </div>
+
+  <style>
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      padding-top: 0px;
+    }
+
+    /* About Section */
+    .about-section {
+      margin-bottom: 4rem;
+    }
+
+    .about-content {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-image {
+      flex: 0 0 300px;
+      height: 300px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-text {
+      flex: 1;
+    }
+
+    .about-text h1 {
+        color: #637cce;
+        font-size: 2.8rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .about-text h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #637cce, #8da7f0);
+      border-radius: 2px;
+    }
+
+    .about-text p {
+      margin-bottom: 1.5rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .about-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .about-skills span {
+      background: #f0f4ff;
+      color: #637cce;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Favorites Section */
+    .favorites-section {
+      text-align: center;
+    }
+
+    .favorites-section h2 {
+      font-size: 2.2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .favorites-section p {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    /* Favorite Cards */
+    .favorite-card {
+      position: relative;
+      height: 400px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .favorite-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .card-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+    }
+
+    .card-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+      color: white;
+      z-index: 2;
+      transition: filter 0.3s ease;
+    }
+
+    .card-icon {
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .card-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-content p {
+      margin-bottom: 0.25rem;
+    }
+
+    .card-description {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .card-hover-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 3;
+      backdrop-filter: blur(5px);
+    }
+
+    .favorite-card:hover .card-hover-overlay {
+      opacity: 1;
+    }
+
+    .favorite-card:hover .card-content {
+      filter: blur(4px);
+    }
+
+    .card-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: #333;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .about-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .about-image {
+        flex: 0 0 auto;
+        width: 250px;
+        height: 250px;
+        margin: 0 auto 2rem;
+      }
+      
+      .about-text h1::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .about-skills {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .favorites-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .favorite-card {
+        height: 350px;
+      }
+    }
+  </style>
 </BaseLayout>

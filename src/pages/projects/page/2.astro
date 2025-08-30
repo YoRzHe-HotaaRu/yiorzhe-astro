@@ -1,6 +1,6 @@
 ---
-// src/pages/projects.astro
-import BaseLayout from '../layouts/BaseLayout.astro';
+// src/pages/projects/page/2.astro
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 // Define the type for a GitHub repo
 interface Repo {
@@ -20,21 +20,21 @@ const repos = await response.json();
 // Filter out forks
 const filteredRepos = repos.filter((repo: any) => !repo.fork) as Repo[];
 
-// Paginate: Page 1 (0-3)
+// Paginate: Page 2 (4-7)
 const projectsPerPage = 4;
 const totalProjects = filteredRepos.length;
 const totalPages = Math.ceil(totalProjects / projectsPerPage);
-const currentPage = 1;
+const currentPage = 2;
 const start = (currentPage - 1) * projectsPerPage;
 const end = start + projectsPerPage;
 const paginatedRepos = filteredRepos.slice(start, end);
 ---
 
-<BaseLayout title="My Projects">
+<BaseLayout title="My Projects - Page 2">
   <div class="projects-container">
     <div class="projects-header">
       <h1>My Projects 🗃️</h1>
-      <p>Here are my most recent GitHub repositories. Each represents a unique challenge and learning experience in my development journey.</p>
+      <p>More repositories from my development journey.</p>
     </div>
 
     <div class="projects-grid">
@@ -78,10 +78,9 @@ const paginatedRepos = filteredRepos.slice(start, end);
 
     <!-- Pagination -->
     <div class="pagination">
-      <span class="page-info">Page 1 of {totalPages}</span>
-      {totalPages > 1 && (
-        <a href="/projects/page/2" class="btn-next">Next →</a>
-      )}
+      <a href="/projects" class="btn-prev">← Previous</a>
+      <span class="page-info">Page 2 of {totalPages}</span>
+      {end < totalProjects && <a href="/projects/page/3" class="btn-next">Next →</a>}
     </div>
   </div>
 </BaseLayout>
