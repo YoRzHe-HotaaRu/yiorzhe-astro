@@ -330,7 +330,7 @@ footer {
 .projects-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 0rem 1.5rem;
 }
 
 .projects-header {
@@ -339,7 +339,7 @@ footer {
 
   h1 {
     font-size: 2.8rem;
-    color: $primary;
+    color: #2c3e50;
     margin-bottom: 1rem;
     position: relative;
     display: inline-block;
@@ -678,7 +678,7 @@ footer {
 }
 
 .contact-container h1 {
-  color: $primary;
+  color: #2c3e50;
   font-size: 2.8rem;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -918,250 +918,8 @@ footer {
 
 
 
-/* === Apps Page === */
-.apps-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  line-height: 1.7;
-}
-
-.apps-container h1 {
-  color: $primary;
-  font-size: 2.8rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, $primary, lighten($primary, 20%));
-    border-radius: 2px;
-  }
-}
-
-.apps-container p {
-  color: #333;
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto 2.5rem;
-}
-
-/* Apps Grid */
-.apps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-/* App Card */
-.app-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  perspective: 1000px;
-}
-
-.app-card-inner {
-  background: #f8f9fa;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: $shadow-sm;
-  border: 1px solid $border;
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  transform-style: preserve-3d;
-  position: relative;
-}
-
-.app-card:hover .app-card-inner {
-  transform: translateY(-12px) rotateX(8deg) rotateY(4deg) scale(1.02);
-  box-shadow: 
-    0 10px 20px rgba(0,0,0,0.15),
-    0 15px 35px rgba(74, 111, 165, 0.2),
-    0 0 20px rgba(74, 111, 165, 0.15); // Glow effect
-  border-color: $primary;
-  filter: brightness(1.02);
-}
-
-.app-image {
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-}
-
-.app-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease, filter 0.4s ease;
-}
-
-.app-card:hover .app-image img {
-  transform: scale(1.05);
-  filter: blur(1px);
-}
-
-.app-info {
-  padding: 1.2rem;
-  background: #fff8fe; /* Same as card */
-}
-
-.app-info h3 {
-  color: $primary;
-  margin-bottom: 0.5rem;
-  font-size: 1.3rem;
-}
-
-.app-info p {
-  color: #555;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-/* === Floating Animation === */
-@keyframes float {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-4px) rotate(-0.5deg);
-  }
-  50% {
-    transform: translateY(-6px) rotate(0.5deg);
-  }
-  75% {
-    transform: translateY(-4px) rotate(-0.5deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-}
-
-/* Apply float to card when NOT hovered */
-.app-card:not(:hover) .app-card-inner {
-  animation: float 6s ease-in-out infinite;
-}
 
 
-
-
-
-
-/* === Certificates Page === */
-.certificates-container {
-  max-width: 1000px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-  line-height: 1.7;
-}
-
-.certificates-container h1 {
-  color: $primary;
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.certificates-container p {
-  color: #333;
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto 2.5rem;
-}
-
-/* Certificates Grid */
-.certificates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-/* Certificate Card */
-.cert-card {
-  perspective: 1000px;
-}
-
-.cert-inner {
-  background: #f8f9fa;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: $shadow-sm;
-  border: 1px solid $border;
-  transition: all 0.3s ease;
-}
-
-.cert-card:hover .cert-inner {
-  transform: translateY(-10px) rotate(-1deg);
-  box-shadow: $shadow-lg;
-  border-color: $primary;
-}
-
-/* Header */
-.cert-header {
-  padding: 1rem;
-  background: white;
-  border-bottom: 1px solid $border;
-  text-align: center;
-}
-
-.cert-header i {
-  color: $primary;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.cert-header h3 {
-  color: $primary;
-  font-size: 1.2rem;
-  margin: 0;
-}
-
-/* Body */
-.cert-body {
-  padding: 1rem;
-  text-align: center;
-}
-
-.cert-body img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin: 0.5rem 0;
-  box-shadow: $shadow-sm;
-}
-
-.cert-desc {
-  color: #555;
-  font-size: 0.95rem;
-  margin: 0.5rem 0;
-}
-
-/* Link */
-.cert-link {
-  display: block;
-  text-align: center;
-  padding: 0.7rem;
-  background: $primary;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background 0.2s;
-
-  &:hover {
-    background: darken($primary, 20%);
-  }
-}
 
 
 

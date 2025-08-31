@@ -1,0 +1,450 @@
+---
+// src/pages/ai.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Function to extract domain from URL
+function getDomain(url: string): string {
+  try {
+    const domain = new URL(url).hostname;
+    return domain.startsWith('www.') ? domain.substring(4) : domain;
+  } catch (e) {
+    return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  }
+}
+
+// Define the AI LLM data
+const aiModels = [
+  { name: "Z.AI", url: "https://chat.z.ai/", category: "General AI" },
+  { name: "Qwen", url: "https://chat.qwen.ai/", category: "Multilingual AI" },
+  { name: "Kimi", url: "https://www.kimi.com/", category: "Conversational AI" },
+  { name: "Deepseek", url: "https://chat.deepseek.com/", category: "Code Assistant" },
+  { name: "MiniMax", url: "https://chat.minimax.io/", category: "Creative AI" },
+  { name: "Baidu Ernie", url: "https://ernie.baidu.com/", category: "Chinese AI" },
+  { name: "Manus", url: "https://manus.im/app", category: "Writing Assistant" },
+  { name: "Grok", url: "https://grok.com/", category: "Real-time AI" },
+  { name: "Gemini", url: "https://gemini.google.com/app", category: "Multimodal AI" },
+  { name: "ChatGPT", url: "https://chatgpt.com/", category: "General AI" },
+  { name: "Mistral", url: "https://chat.mistral.ai/chat", category: "Open Source AI" },
+  { name: "Liquid", url: "https://playground.liquid.ai/chat", category: "Creative AI" },
+  { name: "Venice", url: "https://venice.ai/chat", category: "Privacy AI" },
+  { name: "CoPilot", url: "https://copilot.microsoft.com/chats/", category: "Productivity AI" },
+  { name: "Mercury", url: "https://chat.inceptionlabs.ai/", category: "Research AI" }
+];
+
+// Add domain and favicon URL to each model
+const aiModelsWithIcons = aiModels.map(ai => {
+  const domain = getDomain(ai.url);
+  
+  // Custom favicon handling for specific domains
+  let faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+  
+  // Special cases where Google favicon doesn't work well
+  if (domain === 'chatgpt.com') {
+    faviconUrl = 'https://cdn.oaistatic.com/_next/static/media/favicon-32x32.6e956b52.png';
+  } else if (domain === 'chat.inceptionlabs.ai') {
+    faviconUrl = 'https://chat.inceptionlabs.ai/favicon.ico';
+  }
+  
+  return {
+    ...ai,
+    domain,
+    faviconUrl
+  };
+});
+---
+<BaseLayout title="AI Models 🤖">
+  <div class="ai-container">
+    <div class="ai-header">
+      <div class="header-content">
+        <h1>AI Models 🤖</h1>
+        <p>
+          Explore the cutting-edge AI language models I use and experiment with. 
+          Each one offers unique capabilities and perspectives on artificial intelligence.
+        </p>
+      </div>
+      <div class="header-decoration">
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+      </div>
+    </div>
+    
+    <div class="ai-grid">
+      {aiModelsWithIcons.map((ai) => (
+        <a href={ai.url} target="_blank" rel="noopener" class="ai-card">
+          <div class="ai-icon">
+            <img 
+              src={ai.faviconUrl} 
+              alt={`${ai.name} icon`} 
+              class="favicon"
+              onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(ai.name)}&background=637cce&color=fff&size=64&format=png'`}
+            />
+          </div>
+          <div class="ai-content">
+            <div class="ai-meta">
+              <span class="ai-category">{ai.category}</span>
+            </div>
+            <h3>{ai.name}</h3>
+            <p class="ai-desc">
+              {ai.domain}
+            </p>
+            <div class="ai-link">
+              Try AI <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="ai-footer">
+      <div class="ai-stats">
+        <h3>AI Usage Stats</h3>
+        <div class="stats-container">
+          <div class="stat-item">
+            <span class="stat-number">15</span>
+            <span class="stat-label">AI Models</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">8</span>
+            <span class="stat-label">Categories</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="ai-categories">
+        <h3>Categories</h3>
+        <div class="category-tags">
+          <span class="category-tag">General AI</span>
+          <span class="category-tag">Multilingual</span>
+          <span class="category-tag">Code Assistant</span>
+          <span class="category-tag">Creative</span>
+          <span class="category-tag">Privacy</span>
+          <span class="category-tag">Research</span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <style>
+    :root {
+      --primary-color: #637cce;
+      --secondary-color: #8da7f0;
+      --accent-color: #ff7e67;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --text-color: #333;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .ai-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+      min-height: 100vh;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .ai-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .header-content {
+      flex: 2;
+    }
+    
+    .ai-header h1 {
+      font-size: 3rem;
+      color: var(--dark-color);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .ai-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    .ai-header p {
+      color: var(--text-color);
+      max-width: 700px;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .header-decoration {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .decoration-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      opacity: 0.7;
+    }
+    
+    .decoration-item:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent-color), #ff9e80);
+    }
+    
+    .decoration-item:nth-child(3) {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #16a085, #1abc9c);
+    }
+    
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .ai-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .ai-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .ai-icon {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-color);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .favicon {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+    
+    .ai-card:hover .favicon {
+      transform: scale(1.1);
+    }
+    
+    .ai-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .ai-meta {
+      margin-bottom: 0.75rem;
+    }
+    
+    .ai-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .ai-content h3 {
+      font-size: 1.4rem;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    
+    .ai-desc {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
+    
+    .ai-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      transition: gap 0.3s ease;
+    }
+    
+    .ai-card:hover .ai-link {
+      gap: 0.75rem;
+    }
+    
+    .ai-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .ai-stats, .ai-categories {
+      width: 100%;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .ai-stats h3, .ai-categories h3 {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .category-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    
+    .category-tag {
+      padding: 0.5rem 1rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: var(--primary-color);
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .back-btn:hover {
+      background: var(--light-color);
+      transform: translateY(-2px);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .ai-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .header-decoration {
+        margin-top: 1rem;
+        justify-content: flex-start;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .ai-container {
+        padding: 1.5rem;
+      }
+      
+      .ai-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .ai-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
+      }
+      
+      .stats-container {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .ai-header h1 {
+        font-size: 2rem;
+      }
+      
+      .ai-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .ai-icon {
+        height: 100px;
+      }
+      
+      .favicon {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
+</BaseLayout>
