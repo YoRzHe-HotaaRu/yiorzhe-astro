@@ -42,12 +42,11 @@ A clean, modern, and interactive personal website built with **Astro**, showcasi
 ![Homepage](screenshots/homepage.png)
 
 ### Projects Page
-![Projects](screenshots/project.jpg)
+![Projects](screenshots/projects.png)
 
 ### Apps Page
 ![Apps](screenshots/apps.png)
 
-> *Add these screenshots to a `screenshots/` folder in your repo.*
 
 ---
 
