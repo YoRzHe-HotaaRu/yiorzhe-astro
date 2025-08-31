@@ -79,7 +79,7 @@ async function fetchYouTubePlaylist(playlistId: string, apiKey: string) {
 
 // Your YouTube playlist ID and API key
 const playlistId = "PLqyfvRdD6bxR8u9IKod7L0ny63lSm8hF4";
-const apiKey = "AIzaSyBNibFqguSIZSIL4djYe1UysH4Ltf3YNKI"; 
+const apiKey = import.meta.env.YOUTUBE_API_KEY;
 
 // Fetch songs from YouTube playlist
 const favoriteSongs: Song[] = await fetchYouTubePlaylist(playlistId, apiKey);
