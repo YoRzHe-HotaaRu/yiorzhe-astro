@@ -1,0 +1,494 @@
+---
+// src/pages/favorites/show.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Define the type for a TV show
+interface Show {
+  id: string;
+  title: string;
+  year: number;
+  imageUrl: string;
+  link: string;
+  description?: string;
+  streamingService?: string;
+  size: 'small' | 'medium' | 'large' | 'wide' | 'tall';
+}
+
+// List of favorite TV shows
+const favoriteShows: Show[] = [
+  {
+    id: "mr-robot",
+    title: "Mr. Robot",
+    year: 2015,
+    imageUrl: "https://image.tmdb.org/t/p/w500/5s8rQyTf0p25n6G3YgNnL4s3B9M.jpg",
+    link: "https://www.imdb.com/title/tt4158110/",
+    description: "A psychological thriller about a cybersecurity engineer and hacker with social anxiety disorder.",
+    streamingService: "Donghua",
+    size: "large"
+  },
+  {
+    id: "stranger-things",
+    title: "Stranger Things",
+    year: 2016,
+    imageUrl: "https://image.tmdb.org/t/p/w500/x2LSRK2C25dPiGd5U33pTh7gBmQ.jpg",
+    link: "https://www.imdb.com/title/tt4574334/",
+    description: "Kids in a small town face supernatural forces in the 1980s.",
+    streamingService: "Anime",
+    size: "medium"
+  },
+  {
+    id: "breaking-bad",
+    title: "Breaking Bad",
+    year: 2008,
+    imageUrl: "https://image.tmdb.org/t/p/w500/1gvvZAE3f1OAl4nK4YH2gKe3s0x.jpg",
+    link: "https://www.imdb.com/title/tt0903747/",
+    description: "A high school chemistry teacher turns to cooking meth to secure his family's future.",
+    streamingService: "Anime",
+    size: "medium"
+  },
+  {
+    id: "the-mandalorian",
+    title: "The Mandalorian",
+    year: 2019,
+    imageUrl: "https://image.tmdb.org/t/p/w500/9kBN7XuQyQj5w2XVJ5j3b7u7B4.jpg",
+    link: "https://www.imdb.com/title/tt8111088/",
+    description: "A lone bounty hunter travels the outer reaches of the galaxy.",
+    streamingService: "Donghua",
+    size: "wide"
+  },
+  {
+    id: "westworld",
+    title: "Westworld",
+    year: 2016,
+    imageUrl: "https://image.tmdb.org/t/p/w500/7d2E2xGsT5Wq7y9I9c5D9j1J1k.jpg",
+    link: "https://www.imdb.com/title/tt0475784/",
+    description: "A theme park for the wealthy where androids begin to gain consciousness.",
+    streamingService: "Donghua",
+    size: "tall"
+  },
+  {
+    id: "black-mirror",
+    title: "Black Mirror",
+    year: 2011,
+    imageUrl: "https://image.tmdb.org/t/p/w500/6d5s2x8t2y0y1x1z3a4b5c6d7e8f9g0h.jpg",
+    link: "https://www.imdb.com/title/tt2085059/",
+    description: "An anthology series exploring the dark side of technology and modern society.",
+    streamingService: "Anime",
+    size: "small"
+  },
+  {
+    id: "the-crown",
+    title: "The Crown",
+    year: 2016,
+    imageUrl: "https://image.tmdb.org/t/p/w500/9kBN7XuQyQj5w2XVJ5j3b7u7B4.jpg",
+    link: "https://www.imdb.com/title/tt4786824/",
+    description: "The reign of Queen Elizabeth II from the 1940s to modern times.",
+    streamingService: "Anime",
+    size: "small"
+  },
+  {
+    id: "rick-and-morty",
+    title: "Rick and Morty",
+    year: 2013,
+    imageUrl: "https://image.tmdb.org/t/p/w500/8kOWDBZ6i2l8x5l5k5k5k5k5k5k5k5k5.jpg",
+    link: "https://www.imdb.com/title/tt2861424/",
+    description: "An alcoholic scientist and his grandson go on interdimensional adventures.",
+    streamingService: "Donghua",
+    size: "small"
+  }
+];
+---
+
+<BaseLayout title="Favorite Shows">
+  <div class="favorite-page-container">
+    <div class="favorite-header">
+      <h1>My Favorite TV Shows</h1>
+      <p>A collection of TV shows that have captivated me with their storytelling and characters</p>
+    </div>
+    
+    <!-- Streaming Service Filters -->
+    <div class="show-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="anime">Anime</button>
+      <button class="filter-btn" data-filter="donghua">Donghua</button>
+    </div>
+    
+    <div class="shows-gallery">
+      {favoriteShows.map((show) => (
+        <a href={show.link} target="_blank" rel="noopener" class={`show-item show-${show.size} show-${show.streamingService?.toLowerCase().replace(' ', '-') || 'other'}`} data-id={show.id}>
+          <div class="show-image-container">
+            <img src={show.imageUrl} alt={show.title} />
+            <div class="show-overlay">
+              <div class="show-info">
+                <h3>{show.title}</h3>
+                <p class="year">{show.year}</p>
+                {show.streamingService && <p class="service">Available on {show.streamingService}</p>}
+                {show.description && <p class="description">{show.description}</p>}
+              </div>
+              <button class="visit-btn">View Show</button>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="back-section">
+      <a href="/about" class="back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to About Me
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Simple filtering functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const showItems = document.querySelectorAll('.show-item');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          const filter = button.getAttribute('data-filter');
+          
+          // Show/hide show items
+          showItems.forEach(item => {
+            if (filter === 'all' || item.classList.contains(`show-${filter}`)) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .favorite-page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .favorite-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .favorite-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .favorite-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #637cce, #8da7f0);
+      border-radius: 2px;
+    }
+    
+    .favorite-header p {
+      color: #666;
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+    }
+    
+    /* Show Filters */
+    .show-filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border: none;
+      border-radius: 30px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    
+    .filter-btn:hover {
+      background: #e0e8ff;
+    }
+    
+    .filter-btn.active {
+      background: #637cce;
+      color: white;
+    }
+    
+    /* Shows Gallery - Collage Style */
+    .shows-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 15px;
+      grid-auto-flow: dense;
+    }
+    
+    .show-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .show-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    /* Different sizes for collage effect */
+    .show-small {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    
+    .show-medium {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+    
+    .show-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    
+    .show-wide {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    
+    .show-tall {
+      grid-column: span 1;
+      grid-row: span 3;
+    }
+    
+    .show-image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .show-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    
+    .show-item:hover .show-image-container img {
+      filter: blur(4px);
+      transform: scale(1.05);
+    }
+    
+    .show-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    
+    .show-item:hover .show-overlay {
+      opacity: 1;
+    }
+    
+    .show-info {
+      margin-bottom: 1rem;
+    }
+    
+    .show-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+      color: white;
+    }
+    
+    .show-info .year {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.25rem;
+    }
+    
+    .show-info .service {
+      font-size: 0.85rem;
+      color: #637cce;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .show-info .description {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+    }
+    
+    .visit-btn {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .visit-btn:hover {
+      background: white;
+      transform: scale(1.05);
+    }
+    
+    .back-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    
+    .back-btn:hover {
+      background: #e0e8ff;
+      transform: translateY(-2px);
+    }
+    
+    /* Streaming service specific styling */
+    .show-netflix {
+      border: 2px solid transparent;
+    }
+    
+    .show-netflix:hover {
+      border-color: #e50914; /* Netflix red */
+    }
+    
+    .show-amazon-prime {
+      border: 2px solid transparent;
+    }
+    
+    .show-amazon-prime:hover {
+      border-color: #00a8e1; /* Amazon blue */
+    }
+    
+    .show-disney {
+      border: 2px solid transparent;
+    }
+    
+    .show-disney:hover {
+      border-color: #113ccf; /* Disney blue */
+    }
+    
+    .show-hbo-max {
+      border: 2px solid transparent;
+    }
+    
+    .show-hbo-max:hover {
+      border-color: #6320ee; /* HBO Max purple */
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .show-large {
+        grid-column: span 1;
+      }
+      
+      .show-wide {
+        grid-column: span 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .shows-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 150px;
+      }
+      
+      .show-medium,
+      .show-tall {
+        grid-row: span 1;
+      }
+      
+      .show-info h3 {
+        font-size: 1rem;
+      }
+      
+      .show-info .year {
+        font-size: 0.8rem;
+      }
+      
+      .show-info .service {
+        font-size: 0.75rem;
+      }
+      
+      .show-info .description {
+        font-size: 0.7rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .favorite-header h1 {
+        font-size: 2rem;
+      }
+      
+      .shows-gallery {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .show-filters {
+        gap: 0.5rem;
+      }
+      
+      .filter-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</BaseLayout>                                                                           

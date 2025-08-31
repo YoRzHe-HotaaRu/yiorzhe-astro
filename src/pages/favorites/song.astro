@@ -1,0 +1,423 @@
+---
+// src/pages/favorites/song.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Define the type for a song
+interface Song {
+  id: string;
+  title: string;
+  artist: string;
+  thumbnailUrl: string;
+  videoUrl: string;
+  duration?: string;
+  size: 'small' | 'medium' | 'large' | 'wide' | 'tall';
+}
+
+// Function to fetch YouTube playlist data and filter deleted videos
+async function fetchYouTubePlaylist(playlistId: string, apiKey: string) {
+  // First, get the playlist items
+  const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+  
+  try {
+    const response = await fetch(playlistUrl);
+    const data = await response.json();
+    
+    if (data.items && data.items.length > 0) {
+      // Extract video IDs
+      const videoIds = data.items.map((item: any) => item.snippet.resourceId.videoId);
+      
+      // Get video details to check status
+      const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=status,snippet&id=${videoIds.join(',')}&key=${apiKey}`;
+      const videosResponse = await fetch(videosUrl);
+      const videosData = await videosResponse.json();
+      
+      if (videosData.items && videosData.items.length > 0) {
+        // Create a map of video IDs to their status
+        const videoStatusMap: Record<string, any> = {};
+        videosData.items.forEach((video: any) => {
+          videoStatusMap[video.id] = {
+            status: video.status,
+            snippet: video.snippet
+          };
+        });
+        
+        // Filter out deleted videos and create song objects
+        const songs: Song[] = [];
+        
+        data.items.forEach((item: any) => {
+          const videoId = item.snippet.resourceId.videoId;
+          const videoInfo = videoStatusMap[videoId];
+          
+          // Only include videos that are not deleted or private
+          if (videoInfo && 
+              videoInfo.status.privacyStatus === 'public' && 
+              videoInfo.status.uploadStatus === 'processed') {
+            
+            const snippet = videoInfo.snippet;
+            songs.push({
+              id: videoId,
+              title: snippet.title,
+              artist: snippet.channelTitle,
+              thumbnailUrl: snippet.thumbnails.maxres?.url || 
+                         snippet.thumbnails.high?.url || 
+                         snippet.thumbnails.medium?.url,
+              videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+              size: 'small' // Default size
+            });
+          }
+        });
+        
+        return songs;
+      }
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching YouTube playlist:', error);
+    return [];
+  }
+}
+
+// Your YouTube playlist ID and API key
+const playlistId = "PLqyfvRdD6bxR8u9IKod7L0ny63lSm8hF4";
+const apiKey = "AIzaSyBNibFqguSIZSIL4djYe1UysH4Ltf3YNKI"; 
+
+// Fetch songs from YouTube playlist
+const favoriteSongs: Song[] = await fetchYouTubePlaylist(playlistId, apiKey);
+
+// Fallback to manual data if API fails or returns empty
+if (favoriteSongs.length === 0) {
+  // Manually add songs as fallback
+  favoriteSongs.push(
+    {
+      id: "song-1",
+      title: "Bohemian Rhapsody",
+      artist: "Queen",
+      thumbnailUrl: "https://i.ytimg.com/vi/fJ9rUzIMcZQ/maxresdefault.jpg",
+      videoUrl: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+      duration: "5:55",
+      size: "large"
+    },
+    // Add more songs as needed
+  );
+}
+---
+
+<BaseLayout title="Favorite Songs">
+  <div class="favorite-page-container">
+    <div class="favorite-header">
+      <h1>My Favorite Songs 🎻</h1>
+      <p>A collection of songs that inspire me and define my musical taste</p>
+      
+      <!-- Playlist Embed -->
+      <div class="playlist-embed">
+        <h3>My YouTube Playlist</h3>
+        <iframe 
+          width="100%" 
+          height="315" 
+          src="https://www.youtube.com/embed/videoseries?list=PLqyfvRdD6bxR8u9IKod7L0ny63lSm8hF4" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+    
+    <div class="songs-gallery">
+      {favoriteSongs.map((song) => (
+        <a href={song.videoUrl} target="_blank" rel="noopener" class={`song-item song-${song.size}`} data-id={song.id}>
+          <div class="song-image-container">
+            <img src={song.thumbnailUrl} alt={song.title} />
+            <div class="song-overlay">
+              <div class="song-info">
+                <h3>{song.title}</h3>
+                <p class="artist">{song.artist}</p>
+                {song.duration && <p class="duration">{song.duration}</p>}
+              </div>
+              <button class="visit-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Play on YouTube
+              </button>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="back-section">
+      <a href="/about" class="back-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to About Me
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .favorite-page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .favorite-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .favorite-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .favorite-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #637cce, #8da7f0);
+      border-radius: 2px;
+    }
+    
+    .favorite-header p {
+      color: #666;
+      max-width: 700px;
+      margin: 1.5rem auto 0;
+    }
+    
+    /* Playlist Embed */
+    .playlist-embed {
+      margin-top: 2.5rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .playlist-embed h3 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    
+    .playlist-embed iframe {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Songs Gallery - Collage Style */
+    .songs-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 15px;
+      grid-auto-flow: dense;
+      margin-top: 3rem;
+    }
+    
+    .song-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      color: white;
+    }
+    
+    .song-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    /* Different sizes for collage effect */
+    .song-small {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    
+    .song-medium {
+      grid-column: span 1;
+      grid-row: span 2;
+    }
+    
+    .song-large {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    
+    .song-wide {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+    
+    .song-tall {
+      grid-column: span 1;
+      grid-row: span 3;
+    }
+    
+    .song-image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .song-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    
+    .song-item:hover .song-image-container img {
+      filter: blur(4px);
+      transform: scale(1.05);
+    }
+    
+    .song-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    
+    .song-item:hover .song-overlay {
+      opacity: 1;
+    }
+    
+    .song-info {
+      margin-bottom: 1rem;
+    }
+    
+    .song-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+      color: white;
+    }
+    
+    .song-info .artist {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.25rem;
+    }
+    
+    .song-info .duration {
+      font-size: 0.85rem;
+      color: #637cce;
+      font-weight: 500;
+    }
+    
+    .visit-btn {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .visit-btn:hover {
+      background: white;
+      transform: scale(1.05);
+    }
+    
+    .back-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+    
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #f0f4ff;
+      color: #637cce;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.2s;
+    }
+    
+    .back-btn:hover {
+      background: #e0e8ff;
+      transform: translateY(-2px);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .song-large {
+        grid-column: span 1;
+      }
+      
+      .song-wide {
+        grid-column: span 1;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .songs-gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 150px;
+      }
+      
+      .song-medium,
+      .song-tall {
+        grid-row: span 1;
+      }
+      
+      .song-info h3 {
+        font-size: 1rem;
+      }
+      
+      .song-info .artist {
+        font-size: 0.8rem;
+      }
+      
+      .song-info .duration {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .favorite-header h1 {
+        font-size: 2rem;
+      }
+      
+      .songs-gallery {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .playlist-embed iframe {
+        height: 200px;
+      }
+    }
+  </style>
+</BaseLayout>
