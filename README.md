@@ -39,7 +39,7 @@ A clean, modern, and interactive personal website built with **Astro**, showcasi
 ## 📸 Screenshots
 
 ### Homepage
-![Homepage](screenshots/home.png)
+![Homepage](screenshots/homepage.png)
 
 ### Projects Page
 ![Projects](screenshots/projects.png)
