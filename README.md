@@ -5,7 +5,7 @@
 
 A clean, modern, and interactive personal website built with **Astro**, showcasing my journey as a hobbyist developer and 2D game creator.
 
-🚀 Live at: [https://yiorzhe.netlify.app](https://yiorzhe.netlify.app) *(coming soon)*  
+🚀 Live at: [https://yiorzhe.dev](https://yiorzhe.dev)
 🔧 Built with: **Astro + SCSS** — no Tailwind, no bloat  
 🎮 Focused on: **Hobby coding, 2D games, open-source**
 
