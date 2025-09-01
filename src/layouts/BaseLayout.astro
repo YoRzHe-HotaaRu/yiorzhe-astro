@@ -9,7 +9,7 @@ import '../styles/main.scss';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    
+   
     <!-- Add Font Awesome -->
     <link
       rel="stylesheet"
@@ -25,6 +25,12 @@ import '../styles/main.scss';
     <div class="container">
       <header class="header">
         <h1><a href="/" class="logo"><img src="/assets/logo4-transparent.png" alt="YioRzHe-HotaaRu Logo" /></a></h1>
+        
+        <!-- Hamburger menu button -->
+        <button class="nav-toggle" aria-label="toggle navigation">
+          <span class="hamburger"></span>
+        </button>
+        
         <nav class="nav">
           <a href="/ai" class="nav-link">AI</a>
           <a href="/apps" class="nav-link">Apps</a>
@@ -44,5 +50,24 @@ import '../styles/main.scss';
         © {new Date().getFullYear()} YioRzHe-HotaaRu. Built with Astro.
       </footer>
     </div>
+
+    <!-- Add JavaScript for mobile menu toggle -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const navToggle = document.querySelector('.nav-toggle');
+        const nav = document.querySelector('.nav');
+        
+        const toggleNav = () => {
+          if (navToggle && nav) {
+            nav.classList.toggle('nav-open');
+            navToggle.classList.toggle('nav-open');
+          }
+        };
+        
+        if (navToggle) {
+          navToggle.addEventListener('click', toggleNav);
+        }
+      });
+    </script>
   </body>
 </html>
