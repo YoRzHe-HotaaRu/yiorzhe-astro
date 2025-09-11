@@ -1,0 +1,528 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Function to extract anime ID from MAL URL
+function getAnimeId(url: string): string | null {
+  const match = url.match(/myanimelist\.net\/anime\/(\d+)\//);
+  return match ? match[1] : null;
+}
+
+// Define the anime list with MAL URLs
+const animeList = [
+  { 
+    title: "Sono Bisque Doll wa Koi wo Suru Season 2", 
+    url: "https://myanimelist.net/anime/53065/Sono_Bisque_Doll_wa_Koi_wo_Suru_Season_2",
+    status: "Watching"
+  },
+  { 
+    title: "Megami no Café Terrace", 
+    url: "https://myanimelist.net/anime/52973/Megami_no_Caf%C3%A9_Terrace",
+    status: "Completed"
+  },
+  { 
+    title: "Kuroiwa Medaka ni Watashi no Kawaii ga Tsuujinai", 
+    url: "https://myanimelist.net/anime/58853/Kuroiwa_Medaka_ni_Watashi_no_Kawaii_ga_Tsuujinai",
+    status: "Completed"
+  },
+  { 
+    title: "Mikadono Sanshimai wa Angai, Choroi", 
+    url: "https://myanimelist.net/anime/59207/Mikadono_Sanshimai_wa_Angai_Choroi",
+    status: "Completed"
+  },
+  // Add more anime here
+];
+
+// Process anime data to include ID
+const processedAnimeList = animeList.map(anime => {
+  const id = getAnimeId(anime.url);
+  return {
+    ...anime,
+    id,
+    apiUrl: id ? `https://api.jikan.moe/v4/anime/${id}` : null
+  };
+});
+---
+
+<BaseLayout title="My Anime Library 🎬">
+  <div class="anime-container">
+    <div class="anime-header">
+      <div class="header-content">
+        <h1>My Anime Library 🎬</h1>
+        <p>
+          A collection of anime I'm currently watching or have completed. 
+          Click on any anime to view details on MyAnimeList.
+        </p>
+      </div>
+      <div class="header-decoration">
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+      </div>
+    </div>
+    
+    <div class="anime-grid">
+      {processedAnimeList.map((anime) => (
+        <div class="anime-card" data-id={anime.id}>
+          <div class="anime-cover">
+            <div class="anime-placeholder">
+              <i class="fas fa-tv"></i>
+              <span>Loading...</span>
+            </div>
+          </div>
+          <div class="anime-content">
+            <div class="anime-meta">
+              <span class="anime-status">{anime.status}</span>
+            </div>
+            <h3>{anime.title}</h3>
+            <p class="anime-synopsis">
+              Loading synopsis...
+            </p>
+            <div class="anime-genres">
+              <span class="genre-tag">Loading genres...</span>
+            </div>
+            <a href={anime.url} target="_blank" rel="noopener" class="anime-link">
+              View on MAL <i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="anime-footer">
+      <div class="anime-stats">
+        <h3>Anime Stats</h3>
+        <div class="stats-container">
+          <div class="stat-item">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Anime</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Watching</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Define type for genre
+            type Genre = {
+            name: string;
+            };
+            
+            // Define type for anime data
+            type AnimeData = {
+            title: string;
+            synopsis: string;
+            genres: Genre[];
+            images: {
+                jpg: {
+                large_image_url: string;
+                };
+            };
+            };
+            
+            // Function to fetch anime data from Jikan API
+            async function fetchAnimeData(id: string): Promise<AnimeData | null> {
+            try {
+                const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+                const data = await response.json();
+                return data.data as AnimeData;
+            } catch (error) {
+                console.error('Error fetching anime data:', error);
+                return null;
+            }
+            }
+            
+            // Process each anime card
+            const animeCards = document.querySelectorAll('.anime-card');
+            
+            for (const card of animeCards) {
+            const id = card.getAttribute('data-id');
+            if (!id) continue;
+            
+            const animeData = await fetchAnimeData(id);
+            if (!animeData) continue;
+            
+            // Update cover image
+            const coverElement = card.querySelector('.anime-cover');
+            if (coverElement) {
+                coverElement.innerHTML = `
+                <img 
+                    src="${animeData.images.jpg.large_image_url}" 
+                    alt="${animeData.title} cover" 
+                    class="cover-image"
+                    onerror="this.parentElement.innerHTML='<div class=\\"anime-placeholder\\"><i class=\\"fas fa-tv\\"></i><span>Image not available</span></div>'"
+                />
+                `;
+            }
+            
+            // Update synopsis
+            const synopsisElement = card.querySelector('.anime-synopsis');
+            if (synopsisElement) {
+                const synopsis = animeData.synopsis 
+                ? animeData.synopsis.substring(0, 150) + (animeData.synopsis.length > 150 ? '...' : '')
+                : 'No synopsis available';
+                synopsisElement.textContent = synopsis;
+            }
+            
+            // Update genres
+            const genresElement = card.querySelector('.anime-genres');
+            if (genresElement) {
+                if (animeData.genres && animeData.genres.length > 0) {
+                genresElement.innerHTML = animeData.genres
+                    .slice(0, 3) // Show max 3 genres
+                    .map((genre: Genre) => `<span class="genre-tag">${genre.name}</span>`)
+                    .join('');
+                } else {
+                genresElement.innerHTML = '<span class="genre-tag">No genres</span>';
+                }
+            }
+            }
+            
+            // Update stats
+            const totalAnime = document.querySelectorAll('.anime-card').length;
+            
+            // Count completed and watching anime by checking status text
+            let completedAnime = 0;
+            let watchingAnime = 0;
+            
+            document.querySelectorAll('.anime-status').forEach(statusElement => {
+            const statusText = statusElement.textContent?.trim().toLowerCase() || '';
+            if (statusText === 'completed') {
+                completedAnime++;
+            } else if (statusText === 'watching') {
+                watchingAnime++;
+            }
+            });
+            
+            // Update stats elements with null checks
+            const totalAnimeElement = document.querySelector('.stat-item:nth-child(1) .stat-number');
+            const completedAnimeElement = document.querySelector('.stat-item:nth-child(2) .stat-number');
+            const watchingAnimeElement = document.querySelector('.stat-item:nth-child(3) .stat-number');
+            
+            if (totalAnimeElement) totalAnimeElement.textContent = totalAnime.toString();
+            if (completedAnimeElement) completedAnimeElement.textContent = completedAnime.toString();
+            if (watchingAnimeElement) watchingAnimeElement.textContent = watchingAnime.toString();
+        });
+    </script>
+  
+  <style>
+    /* Similar styles to AI page but adjusted for anime */
+    :root {
+      --primary-color: #637cce;
+      --secondary-color: #8da7f0;
+      --accent-color: #ff7e67;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --text-color: #333;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .anime-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+      min-height: 100vh;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .anime-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .header-content {
+      flex: 2;
+    }
+    
+    .anime-header h1 {
+      font-size: 3rem;
+      color: var(--dark-color);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .anime-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    .anime-header p {
+      color: var(--text-color);
+      max-width: 700px;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .header-decoration {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .decoration-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      opacity: 0.7;
+    }
+    
+    .decoration-item:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent-color), #ff9e80);
+    }
+    
+    .decoration-item:nth-child(3) {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #16a085, #1abc9c);
+    }
+    
+    .anime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .anime-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .anime-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .anime-cover {
+      height: 318px; /* Typical anime cover aspect ratio */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-color);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .anime-card:hover .cover-image {
+      transform: scale(1.05);
+    }
+    
+    .anime-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+      gap: 1rem;
+    }
+    
+    .anime-placeholder i {
+      font-size: 3rem;
+    }
+    
+    .anime-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .anime-meta {
+      margin-bottom: 0.75rem;
+    }
+    
+    .anime-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .anime-content h3 {
+      font-size: 1.4rem;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    
+    .anime-synopsis {
+      color: #666;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
+    
+    .anime-genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .genre-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .anime-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      transition: gap 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .anime-card:hover .anime-link {
+      gap: 0.75rem;
+    }
+    
+    .anime-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .anime-stats {
+      width: 100%;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .anime-stats h3 {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .anime-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .header-decoration {
+        margin-top: 1rem;
+        justify-content: flex-start;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .anime-container {
+        padding: 1.5rem;
+      }
+      
+      .anime-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .anime-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
+      }
+      
+      .stats-container {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .anime-header h1 {
+        font-size: 2rem;
+      }
+      
+      .anime-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .anime-cover {
+        height: 280px;
+      }
+    }
+  </style>
+</BaseLayout>
