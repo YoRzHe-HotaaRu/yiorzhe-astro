@@ -12,7 +12,7 @@ const animeList = [
   { 
     title: "Sono Bisque Doll wa Koi wo Suru Season 2", 
     url: "https://myanimelist.net/anime/53065/Sono_Bisque_Doll_wa_Koi_wo_Suru_Season_2",
-    status: "Watching"
+    status: "Completed"
   },
   { 
     title: "Megami no Café Terrace", 
@@ -27,6 +27,16 @@ const animeList = [
   { 
     title: "Mikadono Sanshimai wa Angai, Choroi", 
     url: "https://myanimelist.net/anime/59207/Mikadono_Sanshimai_wa_Angai_Choroi",
+    status: "Completed"
+  },
+  { 
+    title: "Summer Pockets", 
+    url: "https://myanimelist.net/anime/50694/Summer_Pockets",
+    status: "Watching"
+  },
+  { 
+    title: "Jian Lai", 
+    url: "https://myanimelist.net/anime/59389/Jian_Lai",
     status: "Completed"
   },
   // Add more anime here
@@ -112,108 +122,151 @@ const processedAnimeList = animeList.map(anime => {
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Define type for genre
-            type Genre = {
-            name: string;
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Define type for genre
+        type Genre = {
+        name: string;
+        };
+        
+        // Define type for anime data
+        type AnimeData = {
+        title: string;
+        synopsis: string;
+        genres: Genre[];
+        images: {
+            jpg: {
+            large_image_url: string;
             };
+        };
+        };
+        
+        // Function to fetch anime data from Jikan API with retry mechanism
+        async function fetchAnimeData(id: string, retryCount = 3, delay = 1000): Promise<AnimeData | null> {
+        try {
+            const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
             
-            // Define type for anime data
-            type AnimeData = {
-            title: string;
-            synopsis: string;
-            genres: Genre[];
-            images: {
-                jpg: {
-                large_image_url: string;
-                };
-            };
-            };
-            
-            // Function to fetch anime data from Jikan API
-            async function fetchAnimeData(id: string): Promise<AnimeData | null> {
-            try {
-                const response = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
-                const data = await response.json();
-                return data.data as AnimeData;
-            } catch (error) {
-                console.error('Error fetching anime data:', error);
-                return null;
-            }
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            // Process each anime card
-            const animeCards = document.querySelectorAll('.anime-card');
+            const data = await response.json();
+            return data.data as AnimeData;
+        } catch (error) {
+            console.error(`Error fetching anime data for ID ${id}:`, error);
             
-            for (const card of animeCards) {
-            const id = card.getAttribute('data-id');
-            if (!id) continue;
-            
+            if (retryCount > 0) {
+            console.log(`Retrying... (${retryCount} attempts left)`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchAnimeData(id, retryCount - 1, delay * 1.5); // Exponential backoff
+            } else {
+            console.error(`Failed to fetch data for anime ID ${id} after multiple attempts`);
+            return null;
+            }
+        }
+        }
+        
+        // Process anime cards with rate limiting
+        const animeCards = document.querySelectorAll('.anime-card');
+        const delayBetweenRequests = 500; // 500ms between requests to avoid rate limiting
+        
+        // Process cards sequentially with delays
+        for (let i = 0; i < animeCards.length; i++) {
+        const card = animeCards[i];
+        const id = card.getAttribute('data-id');
+        
+        if (!id) {
+            console.warn(`No ID found for card at index ${i}`);
+            continue;
+        }
+        
+        // Add delay between requests (except for the first one)
+        if (i > 0) {
+            await new Promise(resolve => setTimeout(resolve, delayBetweenRequests));
+        }
+        
+        try {
             const animeData = await fetchAnimeData(id);
-            if (!animeData) continue;
+            
+            if (!animeData) {
+            console.error(`No data received for anime ID ${id}`);
+            // Update UI to show error state
+            const coverElement = card.querySelector('.anime-cover');
+            if (coverElement) {
+                coverElement.innerHTML = `
+                <div class="anime-placeholder">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Failed to load</span>
+                </div>
+                `;
+            }
+            continue;
+            }
             
             // Update cover image
             const coverElement = card.querySelector('.anime-cover');
             if (coverElement) {
-                coverElement.innerHTML = `
+            coverElement.innerHTML = `
                 <img 
-                    src="${animeData.images.jpg.large_image_url}" 
-                    alt="${animeData.title} cover" 
-                    class="cover-image"
-                    onerror="this.parentElement.innerHTML='<div class=\\"anime-placeholder\\"><i class=\\"fas fa-tv\\"></i><span>Image not available</span></div>'"
+                src="${animeData.images.jpg.large_image_url}" 
+                alt="${animeData.title} cover" 
+                class="cover-image"
+                onerror="this.parentElement.innerHTML='<div class=\\"anime-placeholder\\"><i class=\\"fas fa-tv\\"></i><span>Image not available</span></div>'"
                 />
-                `;
+            `;
             }
             
             // Update synopsis
             const synopsisElement = card.querySelector('.anime-synopsis');
             if (synopsisElement) {
-                const synopsis = animeData.synopsis 
+            const synopsis = animeData.synopsis 
                 ? animeData.synopsis.substring(0, 150) + (animeData.synopsis.length > 150 ? '...' : '')
                 : 'No synopsis available';
-                synopsisElement.textContent = synopsis;
+            synopsisElement.textContent = synopsis;
             }
             
             // Update genres
             const genresElement = card.querySelector('.anime-genres');
             if (genresElement) {
-                if (animeData.genres && animeData.genres.length > 0) {
+            if (animeData.genres && animeData.genres.length > 0) {
                 genresElement.innerHTML = animeData.genres
-                    .slice(0, 3) // Show max 3 genres
-                    .map((genre: Genre) => `<span class="genre-tag">${genre.name}</span>`)
-                    .join('');
-                } else {
+                .slice(0, 3) // Show max 3 genres
+                .map((genre: Genre) => `<span class="genre-tag">${genre.name}</span>`)
+                .join('');
+            } else {
                 genresElement.innerHTML = '<span class="genre-tag">No genres</span>';
-                }
             }
             }
-            
-            // Update stats
-            const totalAnime = document.querySelectorAll('.anime-card').length;
-            
-            // Count completed and watching anime by checking status text
-            let completedAnime = 0;
-            let watchingAnime = 0;
-            
-            document.querySelectorAll('.anime-status').forEach(statusElement => {
-            const statusText = statusElement.textContent?.trim().toLowerCase() || '';
-            if (statusText === 'completed') {
-                completedAnime++;
-            } else if (statusText === 'watching') {
-                watchingAnime++;
-            }
-            });
-            
-            // Update stats elements with null checks
-            const totalAnimeElement = document.querySelector('.stat-item:nth-child(1) .stat-number');
-            const completedAnimeElement = document.querySelector('.stat-item:nth-child(2) .stat-number');
-            const watchingAnimeElement = document.querySelector('.stat-item:nth-child(3) .stat-number');
-            
-            if (totalAnimeElement) totalAnimeElement.textContent = totalAnime.toString();
-            if (completedAnimeElement) completedAnimeElement.textContent = completedAnime.toString();
-            if (watchingAnimeElement) watchingAnimeElement.textContent = watchingAnime.toString();
+        } catch (error) {
+            console.error(`Error processing card for anime ID ${id}:`, error);
+        }
+        }
+        
+        // Update stats
+        const totalAnime = document.querySelectorAll('.anime-card').length;
+        
+        // Count completed and watching anime by checking status text
+        let completedAnime = 0;
+        let watchingAnime = 0;
+        
+        document.querySelectorAll('.anime-status').forEach(statusElement => {
+        const statusText = statusElement.textContent?.trim().toLowerCase() || '';
+        if (statusText === 'completed') {
+            completedAnime++;
+        } else if (statusText === 'watching') {
+            watchingAnime++;
+        }
         });
+        
+        // Update stats elements with null checks
+        const totalAnimeElement = document.querySelector('.stat-item:nth-child(1) .stat-number');
+        const completedAnimeElement = document.querySelector('.stat-item:nth-child(2) .stat-number');
+        const watchingAnimeElement = document.querySelector('.stat-item:nth-child(3) .stat-number');
+        
+        if (totalAnimeElement) totalAnimeElement.textContent = totalAnime.toString();
+        if (completedAnimeElement) completedAnimeElement.textContent = completedAnime.toString();
+        if (watchingAnimeElement) watchingAnimeElement.textContent = watchingAnime.toString();
+    });
     </script>
   
   <style>
