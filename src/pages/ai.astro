@@ -21,15 +21,16 @@ const aiModels = [
   { name: "Kimi", url: "https://www.kimi.com/", category: "Conversational AI" },
   { name: "Deepseek", url: "https://chat.deepseek.com/", category: "Code Assistant" },
   { name: "MiniMax", url: "https://chat.minimax.io/", category: "Creative AI" },
-  { name: "Baidu Ernie", url: "https://ernie.baidu.com/", category: "Chinese AI" },
-  { name: "Manus", url: "https://manus.im/app", category: "Writing Assistant" },
+  { name: "Baidu Ernie", url: "https://ernie.baidu.com/", category: "General AI" },
+  { name: "Manus", url: "https://manus.im/app", category: "Multimodal AI" },
   { name: "Grok", url: "https://grok.com/", category: "Real-time AI" },
+  { name: "Google AI Studio", url: "https://aistudio.google.com/", category: "Multimodal AI" },
   { name: "Gemini", url: "https://gemini.google.com/app", category: "Multimodal AI" },
   { name: "ChatGPT", url: "https://chatgpt.com/", category: "General AI" },
-  { name: "Mistral", url: "https://chat.mistral.ai/chat", category: "Open Source AI" },
+  { name: "Mistral", url: "https://chat.mistral.ai/chat", category: "General AI" },
   { name: "Liquid", url: "https://playground.liquid.ai/chat", category: "Creative AI" },
   { name: "Venice", url: "https://venice.ai/chat", category: "Privacy AI" },
-  { name: "CoPilot", url: "https://copilot.microsoft.com/chats/", category: "Productivity AI" },
+  { name: "CoPilot", url: "https://copilot.microsoft.com/chats/", category: "Multimodal AI" },
   { name: "Mercury", url: "https://chat.inceptionlabs.ai/", category: "Research AI" }
 ];
 
@@ -103,11 +104,11 @@ const aiModelsWithIcons = aiModels.map(ai => {
         <h3>AI Usage Stats</h3>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-number">17</span>
+            <span class="stat-number">18</span>
             <span class="stat-label">AI Models</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">8</span>
+            <span class="stat-number">9</span>
             <span class="stat-label">Categories</span>
           </div>
         </div>
@@ -118,10 +119,13 @@ const aiModelsWithIcons = aiModels.map(ai => {
         <div class="category-tags">
           <span class="category-tag">General AI</span>
           <span class="category-tag">Multilingual</span>
+          <span class="category-tag">Multimodal AI</span>
           <span class="category-tag">Code Assistant</span>
           <span class="category-tag">Creative</span>
           <span class="category-tag">Privacy</span>
           <span class="category-tag">Research</span>
+          <span class="category-tag">Image Editor & Generator</span>
+          <span class="category-tag">Real-Time</span>
         </div>
       </div>
       
