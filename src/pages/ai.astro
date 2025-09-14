@@ -14,6 +14,9 @@ function getDomain(url: string): string {
 
 // Define the AI LLM data
 const aiModels = [
+  { name: "LM Arena", url: "https://lmarena.ai/", category: "AI Arena" },
+  { name: "Stable Audio", url: "https://stableaudio.com/", category: "Audio AI" },
+  { name: "K2 Think", url: "https://www.k2think.ai/", category: "Logic AI" },
   { name: "LongCat", url: "https://longcat.chat/", category: "General AI" },
   { name: "Seedream", url: "https://jimeng.jianying.com/", category: "Image Editor & Generator" },
   { name: "Z.AI", url: "https://chat.z.ai/", category: "General AI" },
@@ -104,11 +107,11 @@ const aiModelsWithIcons = aiModels.map(ai => {
         <h3>AI Usage Stats</h3>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-number">18</span>
+            <span class="stat-number">20</span>
             <span class="stat-label">AI Models</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">9</span>
+            <span class="stat-number">11</span>
             <span class="stat-label">Categories</span>
           </div>
         </div>
@@ -126,6 +129,9 @@ const aiModelsWithIcons = aiModels.map(ai => {
           <span class="category-tag">Research</span>
           <span class="category-tag">Image Editor & Generator</span>
           <span class="category-tag">Real-Time</span>
+          <span class="category-tag">Logic AI</span>
+          <span class="category-tag">Audio AI</span>
+          <span class="category-tag">AI Arena</span>
         </div>
       </div>
       
