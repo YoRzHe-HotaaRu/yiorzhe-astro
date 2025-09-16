@@ -1,0 +1,545 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Function to extract domain from URL
+function getDomain(url: string): string {
+  try {
+    const domain = new URL(url).hostname;
+    return domain.startsWith('www.') ? domain.substring(4) : domain;
+  } catch (e) {
+    return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  }
+}
+
+// Define the Game Dev resources data
+const gameDevResources = [
+  { 
+    name: "Babylon.js", 
+    url: "https://www.babylonjs.com/", 
+    category: "3D Engine",
+    description: "A powerful, beautiful, simple, and open game and rendering engine packed into a friendly JavaScript framework."
+  },
+  { 
+    name: "Unity", 
+    url: "https://unity.com/", 
+    category: "Game Engine",
+    description: "The world's leading platform for creating and operating real-time 3D content."
+  },
+  { 
+    name: "Unreal Engine", 
+    url: "https://www.unrealengine.com/", 
+    category: "Game Engine",
+    description: "The world's most open and advanced real-time 3D creation tool for photoreal visuals and immersive experiences."
+  },
+  { 
+    name: "Godot Engine", 
+    url: "https://godotengine.org/", 
+    category: "Game Engine",
+    description: "Free and open source 2D and 3D game engine."
+  },
+  { 
+    name: "Blender", 
+    url: "https://www.blender.org/", 
+    category: "3D Modelling",
+    description: "Blender is a community project coordinated by the Blender Foundation, primarily funded by donations."
+  },
+  { 
+    name: "PlayCanvas", 
+    url: "https://playcanvas.com/", 
+    category: "3D Engine",
+    description: "The WebGL Game Engine that puts the power of the cloud at your fingertips."
+  },
+  { 
+    name: "Cocos2d-x", 
+    url: "https://www.cocos.com/en", 
+    category: "2D Framework",
+    description: "An open-source game development framework for building 2D games and interactive applications."
+  },
+  { 
+    name: "Raw Therapee", 
+    url: "https://rawtherapee.com/", 
+    category: "Image Processing",
+    description: "RawTherapee is a free, cross-platform raw image processing program"
+  },
+  { 
+    name: "Photopea", 
+    url: "https://www.photopea.com/", 
+    category: "Image Editor",
+    description: "Photopea is a free, cross-platform image editor program"
+  }
+];
+
+// Add domain and favicon URL to each resource
+const gameDevResourcesWithIcons = gameDevResources.map(resource => {
+  const domain = getDomain(resource.url);
+  
+  // Use microlink.io to get metadata
+  const metadataUrl = `https://api.microlink.io/?url=${encodeURIComponent(resource.url)}`;
+  
+  return {
+    ...resource,
+    domain,
+    metadataUrl,
+    faviconUrl: `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+  };
+});
+---
+
+<BaseLayout title="Game Dev Resources 🎮">
+  <div class="gamedev-container">
+    <div class="gamedev-header">
+      <div class="header-content">
+        <h1>Game Dev Resources 🎮</h1>
+        <p>
+          A collection of game development tools, engines, and frameworks I use and explore. 
+          Each one offers unique capabilities for creating amazing games and interactive experiences.
+        </p>
+      </div>
+      <div class="header-decoration">
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+        <div class="decoration-item"></div>
+      </div>
+    </div>
+    
+    <div class="gamedev-grid">
+      {gameDevResourcesWithIcons.map((resource) => (
+        <a href={resource.url} target="_blank" rel="noopener" class="gamedev-card" data-url={resource.metadataUrl}>
+          <div class="gamedev-icon">
+            <img 
+              src={resource.faviconUrl} 
+              alt={`${resource.name} icon`} 
+              class="favicon"
+              onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(resource.name)}&background=637cce&color=fff&size=64&format=png'`}
+            />
+          </div>
+          <div class="gamedev-content">
+            <div class="gamedev-meta">
+              <span class="gamedev-category">{resource.category}</span>
+            </div>
+            <h3>{resource.name}</h3>
+            <p class="gamedev-desc">
+              {resource.description}
+            </p>
+            <p class="gamedev-domain">
+              {resource.domain}
+            </p>
+            <div class="gamedev-link">
+              Visit Site <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="gamedev-footer">
+      <div class="gamedev-stats">
+        <h3>Game Dev Stats</h3>
+        <div class="stats-container">
+          <div class="stat-item">
+            <span class="stat-number">{gameDevResources.length}</span>
+            <span class="stat-label">Resources</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">6</span>
+            <span class="stat-label">Categories</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="gamedev-categories">
+        <h3>Categories</h3>
+        <div class="category-tags">
+          <span class="category-tag">Game Engine</span>
+          <span class="category-tag">3D Engine</span>
+          <span class="category-tag">2D Framework</span>
+          <span class="category-tag">3D Modelling</span>
+          <span class="category-tag">Image Processing</span>
+          <span class="category-tag">Image Editor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Define type for metadata response
+        type Metadata = {
+        image?: {
+            url: string;
+        };
+        description?: string;
+        };
+
+        // Function to fetch website metadata with proper typing
+        async function fetchSiteMetadata(url: string): Promise<Metadata | null> {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Error fetching site metadata:', error);
+            return null;
+        }
+        }
+        
+        // Process each resource card
+        const resourceCards = document.querySelectorAll('.gamedev-card');
+        
+        for (const card of resourceCards) {
+        const metadataUrl = card.getAttribute('data-url');
+        if (!metadataUrl) continue;
+        
+        // Add a small delay between requests to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        const metadata = await fetchSiteMetadata(metadataUrl);
+        if (!metadata) continue;
+        
+        // Update icon with the actual site image if available
+        const iconElement = card.querySelector('.gamedev-icon img');
+        if (iconElement && metadata.image && metadata.image.url) {
+            // Type assertion to HTMLImageElement
+            const imgElement = iconElement as HTMLImageElement;
+            
+            // Store the favicon URL as a data attribute for fallback
+            imgElement.setAttribute('data-favicon', imgElement.src);
+            
+            // Update the image source
+            imgElement.src = metadata.image.url;
+            
+            // Set error handler with proper typing
+            imgElement.onerror = function() {
+            // Fallback to favicon if the main image fails to load
+            const favicon = this.getAttribute('data-favicon');
+            if (favicon) {
+                this.src = favicon;
+            }
+            };
+        }
+        
+        // Update description if we got a better one from the API
+        const descElement = card.querySelector('.gamedev-desc');
+        if (descElement && metadata.description) {
+            // Truncate description if it's too long
+            const description = metadata.description.length > 150 
+            ? metadata.description.substring(0, 150) + '...' 
+            : metadata.description;
+            descElement.textContent = description;
+        }
+        }
+    });
+    </script>
+  
+  <style>
+    /* Similar styles to AI page but adjusted for Game Dev */
+    :root {
+      --primary-color: #637cce;
+      --secondary-color: #8da7f0;
+      --accent-color: #ff7e67;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --text-color: #333;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .gamedev-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+      min-height: 100vh;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .gamedev-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    
+    .header-content {
+      flex: 2;
+    }
+    
+    .gamedev-header h1 {
+      font-size: 3rem;
+      color: var(--dark-color);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .gamedev-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    .gamedev-header p {
+      color: var(--text-color);
+      max-width: 700px;
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .header-decoration {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .decoration-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      opacity: 0.7;
+    }
+    
+    .decoration-item:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent-color), #ff9e80);
+    }
+    
+    .decoration-item:nth-child(3) {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #16a085, #1abc9c);
+    }
+    
+    .gamedev-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .gamedev-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      height: 100%;
+    }
+    
+    .gamedev-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .gamedev-icon {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--light-color);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .favicon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+    
+    .gamedev-card:hover .favicon {
+      transform: scale(1.1);
+    }
+    
+    .gamedev-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .gamedev-meta {
+      margin-bottom: 0.75rem;
+    }
+    
+    .gamedev-category {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .gamedev-content h3 {
+      font-size: 1.4rem;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    
+    .gamedev-desc {
+      color: #666;
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+      font-size: 0.9rem;
+      flex-grow: 1;
+    }
+    
+    .gamedev-domain {
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    
+    .gamedev-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      transition: gap 0.3s ease;
+    }
+    
+    .gamedev-card:hover .gamedev-link {
+      gap: 0.75rem;
+    }
+    
+    .gamedev-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .gamedev-stats, .gamedev-categories {
+      width: 100%;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .gamedev-stats h3, .gamedev-categories h3 {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .category-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    
+    .category-tag {
+      padding: 0.5rem 1rem;
+      background-color: rgba(99, 124, 206, 0.1);
+      color: var(--primary-color);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .gamedev-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .header-decoration {
+        margin-top: 1rem;
+        justify-content: flex-start;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .gamedev-container {
+        padding: 1.5rem;
+      }
+      
+      .gamedev-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .gamedev-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
+      }
+      
+      .stats-container {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .gamedev-header h1 {
+        font-size: 2rem;
+      }
+      
+      .gamedev-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .gamedev-icon {
+        height: 140px;
+      }
+      
+      .favicon {
+        width: 64px;
+        height: 64px;
+      }
+    }
+  </style>
+</BaseLayout>
