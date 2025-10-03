@@ -1,0 +1,440 @@
+---
+// src/pages/sssmaker.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Sprite Sheet Maker">
+  <main class="container">
+    <h1>Sprite Sheet Maker</h1>
+    <p>Create sprite sheets for your 2D games by uploading individual sprite images.</p>
+    
+    <div class="sprite-sheet-maker">
+      <div class="upload-section">
+        <h2>Upload Sprites</h2>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="fileInput" accept="image/*" multiple hidden>
+          <div class="upload-prompt">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p>Drag and drop sprite images here or click to browse</p>
+            <p class="upload-hint">Supports PNG, JPG, GIF and other image formats</p>
+          </div>
+        </div>
+        
+        <div class="sprites-preview" id="spritesPreview"></div>
+      </div>
+      
+      <div class="options-section">
+        <h2>Sprite Sheet Options</h2>
+        <div class="options-grid">
+          <div class="option">
+            <label for="columns">Columns:</label>
+            <input type="number" id="columns" min="1" value="4">
+          </div>
+          <div class="option">
+            <label for="padding">Padding (px):</label>
+            <input type="number" id="padding" min="0" value="0">
+          </div>
+          <div class="option">
+            <label for="backgroundColor">Background Color:</label>
+            <input type="color" id="backgroundColor" value="#ffffff">
+          </div>
+          <div class="option">
+            <label for="spriteWidth">Sprite Width (px):</label>
+            <input type="number" id="spriteWidth" min="1" value="64">
+          </div>
+          <div class="option">
+            <label for="spriteHeight">Sprite Height (px):</label>
+            <input type="number" id="spriteHeight" min="1" value="64">
+          </div>
+          <div class="option">
+            <label for="autoSize">Auto Size Sprites:</label>
+            <input type="checkbox" id="autoSize" checked>
+          </div>
+        </div>
+        
+        <div class="actions">
+          <button id="generateBtn" disabled>Generate Sprite Sheet</button>
+          <button id="downloadBtn" disabled>Download Sprite Sheet</button>
+          <button id="downloadDataBtn" disabled>Download Position Data</button>
+        </div>
+      </div>
+      
+      <div class="preview-section">
+        <h2>Preview</h2>
+        <div class="canvas-container">
+          <canvas id="spriteSheetCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .sprite-sheet-maker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .upload-section, .options-section, .preview-section {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .preview-section {
+      grid-column: 1 / -1;
+    }
+    
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+      border-color: #007bff;
+    }
+    
+    .upload-prompt svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+      color: #6c757d;
+    }
+    
+    .upload-hint {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    
+    .sprites-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .sprite-preview {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .sprite-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .sprite-preview .remove-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: rgba(255, 0, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 0 0 0 4px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .option {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .option label {
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+    
+    .option input {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover:not(:disabled) {
+      background-color: #0069d9;
+    }
+    
+    button:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+    
+    .canvas-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      overflow: auto;
+      max-height: 500px;
+    }
+    
+    #spriteSheetCanvas {
+      border: 1px solid #ddd;
+      max-width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+      .sprite-sheet-maker {
+        grid-template-columns: 1fr;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    // @ts-nocheck
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get DOM elements
+      const uploadArea = document.getElementById('uploadArea');
+      const fileInput = document.getElementById('fileInput');
+      const spritesPreview = document.getElementById('spritesPreview');
+      const generateBtn = document.getElementById('generateBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const downloadDataBtn = document.getElementById('downloadDataBtn');
+      const canvas = document.getElementById('spriteSheetCanvas');
+      
+      // Check if all elements exist
+      if (!uploadArea || !fileInput || !spritesPreview || !generateBtn || !downloadBtn || !downloadDataBtn || !canvas) {
+        console.error('One or more required elements not found');
+        return;
+      }
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error('Could not get canvas context');
+        return;
+      }
+      
+      // Initialize variables
+      let uploadedImages = [];
+      let spriteSheetData = [];
+      
+      // Handle file upload
+      uploadArea.addEventListener('click', () => fileInput.click());
+      
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
+      
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        if (e.dataTransfer && e.dataTransfer.files) {
+          handleFiles(e.dataTransfer.files);
+        }
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        if (e.target && e.target.files) {
+          handleFiles(e.target.files);
+        }
+      });
+      
+      function handleFiles(files) {
+        Array.from(files).forEach(file => {
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              if (e.target && e.target.result && typeof e.target.result === 'string') {
+                const img = new Image();
+                img.onload = () => {
+                  uploadedImages.push(img);
+                  displaySpritePreview(img, uploadedImages.length - 1);
+                  generateBtn.disabled = false;
+                };
+                img.src = e.target.result;
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+      
+      function displaySpritePreview(img, index) {
+        const spriteDiv = document.createElement('div');
+        spriteDiv.className = 'sprite-preview';
+        
+        const imgElement = document.createElement('img');
+        imgElement.src = img.src;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = 'X';
+        removeBtn.addEventListener('click', () => {
+          uploadedImages.splice(index, 1);
+          updateSpritePreviews();
+          if (uploadedImages.length === 0) {
+            generateBtn.disabled = true;
+            downloadBtn.disabled = true;
+            downloadDataBtn.disabled = true;
+          }
+        });
+        
+        spriteDiv.appendChild(imgElement);
+        spriteDiv.appendChild(removeBtn);
+        spritesPreview.appendChild(spriteDiv);
+      }
+      
+      function updateSpritePreviews() {
+        spritesPreview.innerHTML = '';
+        uploadedImages.forEach((img, index) => {
+          displaySpritePreview(img, index);
+        });
+      }
+      
+      // Generate sprite sheet
+      generateBtn.addEventListener('click', () => {
+        const columnsInput = document.getElementById('columns');
+        const paddingInput = document.getElementById('padding');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const spriteWidthInput = document.getElementById('spriteWidth');
+        const spriteHeightInput = document.getElementById('spriteHeight');
+        const autoSizeInput = document.getElementById('autoSize');
+        
+        if (!columnsInput || !paddingInput || !backgroundColorInput || !spriteWidthInput || !spriteHeightInput || !autoSizeInput) {
+          console.error('One or more input elements not found');
+          return;
+        }
+        
+        const columns = parseInt(columnsInput.value);
+        const padding = parseInt(paddingInput.value);
+        const backgroundColor = backgroundColorInput.value;
+        const spriteWidth = parseInt(spriteWidthInput.value);
+        const spriteHeight = parseInt(spriteHeightInput.value);
+        const autoSize = autoSizeInput.checked;
+        
+        if (uploadedImages.length === 0) return;
+        
+        // Calculate dimensions
+        let actualSpriteWidth = spriteWidth;
+        let actualSpriteHeight = spriteHeight;
+        
+        if (autoSize) {
+          actualSpriteWidth = Math.max(...uploadedImages.map(img => img.width));
+          actualSpriteHeight = Math.max(...uploadedImages.map(img => img.height));
+        }
+        
+        const rows = Math.ceil(uploadedImages.length / columns);
+        const canvasWidth = columns * actualSpriteWidth + (columns + 1) * padding;
+        const canvasHeight = rows * actualSpriteHeight + (rows + 1) * padding;
+        
+        // Set canvas dimensions
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        
+        // Fill background
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        
+        // Clear sprite sheet data
+        spriteSheetData = [];
+        
+        // Draw images on canvas
+        uploadedImages.forEach((img, index) => {
+          const row = Math.floor(index / columns);
+          const col = index % columns;
+          const x = col * actualSpriteWidth + (col + 1) * padding;
+          const y = row * actualSpriteHeight + (row + 1) * padding;
+          
+          // Center the image if it's smaller than the sprite size
+          const offsetX = (actualSpriteWidth - img.width) / 2;
+          const offsetY = (actualSpriteHeight - img.height) / 2;
+          
+          ctx.drawImage(img, x + offsetX, y + offsetY);
+          
+          // Store sprite position data
+          spriteSheetData.push({
+            index,
+            x,
+            y,
+            width: img.width,
+            height: img.height,
+            offsetX,
+            offsetY
+          });
+        });
+        
+        downloadBtn.disabled = false;
+        downloadDataBtn.disabled = false;
+      });
+      
+      // Download sprite sheet
+      downloadBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'sprite-sheet.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+      
+      // Download position data
+      downloadDataBtn.addEventListener('click', () => {
+        const dataStr = JSON.stringify(spriteSheetData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        const link = document.createElement('a');
+        link.download = 'sprite-sheet-data.json';
+        link.href = url;
+        link.click();
+        
+        URL.revokeObjectURL(url);
+      });
+    });
+  </script>
+</BaseLayout>
