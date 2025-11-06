@@ -1,4 +1,4 @@
-[![GitHub stars](https://img.shields.io/github/stars/YoRzHe-HotaaRu/yiorzhe?style=social)](https://github.com/YoRzHe-HotaaRu/yiorzhe)
+[![GitHub stars](https://img.shields.io/github/stars/YoRzHe-HotaaRu/yiorzhe?style=social)](https://github.com/YoRzHe-HotaaRu/yiorzhe-astro)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Built with Astro](https://img.shields.io/badge/built%20with-Astro-326DE6)](https://astro.build)
 # YioRzHe-HotaaRu Personal Website 🌐
