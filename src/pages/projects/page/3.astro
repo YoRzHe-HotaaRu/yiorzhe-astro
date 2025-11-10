@@ -20,7 +20,7 @@ const repos = await response.json();
 // Filter out forks
 const filteredRepos = repos.filter((repo: any) => !repo.fork) as Repo[];
 
-// Paginate: Page 3 (4-7)
+// Paginate: Page 3 (8-11)
 const projectsPerPage = 4;
 const totalProjects = filteredRepos.length;
 const totalPages = Math.ceil(totalProjects / projectsPerPage);
