@@ -1,97 +1,574 @@
 ---
 // src/pages/ai.astro
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Function to extract domain from URL
 function getDomain(url: string): string {
   try {
     const domain = new URL(url).hostname;
-    return domain.startsWith('www.') ? domain.substring(4) : domain;
+    return domain.startsWith("www.") ? domain.substring(4) : domain;
   } catch (e) {
-    return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
   }
 }
 
-// Define the AI LLM data
-const aiModels = [
-  { name: "Perplexity", url: "https://www.perplexity.ai/", category: "Multimodal AI" },
-  { name: "Grok 4", url: "https://grok.com/", category: "Real-time AI" },
-  { name: "Granite 4", url: "https://www.ibm.com/granite/playground", category: "Research AI" },
-  { name: "Gemini", url: "https://gemini.google.com/app", category: "Multimodal AI" },
-  { name: "ChatGPT", url: "https://chatgpt.com/", category: "General AI" },
-  { name: "Claude", url: "https://claude.ai/", category: "Multimodal AI" },
-  { name: "Mistral", url: "https://chat.mistral.ai/chat", category: "General AI" },
-  { name: "Liquid", url: "https://playground.liquid.ai/chat", category: "Creative AI" },
-  { name: "Venice", url: "https://venice.ai/chat", category: "Privacy AI" },
-  { name: "Arcee", url: "https://www.arcee.ai/", category: "Multimodal AI" },
-  { name: "CoPilot", url: "https://copilot.microsoft.com/chats/", category: "Multimodal AI" },
-  { name: "Mercury", url: "https://chat.inceptionlabs.ai/", category: "Research AI" },
-  { name: "Ernie (Baidu)", url: "https://ernie.baidu.com/", category: "General AI" },
-  { name: "SenseNova (SenseTime)", url: "https://chat.sensetime.com/", category: "Multimodal AI" },
-  { name: "Llama", url: "https://www.llama.com/", category: "General AI" },
-  { name: "Tongyi (Alibaba)", url: "https://www.tongyi.com/", category: "Multimodal AI" },
-  { name: "Hunyuan (Tencent)", url: "https://hunyuan.tencent.com/", category: "Multimodal AI" },
-  { name: "Seedream (Jianying)", url: "https://jimeng.jianying.com/", category: "Image Editor & Generator" },
-  { name: "Seedream (Dreamina)", url: "https://dreamina.capcut.com/", category: "Image Editor & Generator" },
-  { name: "LTX 2", url: "https://ltx.studio/", category: "AI Video" },
-  { name: "Wan", url: "https://create.wan.video/", category: "Multimodal AI" },
-  { name: "Qwen", url: "https://chat.qwen.ai/", category: "Multilingual AI" },
-  { name: "Zhipu - GLM", url: "https://chat.z.ai/", category: "General AI" },
-  { name: "Deepseek", url: "https://chat.deepseek.com/", category: "Code Assistant" },
-  { name: "Baichuan", url: "https://www.baichuan-ai.com/home", category: "Medical AI" },
-  { name: "K2 Think", url: "https://www.k2think.ai/", category: "Logic AI" },
-  { name: "LongCat", url: "https://longcat.chat/", category: "General AI" },
-  { name: "Kimi", url: "https://www.kimi.com/", category: "Conversational AI" },
-  { name: "MiniMax", url: "https://chat.minimax.io/", category: "Creative AI" },
-  { name: "MiniMax (Full-Scale", url: "https://www.minimaxi.com/", category: "Creative AI" },
-  { name: "Manus", url: "https://manus.im/app", category: "Multimodal AI" },
-  { name: "ZenMux", url: "https://zenmux.ai/", category: "AI API Host" },
-  { name: "OpenRouter", url: "https://openrouter.ai/", category: "AI API Host" },
-  { name: "LiteLLM", url: "https://www.litellm.ai/", category: "AI API Host" },
-  { name: "Eden AI", url: "https://edenai.co", category: "AI API Host" },
-  { name: "portkey", url: "https://portkey.ai/", category: "AI API Host" },
-  { name: "together.ai", url: "https://www.together.ai/", category: "AI API Host" },
-  { name: "Anyscale", url: "https://www.anyscale.com/", category: "AI API Host" },
-  { name: "deepinfra", url: "https://deepinfra.com/", category: "AI API Host" },
-  { name: "KiloCode", url: "https://app.kilocode.ai/", category: "Code Assistant" },
-  { name: "RooCode", url: "https://app.roocode.com/", category: "Code Assistant" },
-  { name: "Google AI Studio", url: "https://aistudio.google.com/", category: "Multimodal AI" },
-  { name: "Hugging Face", url: "https://huggingface.co/", category: "AI Arena" },
-  { name: "LM Arena", url: "https://lmarena.ai/", category: "AI Arena" },
-  { name: "Perchance", url: "https://perchance.org/hub", category: "Community Generator" },
-  { name: "Stable Diffusion XL", url: "https://perchance.org/ai-photo-generator", category: "Image Generator" },
-  { name: "Stable Audio", url: "https://stableaudio.com/", category: "Audio AI" },
-];
+// Define AI data organized by service type
+const aiCategories = {
+  llm: {
+    name: "LLM",
+    icon: "🤖",
+    description: "Large Language Models & AI Chatbots",
+    items: [
+      {
+        name: "Perplexity",
+        url: "https://www.perplexity.ai/",
+        subcategory: "Multimodal",
+      },
+      { name: "Grok 4", url: "https://grok.com/", subcategory: "Real-time" },
+      {
+        name: "Granite 4",
+        url: "https://www.ibm.com/granite/playground",
+        subcategory: "Research",
+      },
+      {
+        name: "Gemini",
+        url: "https://gemini.google.com/app",
+        subcategory: "Multimodal",
+      },
+      { name: "ChatGPT", url: "https://chatgpt.com/", subcategory: "General" },
+      { name: "Claude", url: "https://claude.ai/", subcategory: "Multimodal" },
+      {
+        name: "Mistral",
+        url: "https://chat.mistral.ai/chat",
+        subcategory: "General",
+      },
+      {
+        name: "Liquid",
+        url: "https://playground.liquid.ai/chat",
+        subcategory: "Creative",
+      },
+      { name: "Venice", url: "https://venice.ai/chat", subcategory: "Privacy" },
+      {
+        name: "Arcee",
+        url: "https://www.arcee.ai/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "CoPilot",
+        url: "https://copilot.microsoft.com/chats/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "Mercury",
+        url: "https://chat.inceptionlabs.ai/",
+        subcategory: "Research",
+      },
+      {
+        name: "Ernie (Baidu)",
+        url: "https://ernie.baidu.com/",
+        subcategory: "General",
+      },
+      {
+        name: "SenseNova (SenseTime)",
+        url: "https://chat.sensetime.com/",
+        subcategory: "Multimodal",
+      },
+      { name: "Llama", url: "https://www.llama.com/", subcategory: "General" },
+      {
+        name: "Tongyi (Alibaba)",
+        url: "https://www.tongyi.com/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "Hunyuan (Tencent)",
+        url: "https://hunyuan.tencent.com/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "Wan",
+        url: "https://create.wan.video/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "Qwen",
+        url: "https://chat.qwen.ai/",
+        subcategory: "Multilingual",
+      },
+      {
+        name: "Zhipu - GLM",
+        url: "https://chat.z.ai/",
+        subcategory: "General",
+      },
+      {
+        name: "Deepseek",
+        url: "https://chat.deepseek.com/",
+        subcategory: "Code",
+      },
+      {
+        name: "Baichuan",
+        url: "https://www.baichuan-ai.com/home",
+        subcategory: "Medical",
+      },
+      {
+        name: "K2 Think",
+        url: "https://www.k2think.ai/",
+        subcategory: "Logic",
+      },
+      { name: "LongCat", url: "https://longcat.chat/", subcategory: "General" },
+      {
+        name: "Kimi",
+        url: "https://www.kimi.com/",
+        subcategory: "Conversational",
+      },
+      {
+        name: "MiniMax",
+        url: "https://chat.minimax.io/",
+        subcategory: "Creative",
+      },
+      {
+        name: "MiniMax (Full-Scale)",
+        url: "https://www.minimaxi.com/",
+        subcategory: "Creative",
+      },
+      { name: "Manus", url: "https://manus.im/app", subcategory: "Multimodal" },
+      {
+        name: "Google AI Studio",
+        url: "https://aistudio.google.com/",
+        subcategory: "Multimodal",
+      },
+      {
+        name: "KiloCode",
+        url: "https://app.kilocode.ai/",
+        subcategory: "Code",
+      },
+      { name: "RooCode", url: "https://app.roocode.com/", subcategory: "Code" },
+      {
+        name: "Hugging Face",
+        url: "https://huggingface.co/",
+        subcategory: "Arena",
+      },
+      { name: "LM Arena", url: "https://lmarena.ai/", subcategory: "Arena" },
+      {
+        name: "Xiaomi MiMo",
+        url: "https://aistudio.xiaomimimo.com/#/",
+        subcategory: "Multimodal",
+      },
+      // Conversational & Multi-Model
+      {
+        name: "Pi (Inflection)",
+        url: "https://pi.ai/",
+        subcategory: "Conversational",
+      },
+      {
+        name: "Poe (Quora)",
+        url: "https://poe.com/",
+        subcategory: "Multi-Model",
+      },
+      {
+        name: "Character.AI",
+        url: "https://character.ai/",
+        subcategory: "Creative",
+      },
+      { name: "You.com", url: "https://you.com/", subcategory: "Search" },
+      {
+        name: "Coze",
+        url: "https://www.coze.com/",
+        subcategory: "Bot Builder",
+      },
+      {
+        name: "Doubao (ByteDance)",
+        url: "https://www.doubao.com/",
+        subcategory: "General",
+      },
+      // Research & Enterprise
+      { name: "Phind", url: "https://www.phind.com/", subcategory: "Code" },
+      {
+        name: "Cohere Coral",
+        url: "https://coral.cohere.com/",
+        subcategory: "Enterprise",
+      },
+      {
+        name: "Reka AI",
+        url: "https://chat.reka.ai/",
+        subcategory: "Multimodal",
+      },
+      { name: "Groq", url: "https://groq.com/", subcategory: "Fast Inference" },
+      { name: "01.AI (Yi)", url: "https://www.01.ai/", subcategory: "General" },
+      // Code Assistants
+      { name: "Cursor", url: "https://cursor.com/", subcategory: "Code" },
+      {
+        name: "Windsurf",
+        url: "https://codeium.com/windsurf",
+        subcategory: "Code",
+      },
+      { name: "Codeium", url: "https://codeium.com/", subcategory: "Code" },
+      { name: "Replit AI", url: "https://replit.com/", subcategory: "Code" },
+      {
+        name: "Sourcegraph Cody",
+        url: "https://sourcegraph.com/cody",
+        subcategory: "Code",
+      },
+    ],
+  },
+  provider: {
+    name: "Provider Service",
+    icon: "🔌",
+    description: "AI API Hosts & Infrastructure Providers",
+    items: [
+      { name: "ZenMux", url: "https://zenmux.ai/", subcategory: "API Gateway" },
+      {
+        name: "OpenRouter",
+        url: "https://openrouter.ai/",
+        subcategory: "API Gateway",
+      },
+      {
+        name: "LiteLLM",
+        url: "https://www.litellm.ai/",
+        subcategory: "API Gateway",
+      },
+      { name: "Eden AI", url: "https://edenai.co", subcategory: "API Gateway" },
+      {
+        name: "Portkey",
+        url: "https://portkey.ai/",
+        subcategory: "API Gateway",
+      },
+      {
+        name: "Together.ai",
+        url: "https://www.together.ai/",
+        subcategory: "Infrastructure",
+      },
+      {
+        name: "Anyscale",
+        url: "https://www.anyscale.com/",
+        subcategory: "Infrastructure",
+      },
+      {
+        name: "DeepInfra",
+        url: "https://deepinfra.com/",
+        subcategory: "Infrastructure",
+      },
+    ],
+  },
+  audio: {
+    name: "Audio",
+    icon: "🎵",
+    description: "AI Audio Generation & Processing",
+    items: [
+      // Music Generation
+      {
+        name: "Stable Audio",
+        url: "https://stableaudio.com/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Suno AI",
+        url: "https://suno.com/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Udio",
+        url: "https://www.udio.com/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "AIVA",
+        url: "https://www.aiva.ai/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Soundraw",
+        url: "https://soundraw.io/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Mubert",
+        url: "https://mubert.com/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Boomy",
+        url: "https://boomy.com/",
+        subcategory: "Music Generation",
+      },
+      {
+        name: "Riffusion",
+        url: "https://www.riffusion.com/",
+        subcategory: "Music Generation",
+      },
+      // Voice & Speech
+      {
+        name: "ElevenLabs",
+        url: "https://elevenlabs.io/",
+        subcategory: "Voice Synthesis",
+      },
+      {
+        name: "Play.ht",
+        url: "https://play.ht/",
+        subcategory: "Text-to-Speech",
+      },
+      {
+        name: "Murf AI",
+        url: "https://murf.ai/",
+        subcategory: "Text-to-Speech",
+      },
+      {
+        name: "Lovo AI",
+        url: "https://lovo.ai/",
+        subcategory: "Voice Generator",
+      },
+      {
+        name: "Resemble AI",
+        url: "https://www.resemble.ai/",
+        subcategory: "Voice Cloning",
+      },
+      { name: "Kits.AI", url: "https://kits.ai/", subcategory: "Voice Tools" },
+      // Audio Editing
+      {
+        name: "Descript",
+        url: "https://www.descript.com/",
+        subcategory: "Audio Editing",
+      },
+      {
+        name: "Adobe Podcast",
+        url: "https://podcast.adobe.com/",
+        subcategory: "Audio Enhancement",
+      },
+    ],
+  },
+  image: {
+    name: "Image & Video",
+    icon: "🎨",
+    description: "AI Image & Video Generation Tools",
+    items: [
+      // Image Generation
+      {
+        name: "Midjourney",
+        url: "https://www.midjourney.com/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Leonardo.AI",
+        url: "https://leonardo.ai/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Ideogram",
+        url: "https://ideogram.ai/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Playground AI",
+        url: "https://playground.ai/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Adobe Firefly",
+        url: "https://firefly.adobe.com/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Imagine (Meta)",
+        url: "https://imagine.meta.com/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "NightCafe",
+        url: "https://nightcafe.studio/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Craiyon",
+        url: "https://www.craiyon.com/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Artbreeder",
+        url: "https://www.artbreeder.com/",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Krea AI",
+        url: "https://www.krea.ai/",
+        subcategory: "Real-time Generation",
+      },
+      {
+        name: "Stable Diffusion XL",
+        url: "https://perchance.org/ai-photo-generator",
+        subcategory: "Image Generation",
+      },
+      {
+        name: "Perchance",
+        url: "https://perchance.org/hub",
+        subcategory: "Community",
+      },
+      // Image Editing
+      {
+        name: "Seedream (Jianying)",
+        url: "https://jimeng.jianying.com/",
+        subcategory: "Editor & Generator",
+      },
+      {
+        name: "Seedream (Dreamina)",
+        url: "https://dreamina.capcut.com/",
+        subcategory: "Editor & Generator",
+      },
+      {
+        name: "Clipdrop",
+        url: "https://clipdrop.co/",
+        subcategory: "Image Editing",
+      },
+      {
+        name: "Remove.bg",
+        url: "https://www.remove.bg/",
+        subcategory: "Background Removal",
+      },
+      {
+        name: "PhotoRoom",
+        url: "https://www.photoroom.com/",
+        subcategory: "Background Removal",
+      },
+      {
+        name: "Fotor AI",
+        url: "https://www.fotor.com/",
+        subcategory: "Photo Editing",
+      },
+      {
+        name: "Canva AI",
+        url: "https://www.canva.com/",
+        subcategory: "Design",
+      },
+      // Video Generation
+      {
+        name: "Runway",
+        url: "https://runwayml.com/",
+        subcategory: "Video Generation",
+      },
+      {
+        name: "Pika",
+        url: "https://pika.art/",
+        subcategory: "Video Generation",
+      },
+      {
+        name: "Luma AI",
+        url: "https://lumalabs.ai/",
+        subcategory: "Video & 3D",
+      },
+      {
+        name: "Kling AI",
+        url: "https://klingai.com/",
+        subcategory: "Video Generation",
+      },
+      {
+        name: "Haiper",
+        url: "https://haiper.ai/",
+        subcategory: "Video Generation",
+      },
+      {
+        name: "LTX Studio",
+        url: "https://ltx.studio/",
+        subcategory: "Video Generation",
+      },
+      {
+        name: "Vidu",
+        url: "https://www.vidu.studio/",
+        subcategory: "Video Generation",
+      },
+      // AI Avatars
+      {
+        name: "HeyGen",
+        url: "https://www.heygen.com/",
+        subcategory: "AI Avatars",
+      },
+      {
+        name: "Synthesia",
+        url: "https://www.synthesia.io/",
+        subcategory: "AI Avatars",
+      },
+      { name: "D-ID", url: "https://www.d-id.com/", subcategory: "AI Avatars" },
+      // Video Editing
+      {
+        name: "InVideo AI",
+        url: "https://invideo.io/",
+        subcategory: "Video Creation",
+      },
+      {
+        name: "Kapwing",
+        url: "https://www.kapwing.com/",
+        subcategory: "Video Editing",
+      },
+      {
+        name: "Veed.io",
+        url: "https://www.veed.io/",
+        subcategory: "Video Editing",
+      },
+      {
+        name: "Pictory",
+        url: "https://pictory.ai/",
+        subcategory: "Video Creation",
+      },
+    ],
+  },
+};
 
-// Add domain and favicon URL to each model
-const aiModelsWithIcons = aiModels.map(ai => {
-  const domain = getDomain(ai.url);
-  
-  // Custom favicon handling for specific domains
-  let faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-  
-  // Special cases where Google favicon doesn't work well
-  if (domain === 'chatgpt.com') {
-    faviconUrl = 'https://cdn.oaistatic.com/_next/static/media/favicon-32x32.6e956b52.png';
-  } else if (domain === 'chat.inceptionlabs.ai') {
-    faviconUrl = 'https://chat.inceptionlabs.ai/favicon.ico';
-  }
-  
-  return {
-    ...ai,
-    domain,
-    faviconUrl
+// Helper function to get favicon
+function getFavicon(url: string, name: string): string {
+  const domain = getDomain(url);
+
+  // Special cases for sites where Google favicon doesn't work well
+  const specialFavicons: Record<string, string> = {
+    "chatgpt.com":
+      "https://cdn.oaistatic.com/_next/static/media/favicon-32x32.6e956b52.png",
+    "chat.inceptionlabs.ai": "https://chat.inceptionlabs.ai/favicon.ico",
+    "app.roocode.com":
+      "https://ui-avatars.com/api/?name=Roo&background=7c3aed&color=fff&size=128&format=png",
+    "app.kilocode.ai":
+      "https://ui-avatars.com/api/?name=KC&background=10b981&color=fff&size=128&format=png",
+    "create.wan.video":
+      "https://ui-avatars.com/api/?name=Wan&background=f59e0b&color=fff&size=128&format=png",
+    "tongyi.com": "https://cdn.simpleicons.org/alibabacloud/FF6A00",
+    "chat.sensetime.com":
+      "https://ui-avatars.com/api/?name=SN&background=1e40af&color=fff&size=128&format=png",
   };
-});
+
+  if (specialFavicons[domain]) {
+    return specialFavicons[domain];
+  }
+
+  // Fallback to Google's favicon service
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+}
+
+// Process all categories to add domain and favicon
+const processedCategories = Object.fromEntries(
+  Object.entries(aiCategories).map(([key, category]) => [
+    key,
+    {
+      ...category,
+      items: category.items.map((item) => ({
+        ...item,
+        domain: getDomain(item.url),
+        faviconUrl: getFavicon(item.url, item.name),
+      })),
+    },
+  ]),
+);
+
+// Calculate totals
+const totalItems = Object.values(aiCategories).reduce(
+  (sum, cat) => sum + cat.items.length,
+  0,
+);
+const categoryKeys = Object.keys(aiCategories);
 ---
+
 <BaseLayout title="AI Models 🤖">
   <div class="ai-container">
     <div class="ai-header">
       <div class="header-content">
         <h1>AI Models 🤖</h1>
         <p>
-          Explore the cutting-edge AI language models I use and experiment with. 
-          Each one offers unique capabilities and perspectives on artificial intelligence.
+          Explore the cutting-edge AI tools I use and experiment with. Select a
+          category below to browse different types of AI services.
         </p>
       </div>
       <div class="header-decoration">
@@ -100,75 +577,117 @@ const aiModelsWithIcons = aiModels.map(ai => {
         <div class="decoration-item"></div>
       </div>
     </div>
-    
-    <div class="ai-grid">
-      {aiModelsWithIcons.map((ai) => (
-        <a href={ai.url} target="_blank" rel="noopener" class="ai-card">
-          <div class="ai-icon">
-            <img 
-              src={ai.faviconUrl} 
-              alt={`${ai.name} icon`} 
-              class="favicon"
-              onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(ai.name)}&background=637cce&color=fff&size=64&format=png'`}
-            />
-          </div>
-          <div class="ai-content">
-            <div class="ai-meta">
-              <span class="ai-category">{ai.category}</span>
-            </div>
-            <h3>{ai.name}</h3>
-            <p class="ai-desc">
-              {ai.domain}
-            </p>
-            <div class="ai-link">
-              Try AI <i class="fas fa-arrow-right"></i>
-            </div>
-          </div>
-        </a>
-      ))}
+
+    <!-- Category Filter Buttons -->
+    <div class="category-buttons">
+      {
+        Object.entries(processedCategories).map(([key, category]) => (
+          <button
+            class="category-btn"
+            data-category={key}
+            data-active={key === "llm" ? "true" : "false"}
+          >
+            <span class="btn-icon">{category.icon}</span>
+            <span class="btn-text">{category.name}</span>
+            <span class="btn-count">{category.items.length}</span>
+          </button>
+        ))
+      }
     </div>
-    
+
+    <!-- Category Sections -->
+    {
+      Object.entries(processedCategories).map(([key, category]) => (
+        <div
+          class="category-section"
+          data-section={key}
+          style={key === "llm" ? "" : "display: none;"}
+        >
+          <div class="section-header">
+            <h2>
+              {category.icon} {category.name}
+            </h2>
+            <p>{category.description}</p>
+          </div>
+
+          <div class="ai-grid">
+            {category.items.map((ai) => (
+              <a href={ai.url} target="_blank" rel="noopener" class="ai-card">
+                <div class="ai-icon">
+                  <img
+                    src={ai.faviconUrl}
+                    alt={`${ai.name} icon`}
+                    class="favicon"
+                    onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(ai.name)}&background=637cce&color=fff&size=64&format=png'`}
+                  />
+                </div>
+                <div class="ai-content">
+                  <div class="ai-meta">
+                    <span class="ai-category">{ai.subcategory}</span>
+                  </div>
+                  <h3>{ai.name}</h3>
+                  <p class="ai-desc">{ai.domain}</p>
+                  <div class="ai-link">
+                    Try AI <i class="fas fa-arrow-right" />
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+
     <div class="ai-footer">
       <div class="ai-stats">
         <h3>AI Usage Stats</h3>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-number">20</span>
-            <span class="stat-label">AI Models</span>
+            <span class="stat-number">{totalItems}</span>
+            <span class="stat-label">AI Tools</span>
           </div>
           <div class="stat-item">
-            <span class="stat-number">11</span>
+            <span class="stat-number">{categoryKeys.length}</span>
             <span class="stat-label">Categories</span>
           </div>
         </div>
       </div>
-      
-      <div class="ai-categories">
-        <h3>Categories</h3>
-        <div class="category-tags">
-          <span class="category-tag">General AI</span>
-          <span class="category-tag">Multilingual</span>
-          <span class="category-tag">Multimodal AI</span>
-          <span class="category-tag">Code Assistant</span>
-          <span class="category-tag">Creative</span>
-          <span class="category-tag">Privacy</span>
-          <span class="category-tag">Research</span>
-          <span class="category-tag">Community Generator</span>
-          <span class="category-tag">Image Generator</span>
-          <span class="category-tag">Real-Time</span>
-          <span class="category-tag">Logic AI</span>
-          <span class="category-tag">Audio AI</span>
-          <span class="category-tag">AI Arena</span>
-          <span class="category-tag">Medical AI</span>
-        </div>
-      </div>
-      
     </div>
   </div>
-  
+
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttons = document.querySelectorAll<HTMLElement>(".category-btn");
+      const sections =
+        document.querySelectorAll<HTMLElement>(".category-section");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const category = button.getAttribute("data-category");
+
+          // Update button states
+          buttons.forEach((btn) => btn.setAttribute("data-active", "false"));
+          button.setAttribute("data-active", "true");
+
+          // Show/hide sections
+          sections.forEach((section) => {
+            if (section.getAttribute("data-section") === category) {
+              section.style.display = "block";
+            } else {
+              section.style.display = "none";
+            }
+          });
+        });
+      });
+    });
+  </script>
+
   <style>
     :root {
       --primary-color: #637cce;
@@ -180,7 +699,7 @@ const aiModelsWithIcons = aiModels.map(ai => {
       --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
     }
-    
+
     .ai-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -190,19 +709,19 @@ const aiModelsWithIcons = aiModels.map(ai => {
       border-radius: 20px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
     }
-    
+
     .ai-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
       position: relative;
     }
-    
+
     .header-content {
       flex: 2;
     }
-    
+
     .ai-header h1 {
       font-size: 3rem;
       color: var(--dark-color);
@@ -210,25 +729,29 @@ const aiModelsWithIcons = aiModels.map(ai => {
       position: relative;
       display: inline-block;
     }
-    
+
     .ai-header h1::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -10px;
       left: 0;
       width: 80px;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      background: linear-gradient(
+        90deg,
+        var(--primary-color),
+        var(--secondary-color)
+      );
       border-radius: 2px;
     }
-    
+
     .ai-header p {
       color: var(--text-color);
       max-width: 700px;
       margin-top: 1.5rem;
       line-height: 1.6;
     }
-    
+
     .header-decoration {
       flex: 1;
       display: flex;
@@ -236,51 +759,135 @@ const aiModelsWithIcons = aiModels.map(ai => {
       align-items: center;
       gap: 15px;
     }
-    
+
     .decoration-item {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      background: linear-gradient(
+        135deg,
+        var(--primary-color),
+        var(--secondary-color)
+      );
       opacity: 0.7;
     }
-    
+
     .decoration-item:nth-child(2) {
       width: 60px;
       height: 60px;
       background: linear-gradient(135deg, var(--accent-color), #ff9e80);
     }
-    
+
     .decoration-item:nth-child(3) {
       width: 30px;
       height: 30px;
       background: linear-gradient(135deg, #16a085, #1abc9c);
     }
-    
+
+    /* Category Filter Buttons */
+    .category-buttons {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .category-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .category-btn:hover {
+      background: rgba(99, 124, 206, 0.1);
+    }
+
+    .category-btn[data-active="true"] {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 2px 8px rgba(99, 124, 206, 0.4);
+    }
+
+    .category-btn[data-active="true"] .btn-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+
+    .btn-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-count {
+      background: rgba(99, 124, 206, 0.15);
+      color: var(--primary-color);
+      padding: 0.15rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Section Header */
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+
     .ai-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 3rem;
     }
-    
+
     .ai-card {
       background: white;
       border-radius: 16px;
       overflow: hidden;
       box-shadow: var(--card-shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
       text-decoration: none;
       color: inherit;
     }
-    
+
     .ai-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--hover-shadow);
     }
-    
+
     .ai-icon {
       height: 120px;
       display: flex;
@@ -290,7 +897,7 @@ const aiModelsWithIcons = aiModels.map(ai => {
       position: relative;
       overflow: hidden;
     }
-    
+
     .favicon {
       width: 64px;
       height: 64px;
@@ -298,22 +905,22 @@ const aiModelsWithIcons = aiModels.map(ai => {
       border-radius: 12px;
       transition: transform 0.3s ease;
     }
-    
+
     .ai-card:hover .favicon {
       transform: scale(1.1);
     }
-    
+
     .ai-content {
       padding: 1.5rem;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
     }
-    
+
     .ai-meta {
       margin-bottom: 0.75rem;
     }
-    
+
     .ai-category {
       display: inline-block;
       padding: 0.25rem 0.75rem;
@@ -323,14 +930,14 @@ const aiModelsWithIcons = aiModels.map(ai => {
       font-size: 0.8rem;
       font-weight: 600;
     }
-    
+
     .ai-content h3 {
       font-size: 1.4rem;
       color: var(--dark-color);
       margin-bottom: 0.5rem;
       line-height: 1.3;
     }
-    
+
     .ai-desc {
       color: #666;
       margin-bottom: 1.5rem;
@@ -338,7 +945,7 @@ const aiModelsWithIcons = aiModels.map(ai => {
       font-size: 0.9rem;
       flex-grow: 1;
     }
-    
+
     .ai-link {
       display: inline-flex;
       align-items: center;
@@ -347,11 +954,11 @@ const aiModelsWithIcons = aiModels.map(ai => {
       font-weight: 600;
       transition: gap 0.3s ease;
     }
-    
+
     .ai-card:hover .ai-link {
       gap: 0.75rem;
     }
-    
+
     .ai-footer {
       display: flex;
       flex-direction: column;
@@ -359,128 +966,116 @@ const aiModelsWithIcons = aiModels.map(ai => {
       gap: 2rem;
       margin-top: 2rem;
     }
-    
-    .ai-stats, .ai-categories {
+
+    .ai-stats {
       width: 100%;
       background: white;
       padding: 1.5rem;
       border-radius: 16px;
       box-shadow: var(--card-shadow);
     }
-    
-    .ai-stats h3, .ai-categories h3 {
+
+    .ai-stats h3 {
       font-size: 1.5rem;
       color: var(--dark-color);
       margin-bottom: 1.5rem;
       text-align: center;
     }
-    
+
     .stats-container {
       display: flex;
       justify-content: center;
       gap: 2rem;
     }
-    
+
     .stat-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
-    
+
     .stat-number {
       font-size: 2rem;
       font-weight: 700;
       color: var(--primary-color);
       margin-bottom: 0.25rem;
     }
-    
+
     .stat-label {
       color: #666;
       font-size: 0.9rem;
     }
-    
-    .category-tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-    
-    .category-tag {
-      padding: 0.5rem 1rem;
-      background-color: rgba(99, 124, 206, 0.1);
-      color: var(--primary-color);
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: white;
-      color: var(--primary-color);
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    .back-btn:hover {
-      background: var(--light-color);
-      transform: translateY(-2px);
-    }
-    
+
     /* Responsive adjustments */
     @media (max-width: 992px) {
       .ai-header {
         flex-direction: column;
         align-items: flex-start;
       }
-      
+
       .header-decoration {
         margin-top: 1rem;
         justify-content: flex-start;
       }
     }
-    
+
     @media (max-width: 768px) {
       .ai-container {
         padding: 1.5rem;
       }
-      
+
       .ai-header h1 {
         font-size: 2.5rem;
       }
-      
+
+      .category-buttons {
+        gap: 0.35rem;
+        padding: 0.4rem;
+      }
+
+      .category-btn {
+        padding: 0.4rem 0.7rem;
+        gap: 0.3rem;
+      }
+
+      .btn-text {
+        display: none;
+      }
+
+      .btn-icon {
+        font-size: 0.9rem;
+      }
+
+      .btn-count {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+      }
+
       .ai-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 1.25rem;
       }
-      
+
       .stats-container {
         flex-wrap: wrap;
         gap: 1.5rem;
       }
     }
-    
+
     @media (max-width: 480px) {
       .ai-header h1 {
         font-size: 2rem;
       }
-      
+
       .ai-grid {
         grid-template-columns: 1fr;
       }
-      
+
       .ai-icon {
         height: 100px;
       }
-      
+
       .favicon {
         width: 48px;
         height: 48px;
