@@ -25,60 +25,114 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="nav-grid">
       <!-- Featured Projects Card -->
       <a href="/apps/featured" class="nav-card featured-nav">
-        <div class="nav-icon">
-          <i class="fas fa-star"></i>
-        </div>
-        <div class="nav-content">
-          <h2>Featured Projects</h2>
-          <p>
-            Major applications and full-featured projects including A.K.A.R.I,
-            YuGiDex, FolioS, and MyGal.
-          </p>
-          <div class="nav-arrow">
-            Explore <i class="fas fa-arrow-right"></i>
+        <div class="card-glow"></div>
+        <div class="card-content">
+          <div class="icon-container">
+            <svg class="animated-icon featured-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <!-- Star burst background -->
+              <circle class="star-burst" cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+              <circle class="star-burst-inner" cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+              
+              <!-- Main star -->
+              <g class="star-group">
+                <path class="star-main" d="M50 15 L58 38 L82 38 L63 53 L70 76 L50 62 L30 76 L37 53 L18 38 L42 38 Z" 
+                      fill="currentColor" stroke="none"/>
+                <path class="star-shine" d="M50 20 L56 38 L76 38 L60 50 L66 68 L50 58 L34 68 L40 50 L24 38 L44 38 Z" 
+                      fill="rgba(255,255,255,0.3)" stroke="none"/>
+              </g>
+              
+              <!-- Orbiting sparkles -->
+              <g class="sparkles">
+                <circle class="sparkle sparkle-1" cx="20" cy="30" r="3" fill="currentColor"/>
+                <circle class="sparkle sparkle-2" cx="80" cy="25" r="2" fill="currentColor"/>
+                <circle class="sparkle sparkle-3" cx="75" cy="70" r="2.5" fill="currentColor"/>
+                <circle class="sparkle sparkle-4" cx="25" cy="75" r="2" fill="currentColor"/>
+              </g>
+            </svg>
+          </div>
+          <div class="text-content">
+            <h2>Featured Projects</h2>
+            <p>Major applications and full-featured projects</p>
+            <div class="app-count">4 Projects</div>
+          </div>
+          <div class="arrow-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path class="arrow-path" d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </div>
         </div>
-        <div class="nav-preview">
-          <div class="preview-item">
-            <img src="/assets/apps/AKARI.png" alt="A.K.A.R.I" />
-          </div>
-          <div class="preview-item">
-            <img src="/assets/apps/Yugidex.png" alt="YuGiDex" />
-          </div>
-          <div class="preview-item">
-            <img src="/assets/apps/FolioS.png" alt="FolioS" />
-          </div>
-          <div class="preview-item">
-            <img src="/assets/apps/mygal.png" alt="MyGal" />
-          </div>
+        <div class="card-background">
+          <div class="gradient-orb orb-1"></div>
+          <div class="gradient-orb orb-2"></div>
         </div>
       </a>
 
       <!-- Simple Apps Card -->
       <a href="/apps/simple" class="nav-card simple-nav">
-        <div class="nav-icon">
-          <i class="fas fa-tools"></i>
-        </div>
-        <div class="nav-content">
-          <h2>Simple Apps</h2>
-          <p>
-            Quick utility tools and handy mini-applications including PDF Merger,
-            Password Generator, and QR Generator.
-          </p>
-          <div class="nav-arrow">
-            Explore <i class="fas fa-arrow-right"></i>
+        <div class="card-glow"></div>
+        <div class="card-content">
+          <div class="icon-container">
+            <svg class="animated-icon simple-icon" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <g id="gear-large">
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" />
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" transform="rotate(30)" />
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" transform="rotate(60)" />
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" transform="rotate(90)" />
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" transform="rotate(120)" />
+                  <rect x="-6" y="-46" width="12" height="92" fill="#7ab8ff" rx="4" transform="rotate(150)" />
+                  <circle cx="0" cy="0" r="39" fill="#7ab8ff"/>
+                  <circle cx="0" cy="0" r="22" fill="#ffffff"/>
+                  <circle cx="0" cy="0" r="12" fill="#cccccc"/>
+                </g>
+
+                <g id="gear-small">
+                  <rect x="-5" y="-31" width="10" height="62" fill="#7ab8ff" rx="3" />
+                  <rect x="-5" y="-31" width="10" height="62" fill="#7ab8ff" rx="3" transform="rotate(45)" />
+                  <rect x="-5" y="-31" width="10" height="62" fill="#7ab8ff" rx="3" transform="rotate(90)" />
+                  <rect x="-5" y="-31" width="10" height="62" fill="#7ab8ff" rx="3" transform="rotate(135)" />
+                  <circle cx="0" cy="0" r="26" fill="#7ab8ff"/>
+                  <circle cx="0" cy="0" r="14" fill="#ffffff"/>
+                  <circle cx="0" cy="0" r="8" fill="#cccccc"/>
+                </g>
+              </defs>
+
+              <g transform="translate(125, 90)">
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"/>
+                  <use href="#gear-large"/>
+                </g>
+              </g>
+
+              <g transform="translate(190, 90)">
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="4s" repeatCount="indefinite"/>
+                  <use href="#gear-small" transform="rotate(22.5)"/>
+                </g>
+              </g>
+
+              <g transform="translate(92.5, 146.3)">
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="4s" repeatCount="indefinite"/>
+                  <use href="#gear-small" transform="rotate(7.5)"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="text-content">
+            <h2>Simple Apps</h2>
+            <p>Quick utility tools and handy mini-applications</p>
+            <div class="app-count">3 Tools</div>
+          </div>
+          <div class="arrow-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path class="arrow-path" d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </div>
         </div>
-        <div class="nav-preview">
-          <div class="preview-item">
-            <img src="/assets/apps/pdfMerger.jpg" alt="PDF Merger" />
-          </div>
-          <div class="preview-item">
-            <img src="/assets/apps/passwordGen.jpg" alt="Password Generator" />
-          </div>
-          <div class="preview-item">
-            <img src="/assets/apps/qrGenerator.jpg" alt="QR Generator" />
-          </div>
+        <div class="card-background">
+          <div class="gradient-orb orb-1"></div>
+          <div class="gradient-orb orb-2"></div>
         </div>
       </a>
     </div>
@@ -124,10 +178,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       --dark-color: #2c3e50;
       --light-color: #f8f9fa;
       --text-color: #333;
-      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      --featured-gradient: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-      --simple-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+      --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
     }
 
     .apps-container {
@@ -144,7 +196,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
       position: relative;
     }
 
@@ -153,11 +205,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     .apps-header h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       color: var(--dark-color);
       margin-bottom: 1rem;
       position: relative;
       display: inline-block;
+      font-weight: 800;
     }
 
     .apps-header h1::after {
@@ -165,21 +218,22 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       position: absolute;
       bottom: -10px;
       left: 0;
-      width: 80px;
-      height: 4px;
+      width: 100px;
+      height: 5px;
       background: linear-gradient(
         90deg,
         var(--primary-color),
         var(--secondary-color)
       );
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
     .apps-header p {
       color: var(--text-color);
-      max-width: 700px;
+      max-width: 600px;
       margin-top: 1.5rem;
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 1.1rem;
     }
 
     .header-decoration {
@@ -217,122 +271,272 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     /* Navigation Grid */
     .nav-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2.5rem;
       margin-bottom: 3rem;
     }
 
     .nav-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
+      position: relative;
+      border-radius: 24px;
+      padding: 2.5rem;
       box-shadow: var(--card-shadow);
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: flex;
       flex-direction: column;
       text-decoration: none;
       color: inherit;
-      position: relative;
       overflow: hidden;
+      min-height: 320px;
     }
 
     .nav-card::before {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
+      inset: 0;
+      background: white;
+      z-index: 1;
     }
 
-    .featured-nav::before {
-      background: var(--featured-gradient);
+    .card-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: 26px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
     }
 
-    .simple-nav::before {
-      background: var(--simple-gradient);
+    .featured-nav .card-glow {
+      background: linear-gradient(135deg, #ffd700, #ff6b6b, #ffd700);
+      background-size: 200% 200%;
+      animation: gradient-shift 3s ease infinite;
+    }
+
+    .simple-nav .card-glow {
+      background: linear-gradient(135deg, #74b9ff, #0984e3, #74b9ff);
+      background-size: 200% 200%;
+      animation: gradient-shift 3s ease infinite;
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .nav-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-8px) scale(1.02);
       box-shadow: var(--hover-shadow);
     }
 
-    .nav-icon {
-      width: 70px;
-      height: 70px;
+    .nav-card:hover .card-glow {
+      opacity: 1;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .icon-container {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .animated-icon {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Featured Icon Animations */
+    .featured-icon {
+      color: #ffd700;
+    }
+
+    .star-burst {
+      animation: rotate-slow 20s linear infinite;
+      transform-origin: center;
+    }
+
+    .star-burst-inner {
+      animation: rotate-slow 15s linear infinite reverse;
+      transform-origin: center;
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .star-group {
+      animation: pulse-star 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes pulse-star {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .sparkle {
+      animation: sparkle-twinkle 1.5s ease-in-out infinite;
+    }
+
+    .sparkle-1 { animation-delay: 0s; }
+    .sparkle-2 { animation-delay: 0.3s; }
+    .sparkle-3 { animation-delay: 0.6s; }
+    .sparkle-4 { animation-delay: 0.9s; }
+
+    @keyframes sparkle-twinkle {
+      0%, 100% { 
+        opacity: 0.3;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    /* Simple Icon - Uses SMIL animations inside SVG */
+    .simple-icon {
+      width: 100%;
+      height: 100%;
+    }
+
+    .text-content {
+      flex-grow: 1;
+    }
+
+    .text-content h2 {
+      font-size: 2rem;
+      color: var(--dark-color);
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+
+    .text-content p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+
+    .app-count {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .featured-nav .app-count {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.25));
+      color: #b8860b;
+    }
+
+    .simple-nav .app-count {
+      background: linear-gradient(135deg, rgba(116, 185, 255, 0.15), rgba(116, 185, 255, 0.25));
+      color: #0984e3;
+    }
+
+    .arrow-indicator {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
     }
 
-    .featured-nav .nav-icon {
-      background: var(--featured-gradient);
-      color: #2c3e50;
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    .featured-nav .arrow-indicator {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
     }
 
-    .simple-nav .nav-icon {
-      background: var(--simple-gradient);
+    .simple-nav .arrow-indicator {
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+    }
+
+    .arrow-indicator svg {
+      width: 24px;
+      height: 24px;
       color: white;
-      box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
+      transition: transform 0.3s ease;
     }
 
-    .nav-content h2 {
-      font-size: 1.8rem;
-      color: var(--dark-color);
-      margin-bottom: 0.75rem;
+    .nav-card:hover .arrow-indicator {
+      transform: scale(1.1);
     }
 
-    .nav-content p {
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
+    .nav-card:hover .arrow-path {
+      animation: arrow-bounce 0.6s ease infinite;
     }
 
-    .nav-arrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--primary-color);
-      font-weight: 600;
-      transition: gap 0.3s ease;
+    @keyframes arrow-bounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(3px); }
     }
 
-    .nav-card:hover .nav-arrow {
-      gap: 0.75rem;
-    }
-
-    .nav-preview {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #eee;
-    }
-
-    .preview-item {
-      flex: 1;
-      height: 80px;
-      border-radius: 8px;
+    .card-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
       overflow: hidden;
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
+      border-radius: 24px;
     }
 
-    .nav-card:hover .preview-item {
-      opacity: 1;
+    .gradient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+      transition: all 0.4s ease;
     }
 
-    .preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .featured-nav .orb-1 {
+      width: 200px;
+      height: 200px;
+      background: #ffd700;
+      top: -50px;
+      right: -50px;
+    }
+
+    .featured-nav .orb-2 {
+      width: 150px;
+      height: 150px;
+      background: #ff6b6b;
+      bottom: -30px;
+      left: -30px;
+    }
+
+    .simple-nav .orb-1 {
+      width: 200px;
+      height: 200px;
+      background: #74b9ff;
+      top: -50px;
+      right: -50px;
+    }
+
+    .simple-nav .orb-2 {
+      width: 150px;
+      height: 150px;
+      background: #0984e3;
+      bottom: -30px;
+      left: -30px;
+    }
+
+    .nav-card:hover .gradient-orb {
+      opacity: 0.25;
+      transform: scale(1.2);
     }
 
     .apps-footer {
@@ -383,24 +587,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       color: var(--primary-color);
     }
 
-    .tech-icon:nth-child(1) {
-      color: #e34c26;
-    }
-    .tech-icon:nth-child(2) {
-      color: #1572b6;
-    }
-    .tech-icon:nth-child(3) {
-      color: #f7df1e;
-    }
-    .tech-icon:nth-child(4) {
-      color: #61dafb;
-    }
-    .tech-icon:nth-child(5) {
-      color: #339933;
-    }
-    .tech-icon:nth-child(6) {
-      color: #3776ab;
-    }
+    .tech-icon:nth-child(1) { color: #e34c26; }
+    .tech-icon:nth-child(2) { color: #1572b6; }
+    .tech-icon:nth-child(3) { color: #f7df1e; }
+    .tech-icon:nth-child(4) { color: #61dafb; }
+    .tech-icon:nth-child(5) { color: #339933; }
+    .tech-icon:nth-child(6) { color: #3776ab; }
 
     /* Responsive adjustments */
     @media (max-width: 992px) {
@@ -429,11 +621,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }
 
       .nav-card {
-        padding: 1.5rem;
+        padding: 2rem;
+        min-height: 280px;
       }
 
-      .nav-content h2 {
-        font-size: 1.5rem;
+      .icon-container {
+        width: 100px;
+        height: 100px;
+      }
+
+      .text-content h2 {
+        font-size: 1.75rem;
       }
 
       .tech-icons {
@@ -452,14 +650,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         font-size: 2rem;
       }
 
-      .nav-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
+      .nav-card {
+        padding: 1.5rem;
       }
 
-      .preview-item {
-        height: 60px;
+      .arrow-indicator {
+        width: 40px;
+        height: 40px;
+        bottom: 1.5rem;
+        right: 1.5rem;
       }
     }
   </style>
