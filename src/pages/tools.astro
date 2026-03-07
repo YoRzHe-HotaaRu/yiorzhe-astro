@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Tools categories data
+const toolCategories = [
+  {
+    id: 'ai',
+    title: 'AI Resources',
+    description: 'Explore a comprehensive collection of Large Language Models, AI chatbots, and artificial intelligence tools for various use cases.',
+    icon: '🤖',
+    color: '#58cc02',
+    features: [
+      'LLMs & Chatbots',
+      'Multimodal AI',
+      'Research Tools',
+      'Creative AI',
+      'Privacy-Focused AI'
+    ],
+    link: '/ai',
+    stats: '20+ AI Tools'
+  },
+  {
+    id: 'gamedev',
+    title: 'Game Development',
+    description: 'Discover game engines, 3D modeling tools, and development frameworks for creating amazing games and interactive experiences.',
+    icon: '🎮',
+    color: '#1cb0f6',
+    features: [
+      'Game Engines',
+      '3D Modeling',
+      '2D Frameworks',
+      'Image Processing',
+      'WebGL Tools'
+    ],
+    link: '/gamedev',
+    stats: '10+ Dev Tools'
+  }
+];
+---
+
+<BaseLayout title="Tools & Resources">
+  <div class="tools-container">
+    <!-- Header Section -->
+    <div class="tools-header">
+      <h1>Tools & Resources 🛠️</h1>
+      <p class="subtitle">
+        A curated collection of powerful tools and resources for AI enthusiasts and game developers. 
+        Choose your path and explore the possibilities.
+      </p>
+    </div>
+
+    <!-- Tools Grid -->
+    <div class="tools-grid">
+      {toolCategories.map((category) => (
+        <a href={category.link} class="tool-card" style={`--card-color: ${category.color}`}>
+          <div class="card-glow"></div>
+          <div class="card-content">
+            <div class="card-header">
+              <span class="card-icon">{category.icon}</span>
+              <span class="card-stats">{category.stats}</span>
+            </div>
+            
+            <h2 class="card-title">{category.title}</h2>
+            <p class="card-description">{category.description}</p>
+            
+            <div class="features-list">
+              {category.features.map((feature) => (
+                <span class="feature-tag">{feature}</span>
+              ))}
+            </div>
+            
+            <div class="card-action">
+              <span class="action-text">Explore {category.title}</span>
+              <span class="action-arrow">→</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <style lang="scss">
+    @use "sass:color";
+
+    .tools-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    // Header Styles
+    .tools-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      
+      h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #58cc02 0%, #1cb0f6 50%, #ce82ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
+      }
+      
+      .subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+        
+        @media (max-width: 768px) {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    // Tools Grid
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    // Tool Card
+    .tool-card {
+      position: relative;
+      background: white;
+      border-radius: 24px;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+      border: 2px solid transparent;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--card-color);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: var(--card-color);
+        
+        &::before {
+          transform: scaleX(1);
+        }
+        
+        .card-glow {
+          opacity: 0.1;
+        }
+        
+        .action-arrow {
+          transform: translateX(5px);
+        }
+      }
+    }
+
+    .card-glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--card-color) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .card-stats {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--card-color);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+    }
+
+    .card-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-description {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .features-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-tag {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.7rem;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .action-text {
+      font-weight: 600;
+      color: var(--card-color);
+      font-size: 1rem;
+    }
+
+    .action-arrow {
+      font-size: 1.5rem;
+      color: var(--card-color);
+      transition: transform 0.3s ease;
+    }
+
+    // Animation for cards on load
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .tool-card {
+      animation: fadeInUp 0.6s ease-out forwards;
+      
+      &:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+    }
+  </style>
+</BaseLayout>
