@@ -1,4 +1,6 @@
 // src/styles/main.scss
+@use "sass:color";
+
 $primary: #637cce;
 $text: #111;
 $bg: #e5eff8; // Light gray background (page)
@@ -73,7 +75,7 @@ body {
   transition: color 0.2s;
 
   &:hover {
-    color: darken($primary, 15%);
+    color: color.adjust($primary, $lightness: -15%);
   }
 }
 
@@ -488,7 +490,7 @@ footer {
       transform: translateX(-50%);
       width: 80px;
       height: 4px;
-      background: linear-gradient(90deg, $primary, lighten($primary, 20%));
+      background: linear-gradient(90deg, $primary, color.adjust($primary, $lightness: 20%));
       border-radius: 2px;
     }
   }
@@ -680,7 +682,7 @@ footer {
   }
 
   &:hover {
-    background: darken($primary, 10%);
+    background: color.adjust($primary, $lightness: -10%);
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba($primary, 0.2);
 
@@ -795,7 +797,7 @@ footer {
   transition: color 0.2s;
 
   &:hover {
-    color: darken($primary, 20%);
+    color: color.adjust($primary, $lightness: -20%);
   }
 }
 
@@ -830,7 +832,7 @@ footer {
     transform: translateX(-50%);
     width: 80px;
     height: 4px;
-    background: linear-gradient(90deg, $primary, lighten($primary, 20%));
+    background: linear-gradient(90deg, $primary, color.adjust($primary, $lightness: 20%));
     border-radius: 2px;
   }
 }
@@ -870,7 +872,7 @@ footer {
     left: 0;
     width: 100%;
     height: 5px;
-    background: linear-gradient(90deg, $primary, lighten($primary, 20%));
+    background: linear-gradient(90deg, $primary, color.adjust($primary, $lightness: 20%));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
@@ -934,7 +936,7 @@ footer {
   }
   
   &:hover {
-    background: darken($primary, 10%);
+    background: color.adjust($primary, $lightness: -10%);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba($primary, 0.3);
     
@@ -973,7 +975,7 @@ footer {
     left: 0;
     width: 5px;
     height: 100%;
-    background: linear-gradient(to bottom, $primary, lighten($primary, 20%));
+    background: linear-gradient(to bottom, $primary, color.adjust($primary, $lightness: 20%));
     border-radius: 3px 0 0 3px;
   }
   
@@ -1087,7 +1089,7 @@ footer {
   transition: background 0.2s;
 
   &:hover {
-    background: darken($primary, 20%);
+    background: color.adjust($primary, $lightness: -20%);
   }
 }
 

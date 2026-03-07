@@ -1,0 +1,534 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 - Page Not Found">
+  <div class="error-container">
+    <div class="owl-scene">
+      <!-- Confused Owl Character -->
+      <div class="owl">
+        <!-- Body -->
+        <div class="owl-body">
+          <!-- Eyes Container -->
+          <div class="eyes-container">
+            <div class="eye left">
+              <div class="pupil"></div>
+              <div class="eyebrow"></div>
+            </div>
+            <div class="eye right">
+              <div class="pupil"></div>
+              <div class="eyebrow"></div>
+            </div>
+          </div>
+          <!-- Beak -->
+          <div class="beak"></div>
+          <!-- Wings -->
+          <div class="wing left"></div>
+          <div class="wing right"></div>
+          <!-- Feet -->
+          <div class="feet">
+            <div class="foot left"></div>
+            <div class="foot right"></div>
+          </div>
+        </div>
+        <!-- Question marks floating around -->
+        <div class="floating-mark mark-1">?</div>
+        <div class="floating-mark mark-2">?</div>
+        <div class="floating-mark mark-3">?</div>
+      </div>
+    </div>
+
+    <div class="error-content">
+      <h1 class="error-code">404</h1>
+      <h2 class="error-title">Hoot! Page not found</h2>
+      <p class="error-message">
+        Looks like this page flew away! <br>
+        Don't worry, even the best owls get lost sometimes.
+      </p>
+      
+      <div class="action-buttons">
+        <a href="/" class="btn btn-primary">
+          <span class="btn-icon">🏠</span>
+          Go Home
+        </a>
+        <a href="/projects" class="btn btn-secondary">
+          <span class="btn-icon">🚀</span>
+          Explore Projects
+        </a>
+      </div>
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="decoration leaf leaf-1">🍃</div>
+    <div class="decoration leaf leaf-2">🌿</div>
+    <div class="decoration leaf leaf-3">🍃</div>
+    <div class="decoration star star-1">✨</div>
+    <div class="decoration star star-2">✨</div>
+  </div>
+
+  <style lang="scss">
+    @use "sass:color";
+
+    // Duolingo-inspired color palette
+    $duo-green: #58cc02;
+    $duo-green-dark: #58a700;
+    $duo-blue: #1cb0f6;
+    $duo-blue-dark: #1899d6;
+    $duo-purple: #ce82ff;
+    $duo-orange: #ff9600;
+    $duo-red: #ff4b4b;
+    $duo-yellow: #ffc800;
+    
+    $owl-green: #89e219;
+    $owl-green-dark: #6bb816;
+    $owl-belly: #e8f8d8;
+
+    .error-container {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
+    }
+
+    // Owl Scene
+    .owl-scene {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    // The Owl Character
+    .owl {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      animation: gentle-bounce 3s ease-in-out infinite;
+    }
+
+    .owl-body {
+      width: 160px;
+      height: 180px;
+      background: linear-gradient(180deg, $owl-green 0%, $owl-green-dark 100%);
+      border-radius: 50% 50% 45% 45%;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 
+        0 8px 0 rgba(0,0,0,0.1),
+        inset 0 -20px 30px rgba(0,0,0,0.1);
+      
+      // Belly
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 80px;
+        background: $owl-belly;
+        border-radius: 50%;
+        opacity: 0.6;
+      }
+    }
+
+    // Eyes
+    .eyes-container {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+    }
+
+    .eye {
+      width: 55px;
+      height: 55px;
+      background: white;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      
+      .pupil {
+        width: 22px;
+        height: 22px;
+        background: #1f1f1f;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: look-around 4s ease-in-out infinite;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          background: white;
+          border-radius: 50%;
+          top: 4px;
+          right: 4px;
+        }
+      }
+    }
+
+    // Confused eyebrows
+    .eyebrow {
+      position: absolute;
+      top: -8px;
+      width: 25px;
+      height: 4px;
+      background: #1f1f1f;
+      border-radius: 2px;
+    }
+
+    .eye.left .eyebrow {
+      left: 8px;
+      transform: rotate(-20deg);
+    }
+
+    .eye.right .eyebrow {
+      right: 8px;
+      transform: rotate(20deg);
+    }
+
+    // Beak
+    .beak {
+      position: absolute;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 18px solid $duo-orange;
+      border-radius: 0 0 50% 50%;
+    }
+
+    // Wings
+    .wing {
+      position: absolute;
+      width: 35px;
+      height: 60px;
+      background: $owl-green-dark;
+      border-radius: 50%;
+      top: 80px;
+      
+      &.left {
+        left: -15px;
+        transform: rotate(-20deg);
+        animation: wing-left 2s ease-in-out infinite;
+      }
+      
+      &.right {
+        right: -15px;
+        transform: rotate(20deg);
+        animation: wing-right 2s ease-in-out infinite;
+      }
+    }
+
+    // Feet
+    .feet {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 30px;
+    }
+
+    .foot {
+      width: 20px;
+      height: 15px;
+      background: $duo-orange;
+      border-radius: 50%;
+      position: relative;
+      
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 12px;
+        background: $duo-orange;
+        border-radius: 50%;
+        top: -5px;
+      }
+      
+      &::before { left: -3px; }
+      &::after { right: -3px; }
+    }
+
+    // Floating question marks
+    .floating-mark {
+      position: absolute;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: $duo-purple;
+      opacity: 0.8;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    }
+
+    .mark-1 {
+      top: -20px;
+      left: -30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .mark-2 {
+      top: 20px;
+      right: -20px;
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite 0.5s;
+    }
+
+    .mark-3 {
+      top: 80px;
+      left: -40px;
+      font-size: 1.8rem;
+      animation: float 3s ease-in-out infinite 1s;
+    }
+
+    // Error Content
+    .error-content {
+      text-align: center;
+      z-index: 1;
+    }
+
+    .error-code {
+      font-size: 8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, $duo-green 0%, $duo-blue 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      text-shadow: none;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .error-title {
+      font-size: 2.5rem;
+      color: #3c3c3c;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .error-message {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    // Action Buttons
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+      
+      &:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+      }
+    }
+
+    .btn-primary {
+      background: $duo-green;
+      color: white;
+      box-shadow: 0 6px 0 $duo-green-dark;
+      
+      &:hover {
+        background: color.adjust($duo-green, $lightness: 5%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 $duo-green-dark;
+      }
+      
+      &:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 $duo-green-dark;
+      }
+    }
+
+    .btn-secondary {
+      background: white;
+      color: $duo-blue;
+      border: 2px solid #e5e5e5;
+      box-shadow: 0 6px 0 #e5e5e5;
+      
+      &:hover {
+        background: #f7f7f7;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 #d5d5d5;
+      }
+      
+      &:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #d5d5d5;
+      }
+    }
+
+    .btn-icon {
+      font-size: 1.3rem;
+    }
+
+    // Decorative Elements
+    .decoration {
+      position: absolute;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .leaf {
+      font-size: 2rem;
+      animation: sway 4s ease-in-out infinite;
+    }
+
+    .leaf-1 {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .leaf-2 {
+      top: 20%;
+      right: 8%;
+      font-size: 2.5rem;
+      animation-delay: 1s;
+    }
+
+    .leaf-3 {
+      bottom: 20%;
+      left: 8%;
+      animation-delay: 2s;
+    }
+
+    .star {
+      font-size: 1.5rem;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+
+    .star-1 {
+      top: 15%;
+      right: 15%;
+    }
+
+    .star-2 {
+      bottom: 30%;
+      right: 10%;
+      animation-delay: 1s;
+    }
+
+    // Animations
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes look-around {
+      0%, 100% { transform: translate(-50%, -50%); }
+      25% { transform: translate(-70%, -50%); }
+      75% { transform: translate(-30%, -50%); }
+    }
+
+    @keyframes wing-left {
+      0%, 100% { transform: rotate(-20deg); }
+      50% { transform: rotate(-30deg); }
+    }
+
+    @keyframes wing-right {
+      0%, 100% { transform: rotate(20deg); }
+      50% { transform: rotate(30deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0) rotate(-5deg); 
+        opacity: 0.8;
+      }
+      50% { 
+        transform: translateY(-15px) rotate(5deg); 
+        opacity: 1;
+      }
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    // Responsive
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 5rem;
+      }
+      
+      .error-title {
+        font-size: 1.8rem;
+      }
+      
+      .owl {
+        width: 150px;
+        height: 180px;
+      }
+      
+      .owl-body {
+        width: 120px;
+        height: 135px;
+      }
+      
+      .eye {
+        width: 40px;
+        height: 40px;
+        
+        .pupil {
+          width: 16px;
+          height: 16px;
+        }
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</BaseLayout>

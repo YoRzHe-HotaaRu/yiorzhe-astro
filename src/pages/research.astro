@@ -88,6 +88,7 @@ const researchPapers: ResearchPaper[] = [
   </div>
 
   <style lang="scss">
+    @use "sass:color";
     
     .research-container {
       max-width: 1200px;
@@ -118,7 +119,7 @@ const researchPapers: ResearchPaper[] = [
             transform: translateX(-50%);
             width: 80px;
             height: 4px;
-            background: linear-gradient(90deg, #637cce, lighten(#637cce, 20%));
+            background: linear-gradient(90deg, #637cce, color.adjust(#637cce, $lightness: 20%));
             border-radius: 2px;
         }
     }

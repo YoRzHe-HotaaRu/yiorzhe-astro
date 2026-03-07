@@ -1,4 +1,5 @@
-// src/env.d.ts
+/// <reference types="astro/client" />
+
 interface ImportMetaEnv {
   readonly YOUTUBE_API_KEY: string;
   // More environment variables...
