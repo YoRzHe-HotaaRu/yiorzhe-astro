@@ -185,3 +185,54 @@ const stats = {
 		</div>
 	</section>
 </BaseLayout>
+
+<style>
+  /* Lightweight idle animations - GPU optimized */
+
+  /* Profile image gentle float + glow pulse */
+  .profile-image {
+    animation: profileFloat 4s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .profile-image img {
+    animation: profileGlow 3s ease-in-out infinite;
+    border-radius: 50%;
+  }
+
+  @keyframes profileFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes profileGlow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(99, 124, 206, 0.3); }
+    50% { box-shadow: 0 8px 30px rgba(99, 124, 206, 0.5), 0 0 40px rgba(99, 124, 206, 0.2); }
+  }
+
+  /* Username gradient shimmer + subtle float */
+  .gradient-text {
+    display: inline-block;
+    animation: textFloat 5s ease-in-out infinite, textShimmer 4s linear infinite;
+    background-size: 200% auto;
+    will-change: transform, background-position;
+  }
+
+  @keyframes textFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  @keyframes textShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Pause animations when user prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .profile-image,
+    .gradient-text {
+      animation: none;
+    }
+  }
+</style>
