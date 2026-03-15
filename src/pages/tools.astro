@@ -263,29 +263,5 @@ const toolCategories = [
       color: var(--card-color);
       transition: transform 0.3s ease;
     }
-
-    // Animation for cards on load
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .tool-card {
-      animation: fadeInUp 0.6s ease-out forwards;
-      
-      &:nth-child(1) {
-        animation-delay: 0.1s;
-      }
-      
-      &:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-    }
   </style>
 </BaseLayout>
