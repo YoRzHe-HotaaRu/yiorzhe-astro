@@ -184,6 +184,53 @@ const stats = {
 			</div>
 		</div>
 	</section>
+
+	<!-- === Recent Projects Section === -->
+	<section class="recent-projects-section">
+		<h2>Recent Projects</h2>
+		<div class="carousel-wrapper">
+			<div class="carousel-track">
+				<button class="carousel-btn prev-btn" aria-label="Previous project">
+					<i class="fas fa-chevron-left"></i>
+				</button>
+				<a href="https://nakano-room.vercel.app/" target="_blank" rel="noopener" class="carousel-slide active">
+					<img src="/assets/recentProject/NakanoRoom.jpg" alt="Nakano Room" loading="lazy" />
+					<div class="slide-label">Nakano Room</div>
+				</a>
+				<a href="https://vulkan747.pythonanywhere.com/" target="_blank" rel="noopener" class="carousel-slide">
+					<img src="/assets/recentProject/akari_web.jpg" alt="A.K.A.R.I AI Assistant" loading="lazy" />
+					<div class="slide-label">A.K.A.R.I AI Assistant</div>
+				</a>
+				<a href="https://pjima-perak-dashboard.pages.dev/" target="_blank" rel="noopener" class="carousel-slide">
+					<img src="/assets/recentProject/PJIMA-Dashboard.jpg" alt="PJIMA Perak Dashboard" loading="lazy" />
+					<div class="slide-label">PJIMA Perak Dashboard</div>
+				</a>
+				<a href="https://sksp.pages.dev/" target="_blank" rel="noopener" class="carousel-slide">
+					<img src="/assets/recentProject/sksp_portal.jpg" alt="SKSP Portal Rasmi Sekolah" loading="lazy" />
+					<div class="slide-label">SKSP Portal Rasmi Sekolah</div>
+				</a>
+				<a href="https://clarity-roadtag.vercel.app/" target="_blank" rel="noopener" class="carousel-slide">
+					<img src="/assets/recentProject/roadtagvisualizer.jpg" alt="JKR Road Construction Tagging Visualizer" loading="lazy" />
+					<div class="slide-label">JKR Road Construction Tagging Visualizer</div>
+				</a>
+				<a href="https://hydra-learn.pages.dev/" target="_blank" rel="noopener" class="carousel-slide">
+					<img src="/assets/recentProject/guide_to_hydra.jpg" alt="Complete Guide to Hydra" loading="lazy" />
+					<div class="slide-label">Complete Guide to Hydra</div>
+				</a>
+				<button class="carousel-btn next-btn" aria-label="Next project">
+					<i class="fas fa-chevron-right"></i>
+				</button>
+			</div>
+		</div>
+		<div class="carousel-indicators">
+			<span class="indicator active" data-index="0"></span>
+			<span class="indicator" data-index="1"></span>
+			<span class="indicator" data-index="2"></span>
+			<span class="indicator" data-index="3"></span>
+			<span class="indicator" data-index="4"></span>
+			<span class="indicator" data-index="5"></span>
+		</div>
+	</section>
 </BaseLayout>
 
 <style>
@@ -236,3 +283,242 @@ const stats = {
     }
   }
 </style>
+
+<style lang="scss">
+  @use "sass:color";
+
+  .recent-projects-section {
+    margin-top: 2rem;
+  }
+
+  .recent-projects-section h2 {
+    font-size: 1.5rem;
+    color: #637cce;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+  }
+
+  .carousel-wrapper {
+    position: relative;
+  }
+
+  .carousel-track {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    border-radius: 0;
+    overflow: hidden;
+    outline: 2px solid #637cce;
+    outline-offset: 4px;
+    box-shadow: 8px 8px 0 #637cce, 12px 12px 30px rgba(0, 0, 0, 0.2);
+    background: #1a1a2e;
+  }
+
+  .carousel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+
+    &.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 2;
+    }
+
+    &.slide-out-left {
+      opacity: 0;
+      transform: translateX(-40px) scale(0.95);
+      z-index: 1;
+    }
+
+    &.slide-out-right {
+      opacity: 0;
+      transform: translateX(40px) scale(0.95);
+      z-index: 1;
+    }
+
+    &.slide-in-left {
+      animation: slideInFromLeft 0.7s ease forwards;
+    }
+
+    &.slide-in-right {
+      animation: slideInFromRight 0.7s ease forwards;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from { opacity: 0; transform: translateX(-40px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+
+  @keyframes slideInFromRight {
+    from { opacity: 0; transform: translateX(40px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+
+  .slide-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+
+    &:hover {
+      background: rgba(99, 124, 206, 0.8);
+      color: #fff;
+    }
+
+    &.prev-btn {
+      left: 0;
+    }
+
+    &.next-btn {
+      right: 0;
+    }
+  }
+
+  .carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #cdd5f0;
+    cursor: pointer;
+    transition: all 0.35s ease;
+
+    &.active {
+      background: #637cce;
+      transform: scale(1.3);
+      box-shadow: 0 0 8px rgba(99, 124, 206, 0.5);
+    }
+
+    &:hover:not(.active) {
+      background: #a0b0e0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .carousel-track {
+      height: 260px;
+    }
+    .carousel-btn {
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
+    }
+    .slide-label {
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const indicators = Array.from(document.querySelectorAll('.indicator'));
+    const prevBtn = document.querySelector('.prev-btn') as HTMLButtonElement | null;
+    const nextBtn = document.querySelector('.next-btn') as HTMLButtonElement | null;
+    let current = 0;
+    let autoTimer: ReturnType<typeof setInterval>;
+    const INTERVAL = 5000;
+    const total = slides.length;
+
+    function goTo(index: number, direction: 'left' | 'right') {
+      if (index === current) return;
+      const oldSlide = slides[current];
+      const newSlide = slides[index];
+
+      oldSlide.classList.remove('active');
+      oldSlide.classList.add(direction === 'left' ? 'slide-out-left' : 'slide-out-right');
+
+      newSlide.classList.remove('slide-out-left', 'slide-out-right');
+      newSlide.classList.add('active', direction === 'left' ? 'slide-in-right' : 'slide-in-left');
+
+      indicators[current].classList.remove('active');
+      indicators[index].classList.add('active');
+
+      current = index;
+
+      setTimeout(() => {
+        oldSlide.classList.remove('slide-out-left', 'slide-out-right');
+        newSlide.classList.remove('slide-in-left', 'slide-in-right');
+      }, 750);
+
+      resetAuto();
+    }
+
+    function next() {
+      goTo((current + 1) % total, 'left');
+    }
+
+    function prev() {
+      goTo((current - 1 + total) % total, 'right');
+    }
+
+    function startAuto() {
+      autoTimer = setInterval(next, INTERVAL);
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      startAuto();
+    }
+
+    nextBtn?.addEventListener('click', next);
+    prevBtn?.addEventListener('click', prev);
+
+    indicators.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt((dot as HTMLElement).dataset.index || '0', 10);
+        if (idx > current) goTo(idx, 'left');
+        else if (idx < current) goTo(idx, 'right');
+      });
+    });
+
+    startAuto();
+  });
+</script>
