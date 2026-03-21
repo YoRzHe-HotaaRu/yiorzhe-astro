@@ -7,7 +7,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <div class="apps-container">
     <div class="apps-header">
       <div class="header-content">
-        <h1>My Web Apps 🌏</h1>
+        <h1>My Web Apps <span class="spin-emoji">🌏</span></h1>
         <p>
           Explore my collection of web applications. Choose a category below to
           discover projects ranging from full-featured applications to handy
@@ -54,11 +54,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <h2>Featured Projects</h2>
             <p>Major applications and full-featured projects</p>
             <div class="app-count">9 Projects</div>
-          </div>
-          <div class="arrow-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path class="arrow-path" d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           </div>
         </div>
         <div class="card-background">
@@ -121,13 +116,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </div>
           <div class="text-content">
             <h2>Simple Apps</h2>
-            <p>Quick utility tools and handy mini-applications</p>
+            <p>Quick and handy mini utility tools</p>
             <div class="app-count">4 Tools</div>
-          </div>
-          <div class="arrow-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path class="arrow-path" d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           </div>
         </div>
         <div class="card-background">
@@ -178,12 +168,22 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     .apps-header h1 {
-      font-size: 3.5rem;
+      font-size: 3rem;
       color: var(--dark-color);
       margin-bottom: 1rem;
       position: relative;
       display: inline-block;
       font-weight: 800;
+    }
+
+    .apps-header h1 .spin-emoji {
+      display: inline-block;
+      animation: spin-globe 4s linear infinite;
+    }
+
+    @keyframes spin-globe {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .apps-header h1::after {
@@ -417,47 +417,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       color: #0984e3;
     }
 
-    .arrow-indicator {
-      position: absolute;
-      bottom: 2rem;
-      right: 2rem;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .featured-nav .arrow-indicator {
-      background: linear-gradient(135deg, #ffd700, #ffed4e);
-    }
-
-    .simple-nav .arrow-indicator {
-      background: linear-gradient(135deg, #74b9ff, #0984e3);
-    }
-
-    .arrow-indicator svg {
-      width: 24px;
-      height: 24px;
-      color: white;
-      transition: transform 0.3s ease;
-    }
-
-    .nav-card:hover .arrow-indicator {
-      transform: scale(1.1);
-    }
-
-    .nav-card:hover .arrow-path {
-      animation: arrow-bounce 0.6s ease infinite;
-    }
-
-    @keyframes arrow-bounce {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(3px); }
-    }
-
     .card-background {
       position: absolute;
       inset: 0;
@@ -559,13 +518,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
       .nav-card {
         padding: 1.5rem;
-      }
-
-      .arrow-indicator {
-        width: 40px;
-        height: 40px;
-        bottom: 1.5rem;
-        right: 1.5rem;
       }
     }
   </style>

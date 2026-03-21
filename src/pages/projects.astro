@@ -33,7 +33,7 @@ const paginatedRepos = filteredRepos.slice(start, end);
 <BaseLayout title="My Projects">
   <div class="projects-container">
     <div class="projects-header">
-      <h1>My Projects 🗃️</h1>
+      <h1>My Projects <span class="folder-emoji">🗃️</span></h1>
       <p>Here are my most recent GitHub repositories. Each represents a unique challenge and learning experience in my development journey.</p>
     </div>
 
@@ -85,3 +85,15 @@ const paginatedRepos = filteredRepos.slice(start, end);
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .folder-emoji {
+    display: inline-block;
+    animation: folder-bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes folder-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+</style>

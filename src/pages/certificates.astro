@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="certificates-container">
     <div class="certificates-header">
       <div class="header-content">
-        <h1>My Certifications 📜</h1>
+        <h1>My Certifications <span class="cert-emoji">📜</span></h1>
         <p>
           Here are some of the certifications I've earned while learning to code, 
           build games, and grow as a developer. Each one represents a milestone in my journey.
@@ -189,6 +189,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       margin-bottom: 1rem;
       position: relative;
       display: inline-block;
+    }
+
+    .cert-emoji {
+      display: inline-block;
+      animation: scroll-float 3s ease-in-out infinite;
+    }
+
+    @keyframes scroll-float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-5px) rotate(-5deg); }
+      75% { transform: translateY(5px) rotate(5deg); }
     }
     
     .certificates-header h1::after {

@@ -12,7 +12,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <img src="/assets/aboutProfileC.gif" alt="Profile" />
         </div>
         <div class="about-text">
-          <h1>About Me 🎓</h1>
+          <h1>About Me <span class="grad-emoji">🎓</span></h1>
           <p>I'm Amir Hafizi, a passionate developer and researcher with a love for creating innovative solutions. My journey in tech started with a curiosity about how things work, and it has evolved into a career focused on building meaningful applications and contributing to research in various fields.</p>
           <p>When I'm not coding or writing research papers, I enjoy exploring my favorite games, shows, and music. These interests not only provide entertainment but also inspire creativity and new perspectives in my work.</p>
           <div class="about-skills">
@@ -184,6 +184,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         margin-bottom: 1.5rem;
         position: relative;
         display: inline-block;
+    }
+
+    .grad-emoji {
+      display: inline-block;
+      animation: grad-tilt 3s ease-in-out infinite;
+    }
+
+    @keyframes grad-tilt {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      25% { transform: rotate(-10deg) translateY(-3px); }
+      75% { transform: rotate(10deg) translateY(-3px); }
     }
 
     .about-text h1::after {

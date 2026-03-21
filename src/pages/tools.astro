@@ -42,7 +42,7 @@ const toolCategories = [
   <div class="tools-container">
     <!-- Header Section -->
     <div class="tools-header">
-      <h1>Tools & Resources 🛠️</h1>
+      <h1>Tools & Resources <span class="wrench-emoji">🛠️</span></h1>
       <p class="subtitle">
         A curated collection of powerful tools and resources for AI enthusiasts and game developers. 
         Choose your path and explore the possibilities.
@@ -101,7 +101,12 @@ const toolCategories = [
         font-weight: 800;
         color: #2c3e50;
         margin-bottom: 1rem;
-        
+
+        .wrench-emoji {
+          display: inline-block;
+          animation: wrench-wobble 2s ease-in-out infinite;
+        }
+
         @media (max-width: 768px) {
           font-size: 2rem;
         }
@@ -118,6 +123,15 @@ const toolCategories = [
           font-size: 1rem;
         }
       }
+    }
+
+    @keyframes wrench-wobble {
+      0%, 100% { transform: rotate(0deg); }
+      10% { transform: rotate(-14deg); }
+      20% { transform: rotate(14deg); }
+      30% { transform: rotate(-10deg); }
+      40% { transform: rotate(10deg); }
+      50% { transform: rotate(0deg); }
     }
 
     // Tools Grid

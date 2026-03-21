@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Contact Me">
   <div class="contact-container">
-    <h1>Get In Touch 🔔</h1>
+    <h1>Get In Touch <span class="bell-emoji">🔔</span></h1>
     <p>
       I'm always open to chatting about game development, open-source projects, or collaboration ideas. 
       Whether you have a question, want to share a cool tool, or just want to say hi, feel free to reach out!
@@ -45,3 +45,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .contact-container h1 {
+    position: relative;
+  }
+
+  .bell-emoji {
+    display: inline-block;
+    animation: bell-ring 1.5s ease-in-out infinite;
+    transform-origin: top center;
+  }
+
+  @keyframes bell-ring {
+    0%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-14deg); }
+    30% { transform: rotate(10deg); }
+    40% { transform: rotate(-10deg); }
+    50% { transform: rotate(0deg); }
+  }
+</style>

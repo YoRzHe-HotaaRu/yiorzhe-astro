@@ -75,7 +75,7 @@ const researchPapers: ResearchPaper[] = [
 <BaseLayout title="Research Papers">
   <div class="research-container">
     <div class="research-header">
-      <h1>My Research ⚗️</h1>
+      <h1>My Research <span class="flask-emoji">⚗️</span></h1>
       <p>Here are the research papers I've authored or contributed to. Each paper represents a deep dive into a specific topic I'm passionate about.</p>
     </div>
     
@@ -137,6 +137,11 @@ const researchPapers: ResearchPaper[] = [
         position: relative;
         display: inline-block;
         width: 100%;
+
+        .flask-emoji {
+          display: inline-block;
+          animation: flask-bubble 2.5s ease-in-out infinite;
+        }
         
         &::after {
             content: '';
@@ -156,6 +161,13 @@ const researchPapers: ResearchPaper[] = [
       color: #666;
       max-width: 700px;
       margin: 0 auto;
+    }
+
+    @keyframes flask-bubble {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-4px) rotate(-8deg); }
+      50% { transform: translateY(0) rotate(0deg); }
+      75% { transform: translateY(-4px) rotate(8deg); }
     }
     
     .research-grid {
