@@ -402,7 +402,7 @@ body {
 
   .skills-row {
     display: flex;
-    gap: 2rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -412,9 +412,8 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 0.5rem;
+    padding: 0.15rem;
     transition: transform 0.2s, opacity 0.2s;
-    
 
     &:hover {
       transform: scale(1.1);
@@ -422,14 +421,14 @@ body {
     }
 
     img {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 0.5rem;
+      width: 22px;
+      height: 22px;
+      margin-bottom: 0.15rem;
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
     }
 
     span {
-      font-size: 0.9rem;
+      font-size: 0.65rem;
       color: #444;
       font-weight: 500;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
