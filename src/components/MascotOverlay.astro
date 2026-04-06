@@ -1,0 +1,419 @@
+<div id="site-mascot-overlay" class="mascot-overlay">
+  <button
+    type="button"
+    class="mascot-runner"
+    aria-label="Trigger the mascot magic"
+  >
+    <span class="mascot-shadow" aria-hidden="true"></span>
+    <img
+      src="/assets/gif/spooky-halloween.gif"
+      alt=""
+      aria-hidden="true"
+      decoding="async"
+      loading="eager"
+    />
+  </button>
+
+  <div class="mascot-bubble" aria-live="polite" aria-atomic="true"></div>
+  <div class="mascot-effects" aria-hidden="true"></div>
+</div>
+
+<script is:inline>
+  (() => {
+    const overlay = document.getElementById('site-mascot-overlay');
+
+    if (!overlay || overlay.dataset.ready === 'true') {
+      return;
+    }
+
+    overlay.dataset.ready = 'true';
+
+    const button = overlay.querySelector('.mascot-runner');
+    const bubble = overlay.querySelector('.mascot-bubble');
+    const effects = overlay.querySelector('.mascot-effects');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const phrases = ['Boo!', 'Peek-a-boo!', 'Zoom!', 'Hehe!', 'Spooky!'];
+
+    if (!(button instanceof HTMLElement) || !(bubble instanceof HTMLElement) || !(effects instanceof HTMLElement)) {
+      return;
+    }
+
+    let x = Math.min(Math.max(window.innerWidth * 0.12, 18), Math.max(window.innerWidth - 110, 18));
+    let y = Math.min(Math.max(window.innerHeight * 0.18, 18), Math.max(window.innerHeight - 110, 18));
+    let velocityX = 1.35;
+    let velocityY = 1.05;
+    let paused = false;
+    let lastTime = 0;
+    let rafId = 0;
+    let bubbleTimer = 0;
+
+    const getBounds = () => {
+      const rect = button.getBoundingClientRect();
+
+      return {
+        width: rect.width || 72,
+        height: rect.height || 72,
+      };
+    };
+
+    const clampPosition = () => {
+      const { width, height } = getBounds();
+      const maxX = Math.max(18, window.innerWidth - width - 18);
+      const maxY = Math.max(18, window.innerHeight - height - 18);
+
+      x = Math.min(Math.max(x, 18), maxX);
+      y = Math.min(Math.max(y, 18), maxY);
+    };
+
+    const updatePosition = () => {
+      const { height } = getBounds();
+
+      button.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      button.style.setProperty('--mascot-facing', velocityX < 0 ? '-1' : '1');
+      bubble.style.left = `${x}px`;
+      bubble.style.top = `${Math.max(10, y - Math.max(36, height * 0.72))}px`;
+    };
+
+    const placeAtRest = () => {
+      const { width, height } = getBounds();
+
+      x = Math.max(18, window.innerWidth - width - 24);
+      y = Math.max(18, window.innerHeight - height - 28);
+
+      updatePosition();
+    };
+
+    const animate = (time) => {
+      if (!lastTime) {
+        lastTime = time;
+      }
+
+      const delta = Math.min(32, time - lastTime);
+      lastTime = time;
+
+      if (!paused && !reducedMotion.matches) {
+        const { width, height } = getBounds();
+        const maxX = Math.max(18, window.innerWidth - width - 18);
+        const maxY = Math.max(18, window.innerHeight - height - 18);
+        const step = delta / 16.667;
+
+        x += velocityX * step;
+        y += velocityY * step;
+
+        if (x <= 18 || x >= maxX) {
+          velocityX *= -1;
+          x = Math.min(Math.max(x, 18), maxX);
+        }
+
+        if (y <= 18 || y >= maxY) {
+          velocityY *= -1;
+          y = Math.min(Math.max(y, 18), maxY);
+        }
+      }
+
+      updatePosition();
+      rafId = window.requestAnimationFrame(animate);
+    };
+
+    const showBubble = () => {
+      bubble.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      bubble.classList.remove('is-visible');
+      void bubble.offsetWidth;
+      bubble.classList.add('is-visible');
+
+      window.clearTimeout(bubbleTimer);
+      bubbleTimer = window.setTimeout(() => {
+        bubble.classList.remove('is-visible');
+      }, 1300);
+    };
+
+    const spawnRing = (centerX, centerY) => {
+      const ring = document.createElement('span');
+      ring.className = 'mascot-ring';
+      ring.style.left = `${centerX}px`;
+      ring.style.top = `${centerY}px`;
+      effects.appendChild(ring);
+      window.setTimeout(() => ring.remove(), 700);
+    };
+
+    const spawnParticles = (centerX, centerY) => {
+      const count = 10;
+
+      for (let index = 0; index < count; index += 1) {
+        const particle = document.createElement('span');
+        const angle = ((Math.PI * 2) / count) * index + (Math.random() * 0.5 - 0.25);
+        const distance = 36 + Math.random() * 34;
+
+        particle.className = 'mascot-particle';
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        particle.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+        particle.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+        particle.style.setProperty('--rotation', `${Math.random() * 160 - 80}deg`);
+        particle.style.setProperty('--size', `${8 + Math.random() * 10}px`);
+        effects.appendChild(particle);
+
+        window.setTimeout(() => particle.remove(), 720);
+      }
+    };
+
+    const celebrate = () => {
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      button.classList.remove('is-celebrating');
+      void button.offsetWidth;
+      button.classList.add('is-celebrating');
+
+      spawnRing(centerX, centerY);
+      spawnParticles(centerX, centerY);
+      showBubble();
+
+      velocityX = (Math.random() > 0.5 ? 1 : -1) * (1.2 + Math.random() * 1.1);
+      velocityY = (Math.random() > 0.5 ? 1 : -1) * (0.9 + Math.random() * 1.1);
+    };
+
+    const pauseMovement = () => {
+      paused = true;
+    };
+
+    const resumeMovement = () => {
+      paused = false;
+      lastTime = 0;
+    };
+
+    button.addEventListener('pointerenter', pauseMovement);
+    button.addEventListener('pointerleave', resumeMovement);
+    button.addEventListener('focus', pauseMovement);
+    button.addEventListener('blur', resumeMovement);
+    button.addEventListener('click', celebrate);
+
+    window.addEventListener('resize', () => {
+      if (reducedMotion.matches) {
+        placeAtRest();
+        return;
+      }
+
+      clampPosition();
+      updatePosition();
+    });
+
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) {
+        paused = true;
+        placeAtRest();
+        return;
+      }
+
+      paused = false;
+      clampPosition();
+      updatePosition();
+    });
+
+    if (reducedMotion.matches) {
+      placeAtRest();
+      return;
+    }
+
+    clampPosition();
+    updatePosition();
+    rafId = window.requestAnimationFrame(animate);
+
+    window.addEventListener('pagehide', () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(bubbleTimer);
+    });
+  })();
+</script>
+
+<style is:global>
+  #site-mascot-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 120;
+    overflow: clip;
+  }
+
+  #site-mascot-overlay .mascot-runner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: clamp(42px, 5.5vw, 60px);
+    aspect-ratio: 1;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    appearance: none;
+    touch-action: manipulation;
+    filter: drop-shadow(0 10px 16px rgba(22, 24, 45, 0.24));
+  }
+
+  #site-mascot-overlay .mascot-runner img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    transform-origin: center;
+    transform: scaleX(var(--mascot-facing, 1)) scale(var(--mascot-scale, 1)) rotate(var(--mascot-tilt, 0deg));
+    transition: transform 180ms ease, filter 180ms ease;
+  }
+
+  #site-mascot-overlay .mascot-shadow {
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 4px;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(29, 32, 54, 0.22);
+    filter: blur(7px);
+    z-index: -1;
+  }
+
+  #site-mascot-overlay .mascot-runner:hover img,
+  #site-mascot-overlay .mascot-runner:focus-visible img {
+    --mascot-scale: 1.08;
+    filter: brightness(1.08);
+  }
+
+  #site-mascot-overlay .mascot-runner:focus-visible {
+    outline: 3px solid rgba(99, 124, 206, 0.5);
+    outline-offset: 6px;
+    border-radius: 999px;
+  }
+
+  #site-mascot-overlay .mascot-runner.is-celebrating img {
+    animation: mascot-bounce 640ms ease;
+  }
+
+  #site-mascot-overlay .mascot-bubble {
+    position: fixed;
+    top: -999px;
+    left: -999px;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #2e3357;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 24px rgba(46, 51, 87, 0.14);
+    opacity: 0;
+  }
+
+  #site-mascot-overlay .mascot-bubble.is-visible {
+    animation: mascot-bubble-pop 1.3s ease forwards;
+  }
+
+  #site-mascot-overlay .mascot-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  #site-mascot-overlay .mascot-ring,
+  #site-mascot-overlay .mascot-particle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  #site-mascot-overlay .mascot-ring {
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    margin-top: -9px;
+    border: 3px solid rgba(99, 124, 206, 0.72);
+    border-radius: 50%;
+    animation: mascot-ring-burst 700ms ease-out forwards;
+  }
+
+  #site-mascot-overlay .mascot-particle {
+    width: var(--size, 10px);
+    height: var(--size, 10px);
+    margin-left: calc(var(--size, 10px) / -2);
+    margin-top: calc(var(--size, 10px) / -2);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ffd76f, #ff8aa9 52%, #7287ff);
+    box-shadow: 0 0 18px rgba(255, 215, 111, 0.35);
+    animation: mascot-particle-burst 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes mascot-bounce {
+    0% {
+      transform: scaleX(var(--mascot-facing, 1)) scale(1) rotate(0deg);
+    }
+
+    24% {
+      transform: scaleX(var(--mascot-facing, 1)) scale(1.18) rotate(-8deg);
+    }
+
+    56% {
+      transform: scaleX(var(--mascot-facing, 1)) scale(0.94) rotate(7deg);
+    }
+
+    100% {
+      transform: scaleX(var(--mascot-facing, 1)) scale(1) rotate(0deg);
+    }
+  }
+
+  @keyframes mascot-bubble-pop {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0) scale(0.7);
+    }
+
+    16%,
+    74% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate3d(0, -10px, 0) scale(0.86);
+    }
+  }
+
+  @keyframes mascot-ring-burst {
+    0% {
+      opacity: 0.75;
+      transform: scale(0.4);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(5.8);
+    }
+  }
+
+  @keyframes mascot-particle-burst {
+    0% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(0.7) rotate(0deg);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--dx), var(--dy), 0) scale(1.2) rotate(var(--rotation));
+    }
+  }
+
+  @media (max-width: 768px) {
+    #site-mascot-overlay .mascot-runner {
+      width: clamp(38px, 10vw, 50px);
+    }
+
+    #site-mascot-overlay .mascot-bubble {
+      font-size: 0.72rem;
+      padding: 0.32rem 0.6rem;
+    }
+  }
+</style>

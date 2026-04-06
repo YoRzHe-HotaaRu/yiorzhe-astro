@@ -1,5 +1,6 @@
 ---
 const title = Astro.props.title || 'YioRzHe-HotaaRu';
+import MascotOverlay from '../components/MascotOverlay.astro';
 import '../styles/main.scss';
 ---
 
@@ -50,6 +51,8 @@ import '../styles/main.scss';
         © {new Date().getFullYear()} YioRzHe-HotaaRu. Built with Astro.
       </footer>
     </div>
+
+    <MascotOverlay />
 
     <!-- Add JavaScript for mobile menu toggle -->
     <script>
