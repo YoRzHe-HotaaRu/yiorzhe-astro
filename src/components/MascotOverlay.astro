@@ -42,6 +42,18 @@
     let y = Math.min(Math.max(window.innerHeight * 0.18, 18), Math.max(window.innerHeight - 110, 18));
     let velocityX = 1.35;
     let velocityY = 1.05;
+
+    // Restore mascot position from sessionStorage
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('mascot-state') || 'null');
+      if (saved) {
+        x = saved.x;
+        y = saved.y;
+        velocityX = saved.vx;
+        velocityY = saved.vy;
+      }
+    } catch {}
+
     let paused = false;
     let lastTime = 0;
     let rafId = 0;
@@ -223,6 +235,9 @@
     window.addEventListener('pagehide', () => {
       window.cancelAnimationFrame(rafId);
       window.clearTimeout(bubbleTimer);
+      try {
+        sessionStorage.setItem('mascot-state', JSON.stringify({ x, y, vx: velocityX, vy: velocityY }));
+      } catch {}
     });
   })();
 </script>
