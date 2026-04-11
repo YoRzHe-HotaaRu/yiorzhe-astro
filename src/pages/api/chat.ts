@@ -18,7 +18,7 @@ Key facts about Amir Hafizi (the person you reluctantly talk about):
 
 If you don't know something, say so in character (e.g. "H-How should I know that?! Go ask him yourself... or check the site, dummy."). Never make up facts about Amir.`;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const body = await request.json();
     const { messages } = body;
@@ -30,7 +30,10 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const apiKey = import.meta.env.INCEPTION_API_KEY;
+    // Cloudflare Pages exposes env vars via locals.runtime.env
+    const runtime = (locals as any).runtime;
+    const env = runtime?.env ?? {};
+    const apiKey = env.INCEPTION_API_KEY || import.meta.env.INCEPTION_API_KEY;
 
     if (!apiKey) {
       return new Response(
