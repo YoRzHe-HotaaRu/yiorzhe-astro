@@ -377,6 +377,8 @@ body {
       font-size: 1.5rem;
       font-weight: 700;
       color: $primary;
+      display: inline-block;
+      animation: statFloat 3s ease-in-out infinite, statGlow 3s ease-in-out infinite;
     }
 
     .stat-label {
@@ -384,7 +386,21 @@ body {
       color: #666;
       margin-top: 0.5rem;
     }
+
+    &:nth-child(1) .stat-number { animation-delay: 0s, 0s; }
+    &:nth-child(2) .stat-number { animation-delay: 0.5s, 0.5s; }
+    &:nth-child(3) .stat-number { animation-delay: 1s, 1s; }
   }
+}
+
+@keyframes statFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes statGlow {
+  0%, 100% { text-shadow: 0 0 0 rgba($primary, 0); }
+  50% { text-shadow: 0 0 12px rgba($primary, 0.4); }
 }
 
 /* === Skills Section === */
@@ -414,10 +430,16 @@ body {
     text-align: center;
     padding: 0.15rem;
     transition: transform 0.2s, opacity 0.2s;
+    animation: skillPulse 7.65s ease-in-out infinite;
+
+    @for $i from 1 through 17 {
+      &:nth-child(#{$i}) { animation-delay: #{($i - 1) * 0.45}s; }
+    }
 
     &:hover {
       transform: scale(1.1);
       opacity: 0.9;
+      animation-play-state: paused;
     }
 
     img {
@@ -434,6 +456,12 @@ body {
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
   }
+}
+
+@keyframes skillPulse {
+  0%, 100% { transform: scale(1); }
+  5% { transform: scale(1.35); }
+  10% { transform: scale(1); }
 }
 
 /* Make Unity logo black */
