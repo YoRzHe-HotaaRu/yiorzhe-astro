@@ -12,7 +12,7 @@ export default defineConfig({
       
       // Content-Security-Policy: Prevent XSS attacks
       // Allows: self, inline scripts/styles (for Astro), Google Fonts, Font Awesome, Cloudflare
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'self' https://itch.io; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
       
       // X-Frame-Options: Prevent clickjacking
       'X-Frame-Options': 'SAMEORIGIN',
