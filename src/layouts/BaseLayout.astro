@@ -24,6 +24,22 @@ import '../styles/main.scss';
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <div class="site-background" aria-hidden="true">
+      <video
+        class="site-background-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        poster="/assets/background/forza_background_poster.jpg"
+      >
+        <source src="/assets/background/forza_background_optimized.webm" type="video/webm" />
+        <source src="/assets/background/forza_background_optimized.mp4" type="video/mp4" />
+      </video>
+      <div class="site-background-overlay"></div>
+    </div>
+
     <div class="container">
       <header class="header">
         <h1><a href="/" class="logo"><img src="/assets/logo4-transparent.png" alt="YioRzHe-HotaaRu Logo" /></a></h1>
@@ -61,6 +77,12 @@ import '../styles/main.scss';
       document.addEventListener('DOMContentLoaded', () => {
         const navToggle = document.querySelector('.nav-toggle');
         const nav = document.querySelector('.nav');
+        const backgroundRoot = document.querySelector('.site-background');
+        const backgroundVideo = document.querySelector('.site-background-video');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const shouldSaveData = Boolean(connection && connection.saveData);
+        const disableBackgroundVideo = prefersReducedMotion || shouldSaveData;
         
         const toggleNav = () => {
           if (navToggle && nav) {
@@ -71,6 +93,48 @@ import '../styles/main.scss';
         
         if (navToggle) {
           navToggle.addEventListener('click', toggleNav);
+        }
+
+        const enableFallbackPoster = () => {
+          if (backgroundRoot) {
+            backgroundRoot.classList.add('site-background--fallback');
+          }
+        };
+
+        const disableFallbackPoster = () => {
+          if (backgroundRoot) {
+            backgroundRoot.classList.remove('site-background--fallback');
+          }
+        };
+
+        if (backgroundVideo) {
+          backgroundVideo.addEventListener('error', enableFallbackPoster);
+
+          if (disableBackgroundVideo) {
+            backgroundVideo.pause();
+            backgroundVideo.removeAttribute('autoplay');
+            enableFallbackPoster();
+          } else {
+            disableFallbackPoster();
+            backgroundVideo.play()
+              .then(() => {
+                disableFallbackPoster();
+              })
+              .catch(() => {
+                enableFallbackPoster();
+              });
+          }
+
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden || disableBackgroundVideo) {
+              backgroundVideo.pause();
+              return;
+            }
+
+            backgroundVideo.play().catch(() => {
+              enableFallbackPoster();
+            });
+          });
         }
       });
     </script>

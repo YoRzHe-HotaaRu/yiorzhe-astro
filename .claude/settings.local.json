@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 C:/Users/Administrator/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/scripts/search.py \"AI tools directory link aggregator dark immersive modern\" --design-system -p \"AI Toolkit\")",
+      "Bash(python:*)",
+      "Read(//c/Users/Administrator/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/**)",
+      "Read(//c/Users/Administrator/.claude/plugins/cache/ui-ux-pro-max-skill/**)",
+      "Bash(npm run:*)"
+    ]
+  }
+}

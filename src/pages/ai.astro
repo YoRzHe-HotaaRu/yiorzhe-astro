@@ -2,7 +2,7 @@
 // src/pages/ai.astro
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Function to extract domain from URL
+// Extract domain from URL
 function getDomain(url: string): string {
   try {
     const domain = new URL(url).hostname;
@@ -12,1073 +12,957 @@ function getDomain(url: string): string {
   }
 }
 
-// Define AI data organized by service type
+// SVG icon paths for categories (Lucide-style)
+const categoryIcons: Record<string, string> = {
+  llm: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22"/><path d="M8 6a4 4 0 0 1 8 0"/><circle cx="12" cy="6" r="1"/><path d="M7 10h10"/><path d="M10 14h4"/></svg>`,
+  provider: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`,
+  audio: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+  image: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>`,
+};
+
+// Category accent colors
+const categoryColors: Record<string, string> = {
+  llm: "#818cf8",
+  provider: "#34d399",
+  audio: "#f472b6",
+  image: "#fbbf24",
+};
+
 const aiCategories = {
   llm: {
     name: "LLM",
-    icon: "🤖",
     description: "Large Language Models & AI Chatbots",
     items: [
-      {
-        name: "Perplexity",
-        url: "https://www.perplexity.ai/",
-        subcategory: "Multimodal",
-      },
+      { name: "Perplexity", url: "https://www.perplexity.ai/", subcategory: "Multimodal" },
       { name: "Grok 4", url: "https://grok.com/", subcategory: "Real-time" },
-      {
-        name: "Granite 4",
-        url: "https://www.ibm.com/granite/playground",
-        subcategory: "Research",
-      },
-      {
-        name: "Gemini",
-        url: "https://gemini.google.com/app",
-        subcategory: "Multimodal",
-      },
+      { name: "Granite 4", url: "https://www.ibm.com/granite/playground", subcategory: "Research" },
+      { name: "Gemini", url: "https://gemini.google.com/app", subcategory: "Multimodal" },
       { name: "ChatGPT", url: "https://chatgpt.com/", subcategory: "General" },
       { name: "Claude", url: "https://claude.ai/", subcategory: "Multimodal" },
-      {
-        name: "Mistral",
-        url: "https://chat.mistral.ai/chat",
-        subcategory: "General",
-      },
-      {
-        name: "Liquid",
-        url: "https://playground.liquid.ai/chat",
-        subcategory: "Creative",
-      },
+      { name: "Mistral", url: "https://chat.mistral.ai/chat", subcategory: "General" },
+      { name: "Liquid", url: "https://playground.liquid.ai/chat", subcategory: "Creative" },
       { name: "Venice", url: "https://venice.ai/chat", subcategory: "Privacy" },
-      {
-        name: "Arcee",
-        url: "https://www.arcee.ai/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "CoPilot",
-        url: "https://copilot.microsoft.com/chats/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "Mercury",
-        url: "https://chat.inceptionlabs.ai/",
-        subcategory: "Research",
-      },
-      {
-        name: "Ernie (Baidu)",
-        url: "https://ernie.baidu.com/",
-        subcategory: "General",
-      },
-      {
-        name: "SenseNova (SenseTime)",
-        url: "https://chat.sensetime.com/",
-        subcategory: "Multimodal",
-      },
+      { name: "Arcee", url: "https://www.arcee.ai/", subcategory: "Multimodal" },
+      { name: "CoPilot", url: "https://copilot.microsoft.com/chats/", subcategory: "Multimodal" },
+      { name: "Mercury", url: "https://chat.inceptionlabs.ai/", subcategory: "Research" },
+      { name: "Ernie (Baidu)", url: "https://ernie.baidu.com/", subcategory: "General" },
+      { name: "SenseNova", url: "https://chat.sensetime.com/", subcategory: "Multimodal" },
       { name: "Llama", url: "https://www.llama.com/", subcategory: "General" },
-      {
-        name: "Tongyi (Alibaba)",
-        url: "https://www.tongyi.com/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "Hunyuan (Tencent)",
-        url: "https://hunyuan.tencent.com/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "Wan",
-        url: "https://create.wan.video/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "Qwen",
-        url: "https://chat.qwen.ai/",
-        subcategory: "Multilingual",
-      },
-      {
-        name: "Zhipu - GLM",
-        url: "https://chat.z.ai/",
-        subcategory: "General",
-      },
-      {
-        name: "Deepseek",
-        url: "https://chat.deepseek.com/",
-        subcategory: "Code",
-      },
-      {
-        name: "Baichuan",
-        url: "https://www.baichuan-ai.com/home",
-        subcategory: "Medical",
-      },
-      {
-        name: "K2 Think",
-        url: "https://www.k2think.ai/",
-        subcategory: "Logic",
-      },
+      { name: "Tongyi (Alibaba)", url: "https://www.tongyi.com/", subcategory: "Multimodal" },
+      { name: "Hunyuan (Tencent)", url: "https://hunyuan.tencent.com/", subcategory: "Multimodal" },
+      { name: "Wan", url: "https://create.wan.video/", subcategory: "Multimodal" },
+      { name: "Qwen", url: "https://chat.qwen.ai/", subcategory: "Multilingual" },
+      { name: "Zhipu - GLM", url: "https://chat.z.ai/", subcategory: "General" },
+      { name: "Deepseek", url: "https://chat.deepseek.com/", subcategory: "Code" },
+      { name: "Baichuan", url: "https://www.baichuan-ai.com/home", subcategory: "Medical" },
+      { name: "K2 Think", url: "https://www.k2think.ai/", subcategory: "Logic" },
       { name: "LongCat", url: "https://longcat.chat/", subcategory: "General" },
-      {
-        name: "Kimi",
-        url: "https://www.kimi.com/",
-        subcategory: "Conversational",
-      },
-      {
-        name: "MiniMax",
-        url: "https://chat.minimax.io/",
-        subcategory: "Creative",
-      },
-      {
-        name: "MiniMax (Full-Scale)",
-        url: "https://www.minimaxi.com/",
-        subcategory: "Creative",
-      },
+      { name: "Kimi", url: "https://www.kimi.com/", subcategory: "Conversational" },
+      { name: "MiniMax", url: "https://chat.minimax.io/", subcategory: "Creative" },
+      { name: "MiniMax (Full)", url: "https://www.minimaxi.com/", subcategory: "Creative" },
       { name: "Manus", url: "https://manus.im/app", subcategory: "Multimodal" },
-      {
-        name: "Google AI Studio",
-        url: "https://aistudio.google.com/",
-        subcategory: "Multimodal",
-      },
-      {
-        name: "KiloCode",
-        url: "https://app.kilocode.ai/",
-        subcategory: "Code",
-      },
+      { name: "Google AI Studio", url: "https://aistudio.google.com/", subcategory: "Multimodal" },
+      { name: "KiloCode", url: "https://app.kilocode.ai/", subcategory: "Code" },
       { name: "RooCode", url: "https://app.roocode.com/", subcategory: "Code" },
-      {
-        name: "Hugging Face",
-        url: "https://huggingface.co/",
-        subcategory: "Arena",
-      },
+      { name: "Hugging Face", url: "https://huggingface.co/", subcategory: "Arena" },
       { name: "LM Arena", url: "https://lmarena.ai/", subcategory: "Arena" },
-      {
-        name: "Xiaomi MiMo",
-        url: "https://aistudio.xiaomimimo.com/#/",
-        subcategory: "Multimodal",
-      },
-      // Conversational & Multi-Model
-      {
-        name: "Pi (Inflection)",
-        url: "https://pi.ai/",
-        subcategory: "Conversational",
-      },
-      {
-        name: "Poe (Quora)",
-        url: "https://poe.com/",
-        subcategory: "Multi-Model",
-      },
-      {
-        name: "Character.AI",
-        url: "https://character.ai/",
-        subcategory: "Creative",
-      },
+      { name: "Xiaomi MiMo", url: "https://aistudio.xiaomimimo.com/#/", subcategory: "Multimodal" },
+      { name: "Pi (Inflection)", url: "https://pi.ai/", subcategory: "Conversational" },
+      { name: "Poe (Quora)", url: "https://poe.com/", subcategory: "Multi-Model" },
+      { name: "Character.AI", url: "https://character.ai/", subcategory: "Creative" },
       { name: "You.com", url: "https://you.com/", subcategory: "Search" },
-      {
-        name: "Coze",
-        url: "https://www.coze.com/",
-        subcategory: "Bot Builder",
-      },
-      {
-        name: "Doubao (ByteDance)",
-        url: "https://www.doubao.com/",
-        subcategory: "General",
-      },
-      // Research & Enterprise
+      { name: "Coze", url: "https://www.coze.com/", subcategory: "Bot Builder" },
+      { name: "Doubao (ByteDance)", url: "https://www.doubao.com/", subcategory: "General" },
       { name: "Phind", url: "https://www.phind.com/", subcategory: "Code" },
-      {
-        name: "Cohere Coral",
-        url: "https://coral.cohere.com/",
-        subcategory: "Enterprise",
-      },
-      {
-        name: "Reka AI",
-        url: "https://chat.reka.ai/",
-        subcategory: "Multimodal",
-      },
+      { name: "Cohere Coral", url: "https://coral.cohere.com/", subcategory: "Enterprise" },
+      { name: "Reka AI", url: "https://chat.reka.ai/", subcategory: "Multimodal" },
       { name: "Groq", url: "https://groq.com/", subcategory: "Fast Inference" },
       { name: "01.AI (Yi)", url: "https://www.01.ai/", subcategory: "General" },
-      // Code Assistants
       { name: "Cursor", url: "https://cursor.com/", subcategory: "Code" },
-      {
-        name: "Windsurf",
-        url: "https://codeium.com/windsurf",
-        subcategory: "Code",
-      },
+      { name: "Windsurf", url: "https://codeium.com/windsurf", subcategory: "Code" },
       { name: "Codeium", url: "https://codeium.com/", subcategory: "Code" },
       { name: "Replit AI", url: "https://replit.com/", subcategory: "Code" },
-      {
-        name: "Sourcegraph Cody",
-        url: "https://sourcegraph.com/cody",
-        subcategory: "Code",
-      },
+      { name: "Sourcegraph Cody", url: "https://sourcegraph.com/cody", subcategory: "Code" },
     ],
   },
   provider: {
-    name: "Provider Service",
-    icon: "🔌",
-    description: "AI API Hosts & Infrastructure Providers",
+    name: "Providers",
+    description: "AI API Hosts & Infrastructure",
     items: [
       { name: "ZenMux", url: "https://zenmux.ai/", subcategory: "API Gateway" },
-      {
-        name: "OpenRouter",
-        url: "https://openrouter.ai/",
-        subcategory: "API Gateway",
-      },
-      {
-        name: "LiteLLM",
-        url: "https://www.litellm.ai/",
-        subcategory: "API Gateway",
-      },
+      { name: "OpenRouter", url: "https://openrouter.ai/", subcategory: "API Gateway" },
+      { name: "LiteLLM", url: "https://www.litellm.ai/", subcategory: "API Gateway" },
       { name: "Eden AI", url: "https://edenai.co", subcategory: "API Gateway" },
-      {
-        name: "Portkey",
-        url: "https://portkey.ai/",
-        subcategory: "API Gateway",
-      },
-      {
-        name: "Together.ai",
-        url: "https://www.together.ai/",
-        subcategory: "Infrastructure",
-      },
-      {
-        name: "Anyscale",
-        url: "https://www.anyscale.com/",
-        subcategory: "Infrastructure",
-      },
-      {
-        name: "DeepInfra",
-        url: "https://deepinfra.com/",
-        subcategory: "Infrastructure",
-      },
+      { name: "Portkey", url: "https://portkey.ai/", subcategory: "API Gateway" },
+      { name: "Together.ai", url: "https://www.together.ai/", subcategory: "Infrastructure" },
+      { name: "Anyscale", url: "https://www.anyscale.com/", subcategory: "Infrastructure" },
+      { name: "DeepInfra", url: "https://deepinfra.com/", subcategory: "Infrastructure" },
     ],
   },
   audio: {
     name: "Audio",
-    icon: "🎵",
     description: "AI Audio Generation & Processing",
     items: [
-      // Music Generation
-      {
-        name: "Stable Audio",
-        url: "https://stableaudio.com/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Suno AI",
-        url: "https://suno.com/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Udio",
-        url: "https://www.udio.com/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "AIVA",
-        url: "https://www.aiva.ai/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Soundraw",
-        url: "https://soundraw.io/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Mubert",
-        url: "https://mubert.com/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Boomy",
-        url: "https://boomy.com/",
-        subcategory: "Music Generation",
-      },
-      {
-        name: "Riffusion",
-        url: "https://www.riffusion.com/",
-        subcategory: "Music Generation",
-      },
-      // Voice & Speech
-      {
-        name: "ElevenLabs",
-        url: "https://elevenlabs.io/",
-        subcategory: "Voice Synthesis",
-      },
-      {
-        name: "Play.ht",
-        url: "https://play.ht/",
-        subcategory: "Text-to-Speech",
-      },
-      {
-        name: "Murf AI",
-        url: "https://murf.ai/",
-        subcategory: "Text-to-Speech",
-      },
-      {
-        name: "Lovo AI",
-        url: "https://lovo.ai/",
-        subcategory: "Voice Generator",
-      },
-      {
-        name: "Resemble AI",
-        url: "https://www.resemble.ai/",
-        subcategory: "Voice Cloning",
-      },
+      { name: "Stable Audio", url: "https://stableaudio.com/", subcategory: "Music" },
+      { name: "Suno AI", url: "https://suno.com/", subcategory: "Music" },
+      { name: "Udio", url: "https://www.udio.com/", subcategory: "Music" },
+      { name: "AIVA", url: "https://www.aiva.ai/", subcategory: "Music" },
+      { name: "Soundraw", url: "https://soundraw.io/", subcategory: "Music" },
+      { name: "Mubert", url: "https://mubert.com/", subcategory: "Music" },
+      { name: "Boomy", url: "https://boomy.com/", subcategory: "Music" },
+      { name: "Riffusion", url: "https://www.riffusion.com/", subcategory: "Music" },
+      { name: "ElevenLabs", url: "https://elevenlabs.io/", subcategory: "Voice" },
+      { name: "Play.ht", url: "https://play.ht/", subcategory: "Text-to-Speech" },
+      { name: "Murf AI", url: "https://murf.ai/", subcategory: "Text-to-Speech" },
+      { name: "Lovo AI", url: "https://lovo.ai/", subcategory: "Voice" },
+      { name: "Resemble AI", url: "https://www.resemble.ai/", subcategory: "Voice Clone" },
       { name: "Kits.AI", url: "https://kits.ai/", subcategory: "Voice Tools" },
-      // Audio Editing
-      {
-        name: "Descript",
-        url: "https://www.descript.com/",
-        subcategory: "Audio Editing",
-      },
-      {
-        name: "Adobe Podcast",
-        url: "https://podcast.adobe.com/",
-        subcategory: "Audio Enhancement",
-      },
+      { name: "Descript", url: "https://www.descript.com/", subcategory: "Editing" },
+      { name: "Adobe Podcast", url: "https://podcast.adobe.com/", subcategory: "Enhancement" },
     ],
   },
   image: {
     name: "Image & Video",
-    icon: "🎨",
     description: "AI Image & Video Generation Tools",
     items: [
-      // Image Generation
-      {
-        name: "Midjourney",
-        url: "https://www.midjourney.com/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Leonardo.AI",
-        url: "https://leonardo.ai/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Ideogram",
-        url: "https://ideogram.ai/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Playground AI",
-        url: "https://playground.ai/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Adobe Firefly",
-        url: "https://firefly.adobe.com/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Imagine (Meta)",
-        url: "https://imagine.meta.com/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "NightCafe",
-        url: "https://nightcafe.studio/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Craiyon",
-        url: "https://www.craiyon.com/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Artbreeder",
-        url: "https://www.artbreeder.com/",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Krea AI",
-        url: "https://www.krea.ai/",
-        subcategory: "Real-time Generation",
-      },
-      {
-        name: "Stable Diffusion XL",
-        url: "https://perchance.org/ai-photo-generator",
-        subcategory: "Image Generation",
-      },
-      {
-        name: "Perchance",
-        url: "https://perchance.org/hub",
-        subcategory: "Community",
-      },
-      // Image Editing
-      {
-        name: "Seedream (Jianying)",
-        url: "https://jimeng.jianying.com/",
-        subcategory: "Editor & Generator",
-      },
-      {
-        name: "Seedream (Dreamina)",
-        url: "https://dreamina.capcut.com/",
-        subcategory: "Editor & Generator",
-      },
-      {
-        name: "Clipdrop",
-        url: "https://clipdrop.co/",
-        subcategory: "Image Editing",
-      },
-      {
-        name: "Remove.bg",
-        url: "https://www.remove.bg/",
-        subcategory: "Background Removal",
-      },
-      {
-        name: "PhotoRoom",
-        url: "https://www.photoroom.com/",
-        subcategory: "Background Removal",
-      },
-      {
-        name: "Fotor AI",
-        url: "https://www.fotor.com/",
-        subcategory: "Photo Editing",
-      },
-      {
-        name: "Canva AI",
-        url: "https://www.canva.com/",
-        subcategory: "Design",
-      },
-      // Video Generation
-      {
-        name: "Runway",
-        url: "https://runwayml.com/",
-        subcategory: "Video Generation",
-      },
-      {
-        name: "Pika",
-        url: "https://pika.art/",
-        subcategory: "Video Generation",
-      },
-      {
-        name: "Luma AI",
-        url: "https://lumalabs.ai/",
-        subcategory: "Video & 3D",
-      },
-      {
-        name: "Kling AI",
-        url: "https://klingai.com/",
-        subcategory: "Video Generation",
-      },
-      {
-        name: "Haiper",
-        url: "https://haiper.ai/",
-        subcategory: "Video Generation",
-      },
-      {
-        name: "LTX Studio",
-        url: "https://ltx.studio/",
-        subcategory: "Video Generation",
-      },
-      {
-        name: "Vidu",
-        url: "https://www.vidu.studio/",
-        subcategory: "Video Generation",
-      },
-      // AI Avatars
-      {
-        name: "HeyGen",
-        url: "https://www.heygen.com/",
-        subcategory: "AI Avatars",
-      },
-      {
-        name: "Synthesia",
-        url: "https://www.synthesia.io/",
-        subcategory: "AI Avatars",
-      },
+      { name: "Midjourney", url: "https://www.midjourney.com/", subcategory: "Image Gen" },
+      { name: "Leonardo.AI", url: "https://leonardo.ai/", subcategory: "Image Gen" },
+      { name: "Ideogram", url: "https://ideogram.ai/", subcategory: "Image Gen" },
+      { name: "Playground AI", url: "https://playground.ai/", subcategory: "Image Gen" },
+      { name: "Adobe Firefly", url: "https://firefly.adobe.com/", subcategory: "Image Gen" },
+      { name: "Imagine (Meta)", url: "https://imagine.meta.com/", subcategory: "Image Gen" },
+      { name: "NightCafe", url: "https://nightcafe.studio/", subcategory: "Image Gen" },
+      { name: "Craiyon", url: "https://www.craiyon.com/", subcategory: "Image Gen" },
+      { name: "Artbreeder", url: "https://www.artbreeder.com/", subcategory: "Image Gen" },
+      { name: "Krea AI", url: "https://www.krea.ai/", subcategory: "Real-time" },
+      { name: "SDXL (Perchance)", url: "https://perchance.org/ai-photo-generator", subcategory: "Image Gen" },
+      { name: "Perchance", url: "https://perchance.org/hub", subcategory: "Community" },
+      { name: "Seedream (Jianying)", url: "https://jimeng.jianying.com/", subcategory: "Editor" },
+      { name: "Seedream (Dreamina)", url: "https://dreamina.capcut.com/", subcategory: "Editor" },
+      { name: "Clipdrop", url: "https://clipdrop.co/", subcategory: "Editing" },
+      { name: "Remove.bg", url: "https://www.remove.bg/", subcategory: "Background" },
+      { name: "PhotoRoom", url: "https://www.photoroom.com/", subcategory: "Background" },
+      { name: "Fotor AI", url: "https://www.fotor.com/", subcategory: "Photo Edit" },
+      { name: "Canva AI", url: "https://www.canva.com/", subcategory: "Design" },
+      { name: "Runway", url: "https://runwayml.com/", subcategory: "Video Gen" },
+      { name: "Pika", url: "https://pika.art/", subcategory: "Video Gen" },
+      { name: "Luma AI", url: "https://lumalabs.ai/", subcategory: "Video & 3D" },
+      { name: "Kling AI", url: "https://klingai.com/", subcategory: "Video Gen" },
+      { name: "Haiper", url: "https://haiper.ai/", subcategory: "Video Gen" },
+      { name: "LTX Studio", url: "https://ltx.studio/", subcategory: "Video Gen" },
+      { name: "Vidu", url: "https://www.vidu.studio/", subcategory: "Video Gen" },
+      { name: "HeyGen", url: "https://www.heygen.com/", subcategory: "AI Avatars" },
+      { name: "Synthesia", url: "https://www.synthesia.io/", subcategory: "AI Avatars" },
       { name: "D-ID", url: "https://www.d-id.com/", subcategory: "AI Avatars" },
-      // Video Editing
-      {
-        name: "InVideo AI",
-        url: "https://invideo.io/",
-        subcategory: "Video Creation",
-      },
-      {
-        name: "Kapwing",
-        url: "https://www.kapwing.com/",
-        subcategory: "Video Editing",
-      },
-      {
-        name: "Veed.io",
-        url: "https://www.veed.io/",
-        subcategory: "Video Editing",
-      },
-      {
-        name: "Pictory",
-        url: "https://pictory.ai/",
-        subcategory: "Video Creation",
-      },
+      { name: "InVideo AI", url: "https://invideo.io/", subcategory: "Video Creation" },
+      { name: "Kapwing", url: "https://www.kapwing.com/", subcategory: "Video Edit" },
+      { name: "Veed.io", url: "https://www.veed.io/", subcategory: "Video Edit" },
+      { name: "Pictory", url: "https://pictory.ai/", subcategory: "Video Creation" },
     ],
   },
 };
 
-// Helper function to get favicon
-function getFavicon(url: string, name: string): string {
+// Favicon helper — tries direct favicon first, falls back to DuckDuckGo
+function getFavicon(url: string): string {
   const domain = getDomain(url);
-
-  // Special cases for sites where Google favicon doesn't work well
   const specialFavicons: Record<string, string> = {
-    "chatgpt.com":
-      "https://cdn.oaistatic.com/_next/static/media/favicon-32x32.6e956b52.png",
+    "chatgpt.com": "https://cdn.oaistatic.com/_next/static/media/favicon-32x32.6e956b52.png",
     "chat.inceptionlabs.ai": "https://chat.inceptionlabs.ai/favicon.ico",
-    "app.roocode.com":
-      "https://ui-avatars.com/api/?name=Roo&background=7c3aed&color=fff&size=128&format=png",
-    "app.kilocode.ai":
-      "https://ui-avatars.com/api/?name=KC&background=10b981&color=fff&size=128&format=png",
-    "create.wan.video":
-      "https://ui-avatars.com/api/?name=Wan&background=f59e0b&color=fff&size=128&format=png",
+    "app.roocode.com": "https://ui-avatars.com/api/?name=Roo&background=7c3aed&color=fff&size=128&format=png",
+    "app.kilocode.ai": "https://ui-avatars.com/api/?name=KC&background=10b981&color=fff&size=128&format=png",
+    "create.wan.video": "https://ui-avatars.com/api/?name=Wan&background=f59e0b&color=fff&size=128&format=png",
     "tongyi.com": "https://cdn.simpleicons.org/alibabacloud/FF6A00",
-    "chat.sensetime.com":
-      "https://ui-avatars.com/api/?name=SN&background=1e40af&color=fff&size=128&format=png",
+    "chat.sensetime.com": "https://ui-avatars.com/api/?name=SN&background=1e40af&color=fff&size=128&format=png",
+    "copilot.microsoft.com": "https://copilot.microsoft.com/favicon.ico",
+    "grok.com": "https://grok.com/favicon.ico",
+    "aistudio.google.com": "https://aistudio.google.com/favicon.ico",
+    "ernie.baidu.com": "https://ernie.baidu.com/favicon.ico",
+    "chat.qwen.ai": "https://chat.qwen.ai/favicon.ico",
+    "chat.z.ai": "https://chat.z.ai/favicon.ico",
+    "chat.deepseek.com": "https://chat.deepseek.com/favicon.ico",
+    "longcat.chat": "https://longcat.chat/favicon.ico",
+    "www.kimi.com": "https://www.kimi.com/favicon.ico",
+    "manus.im": "https://manus.im/favicon.ico",
+    "venice.ai": "https://venice.ai/favicon.ico",
+    "playground.liquid.ai": "https://playground.liquid.ai/favicon.ico",
+    "chat.minimax.io": "https://chat.minimax.io/favicon.ico",
+    "www.minimaxi.com": "https://www.minimaxi.com/favicon.ico",
   };
-
-  if (specialFavicons[domain]) {
-    return specialFavicons[domain];
-  }
-
-  // Fallback to Google's favicon service
-  return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+  if (specialFavicons[domain]) return specialFavicons[domain];
+  // DuckDuckGo icons — more reliable than Google's favicon service
+  return `https://icons.duckduckgo.com/ip3/${domain}.ico`;
 }
 
-// Process all categories to add domain and favicon
+// Process data
 const processedCategories = Object.fromEntries(
   Object.entries(aiCategories).map(([key, category]) => [
     key,
     {
       ...category,
+      icon: categoryIcons[key],
+      color: categoryColors[key],
       items: category.items.map((item) => ({
         ...item,
         domain: getDomain(item.url),
-        faviconUrl: getFavicon(item.url, item.name),
+        faviconUrl: getFavicon(item.url),
       })),
     },
-  ]),
+  ])
 );
 
-// Calculate totals
-const totalItems = Object.values(aiCategories).reduce(
-  (sum, cat) => sum + cat.items.length,
-  0,
-);
+// Get unique subcategories per category
+const subcategories: Record<string, string[]> = {};
+for (const [key, cat] of Object.entries(aiCategories)) {
+  subcategories[key] = [...new Set(cat.items.map((i) => i.subcategory))];
+}
+
+const totalItems = Object.values(aiCategories).reduce((sum, cat) => sum + cat.items.length, 0);
 const categoryKeys = Object.keys(aiCategories);
+
+// JSON data for client-side search
+const jsonData = JSON.stringify(
+  Object.entries(processedCategories).map(([key, cat]) => ({
+    key,
+    name: cat.name,
+    color: cat.color,
+    items: cat.items,
+  }))
+);
 ---
 
-<BaseLayout title="AI Models 🤖">
-  <div class="ai-container">
-    <div class="ai-header">
-      <div class="header-content">
-        <h1>AI Models 🤖</h1>
-        <p>
-          Explore the cutting-edge AI tools I use and experiment with. Select a
-          category below to browse different types of AI services.
-        </p>
+<BaseLayout title="AI Models">
+  <div class="ai-page">
+    <!-- Hero section -->
+    <header class="ai-hero">
+      <div class="hero-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22"/><circle cx="12" cy="6" r="1"/></svg>
+        <span>{totalItems} tools curated</span>
       </div>
-      <div class="header-decoration">
-        <div class="decoration-item"></div>
-        <div class="decoration-item"></div>
-        <div class="decoration-item"></div>
-      </div>
-    </div>
+      <h1 class="ai-title">AI Toolkit</h1>
+      <p class="ai-subtitle">A curated collection of AI tools I use and experiment with. Search, filter, and explore.</p>
 
-    <!-- Category Filter Buttons -->
-    <div class="category-buttons">
+      <!-- Search bar -->
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" class="search-input" placeholder="Search AI tools..." autocomplete="off" />
+        <kbd class="search-kbd">/</kbd>
+      </div>
+    </header>
+
+    <!-- Category tabs -->
+    <nav class="category-tabs" role="tablist">
       {
         Object.entries(processedCategories).map(([key, category]) => (
           <button
-            class="category-btn"
+            class="category-tab"
             data-category={key}
             data-active={key === "llm" ? "true" : "false"}
+            role="tab"
+            aria-selected={key === "llm" ? "true" : "false"}
+            style={`--tab-color: ${category.color}`}
           >
-            <span class="btn-icon">{category.icon}</span>
-            <span class="btn-text">{category.name}</span>
-            <span class="btn-count">{category.items.length}</span>
+            <span class="tab-icon" set:html={category.icon} />
+            <span class="tab-name">{category.name}</span>
+            <span class="tab-count">{category.items.length}</span>
           </button>
         ))
       }
-    </div>
+    </nav>
 
-    <!-- Category Sections -->
+    <!-- Subcategory filters -->
     {
-      Object.entries(processedCategories).map(([key, category]) => (
-        <div
-          class="category-section"
-          data-section={key}
-          style={key === "llm" ? "" : "display: none;"}
-        >
-          <div class="section-header">
-            <h2>
-              {category.icon} {category.name}
-            </h2>
-            <p>{category.description}</p>
-          </div>
-
-          <div class="ai-grid">
-            {category.items.map((ai) => (
-              <a href={ai.url} target="_blank" rel="noopener" class="ai-card">
-                <div class="ai-icon">
-                  <img
-                    src={ai.faviconUrl}
-                    alt={`${ai.name} icon`}
-                    class="favicon"
-                    onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(ai.name)}&background=637cce&color=fff&size=64&format=png'`}
-                  />
-                </div>
-                <div class="ai-content">
-                  <div class="ai-meta">
-                    <span class="ai-category">{ai.subcategory}</span>
-                  </div>
-                  <h3>{ai.name}</h3>
-                  <p class="ai-desc">{ai.domain}</p>
-                  <div class="ai-link">
-                    Try AI <i class="fas fa-arrow-right" />
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
+      Object.entries(subcategories).map(([key, subs]) => (
+        <div class="sub-filters" data-subfilters={key} style={key === "llm" ? "" : "display: none;"}>
+          <button class="sub-pill active" data-sub="all">All</button>
+          {subs.map((sub) => (
+            <button class="sub-pill" data-sub={sub}>{sub}</button>
+          ))}
         </div>
       ))
     }
 
-    <div class="ai-footer">
-      <div class="ai-stats">
-        <h3>AI Usage Stats</h3>
-        <div class="stats-container">
-          <div class="stat-item">
-            <span class="stat-number">{totalItems}</span>
-            <span class="stat-label">AI Tools</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">{categoryKeys.length}</span>
-            <span class="stat-label">Categories</span>
-          </div>
-        </div>
-      </div>
+    <!-- Results count -->
+    <div class="results-bar">
+      <span id="results-count" class="results-count"></span>
     </div>
+
+    <!-- Category sections -->
+    {
+      Object.entries(processedCategories).map(([key, category]) => (
+        <section
+          class="ai-grid-section"
+          data-section={key}
+          style={key === "llm" ? "" : "display: none;"}
+          role="tabpanel"
+        >
+          <div class="ai-grid">
+            {category.items.map((ai, index) => (
+              <a
+                href={ai.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ai-card"
+                data-name={ai.name.toLowerCase()}
+                data-subcategory={ai.subcategory}
+                style={`animation-delay: ${index * 30}ms; --card-accent: ${category.color}`}
+              >
+                <div class="card-top">
+                  <img
+                    src={ai.faviconUrl}
+                    alt=""
+                    class="card-favicon"
+                    loading="lazy"
+                    onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(ai.name)}&background=e2e8f0&color=475569&size=64&format=png'`}
+                  />
+                  <span class="card-subcategory">{ai.subcategory}</span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-name">{ai.name}</h3>
+                  <p class="card-domain">{ai.domain}</p>
+                </div>
+                <div class="card-action">
+                  <span>Visit</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <!-- No results message -->
+    <div class="no-results" id="no-results" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <p>No tools match your search.</p>
+      <span>Try a different keyword or clear your search.</span>
+    </div>
+
+    <!-- Footer stats -->
+    <footer class="ai-footer">
+      <div class="footer-stats">
+        {
+          Object.entries(processedCategories).map(([key, category]) => (
+            <div class="footer-stat">
+              <span class="footer-stat-num" style={`color: ${category.color}`}>{category.items.length}</span>
+              <span class="footer-stat-label">{category.name}</span>
+            </div>
+          ))
+        }
+      </div>
+    </footer>
   </div>
 
-  <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
+  <script define:vars={{ jsonData }}>
+    const categoriesData = JSON.parse(jsonData);
 
-  <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const buttons = document.querySelectorAll<HTMLElement>(".category-btn");
-      const sections =
-        document.querySelectorAll<HTMLElement>(".category-section");
+      const searchInput = document.getElementById("search-input");
+      const resultsCount = document.getElementById("results-count");
+      const noResults = document.getElementById("no-results");
+      const tabs = document.querySelectorAll(".category-tab");
+      const sections = document.querySelectorAll(".ai-grid-section");
+      const subFilterGroups = document.querySelectorAll(".sub-filters");
 
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const category = button.getAttribute("data-category");
+      let activeCategory = "llm";
+      let activeSubcategory = "all";
 
-          // Update button states
-          buttons.forEach((btn) => btn.setAttribute("data-active", "false"));
-          button.setAttribute("data-active", "true");
+      // Update results count
+      function updateResultsCount() {
+        const visibleCards = document.querySelectorAll(
+          `.ai-grid-section[data-section="${activeCategory}"] .ai-card:not(.hidden)`
+        );
+        const total = document.querySelectorAll(
+          `.ai-grid-section[data-section="${activeCategory}"] .ai-card`
+        );
+        const query = searchInput.value.trim();
 
-          // Show/hide sections
-          sections.forEach((section) => {
-            if (section.getAttribute("data-section") === category) {
-              section.style.display = "block";
-            } else {
-              section.style.display = "none";
-            }
+        if (query || activeSubcategory !== "all") {
+          resultsCount.textContent = `${visibleCards.length} of ${total.length} tools`;
+        } else {
+          resultsCount.textContent = `${total.length} tools`;
+        }
+
+        noResults.style.display = visibleCards.length === 0 ? "flex" : "none";
+      }
+
+      // Filter cards
+      function filterCards() {
+        const query = searchInput.value.toLowerCase().trim();
+        const currentSection = document.querySelector(
+          `.ai-grid-section[data-section="${activeCategory}"]`
+        );
+        const cards = currentSection.querySelectorAll(".ai-card");
+
+        cards.forEach((card) => {
+          const name = card.dataset.name;
+          const sub = card.dataset.subcategory;
+          const matchesSearch =
+            !query || name.includes(query) || sub.toLowerCase().includes(query);
+          const matchesSub =
+            activeSubcategory === "all" || sub === activeSubcategory;
+
+          if (matchesSearch && matchesSub) {
+            card.classList.remove("hidden");
+            card.style.display = "";
+          } else {
+            card.classList.add("hidden");
+            card.style.display = "none";
+          }
+        });
+
+        updateResultsCount();
+      }
+
+      // Category tab switching
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const category = tab.dataset.category;
+          activeCategory = category;
+          activeSubcategory = "all";
+
+          tabs.forEach((t) => {
+            t.dataset.active = "false";
+            t.setAttribute("aria-selected", "false");
           });
+          tab.dataset.active = "true";
+          tab.setAttribute("aria-selected", "true");
+
+          sections.forEach((section) => {
+            section.style.display =
+              section.dataset.section === category ? "" : "none";
+          });
+
+          subFilterGroups.forEach((group) => {
+            group.style.display =
+              group.dataset.subfilters === category ? "" : "none";
+          });
+
+          // Reset subcategory pills
+          document
+            .querySelectorAll(`[data-subfilters="${category}"] .sub-pill`)
+            .forEach((pill) => {
+              pill.classList.toggle("active", pill.dataset.sub === "all");
+            });
+
+          filterCards();
         });
       });
+
+      // Subcategory pill filtering
+      document.addEventListener("click", (e) => {
+        const pill = e.target.closest(".sub-pill");
+        if (!pill) return;
+
+        const parent = pill.closest(".sub-filters");
+        if (parent.dataset.subfilters !== activeCategory) return;
+
+        parent.querySelectorAll(".sub-pill").forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+        activeSubcategory = pill.dataset.sub;
+        filterCards();
+      });
+
+      // Search input
+      searchInput.addEventListener("input", () => {
+        filterCards();
+      });
+
+      // Keyboard shortcut: "/" to focus search
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "/" &&
+          document.activeElement !== searchInput &&
+          !e.ctrlKey &&
+          !e.metaKey
+        ) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === "Escape" && document.activeElement === searchInput) {
+          searchInput.value = "";
+          searchInput.blur();
+          filterCards();
+        }
+      });
+
+      // Initial count
+      updateResultsCount();
     });
   </script>
 
   <style>
-    :root {
-      --primary-color: #637cce;
-      --secondary-color: #8da7f0;
-      --accent-color: #ff7e67;
-      --dark-color: #2c3e50;
-      --light-color: #f8f9fa;
-      --text-color: #333;
-      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    }
+    /* ========================================
+       AI TOOLKIT — Light, site-matched
+       $primary: #637cce  $text: #111
+       $bg-alt: #f8fcff   gradient: #a9ccf1 → #f7bdbd
+       ======================================== */
 
-    .ai-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
-      min-height: 100vh;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .ai-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
+    .ai-page {
       position: relative;
+      padding: 0 0 2rem;
     }
 
-    .header-content {
-      flex: 2;
-    }
-
-    .ai-header h1 {
-      font-size: 3rem;
-      color: var(--dark-color);
-      margin-bottom: 1rem;
+    /* ---- Hero ---- */
+    .ai-hero {
       position: relative;
-      display: inline-block;
+      z-index: 1;
+      text-align: center;
+      padding: 1.5rem 0 1rem;
     }
 
-    .ai-header h1::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(
-        90deg,
-        var(--primary-color),
-        var(--secondary-color)
-      );
-      border-radius: 2px;
-    }
-
-    .ai-header p {
-      color: var(--text-color);
-      max-width: 700px;
-      margin-top: 1.5rem;
-      line-height: 1.6;
-    }
-
-    .header-decoration {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .decoration-item {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(
-        135deg,
-        var(--primary-color),
-        var(--secondary-color)
-      );
-      opacity: 0.7;
-    }
-
-    .decoration-item:nth-child(2) {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--accent-color), #ff9e80);
-    }
-
-    .decoration-item:nth-child(3) {
-      width: 30px;
-      height: 30px;
-      background: linear-gradient(135deg, #16a085, #1abc9c);
-    }
-
-    /* Category Filter Buttons */
-    .category-buttons {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      justify-content: center;
-      padding: 0.5rem;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 50px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .category-btn {
-      display: flex;
+    .hero-badge {
+      display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.5rem 1rem;
+      padding: 0.3rem 0.8rem;
+      background: #eef2ff;
+      border: 1px solid #dbe3f5;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: #637cce;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .ai-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+    }
+
+    .ai-subtitle {
+      color: #555;
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.5;
+    }
+
+    /* ---- Search ---- */
+    .search-wrapper {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      color: #111;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: text;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .search-input::placeholder {
+      color: #aaa;
+    }
+
+    .search-input:focus {
+      border-color: #637cce;
+      box-shadow: 0 0 0 3px rgba(99, 124, 206, 0.15);
+    }
+
+    .search-kbd {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0.15rem 0.5rem;
+      background: #f1f5f9;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      color: #aaa;
+      font-size: 0.75rem;
+      font-family: inherit;
+      pointer-events: none;
+    }
+
+    /* ---- Category Tabs ---- */
+    .category-tabs {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0.35rem;
+      padding: 0.35rem;
+      background: #f1f5f9;
+      border: 1px solid #e8ecf2;
+      border-radius: 14px;
+      margin: 1.5rem 0 0.75rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .category-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1rem;
       background: transparent;
       border: none;
-      border-radius: 50px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.25s ease;
       font-family: inherit;
-      white-space: nowrap;
-    }
-
-    .category-btn:hover {
-      background: rgba(99, 124, 206, 0.1);
-    }
-
-    .category-btn[data-active="true"] {
-      background: var(--primary-color);
-      color: white;
-      box-shadow: 0 2px 8px rgba(99, 124, 206, 0.4);
-    }
-
-    .category-btn[data-active="true"] .btn-count {
-      background: rgba(255, 255, 255, 0.25);
-      color: white;
-    }
-
-    .btn-icon {
-      font-size: 1rem;
-    }
-
-    .btn-text {
       font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .btn-count {
-      background: rgba(99, 124, 206, 0.15);
-      color: var(--primary-color);
-      padding: 0.15rem 0.5rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    /* Section Header */
-    .section-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .section-header h2 {
-      font-size: 2rem;
-      color: var(--dark-color);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-header p {
+      font-weight: 500;
       color: #666;
-      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex: 1;
+      justify-content: center;
+      min-height: 44px;
+    }
+
+    .category-tab:hover {
+      color: #333;
+      background: rgba(99, 124, 206, 0.06);
+    }
+
+    .category-tab[data-active="true"] {
+      background: #fff;
+      color: #111;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .category-tab[data-active="true"] .tab-icon {
+      color: var(--tab-color);
+    }
+
+    .category-tab[data-active="true"] .tab-count {
+      background: var(--tab-color);
+      color: #fff;
+    }
+
+    .tab-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .tab-name {
+      font-weight: 600;
+    }
+
+    .tab-count {
+      padding: 0.1rem 0.45rem;
+      background: rgba(99, 124, 206, 0.1);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #637cce;
+      transition: all 0.2s;
+    }
+
+    /* ---- Subcategory Filters ---- */
+    .sub-filters {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 0.35rem;
+      padding: 0 0 0.5rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .sub-filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sub-pill {
+      padding: 0.35rem 0.75rem;
+      background: #f1f5f9;
+      border: 1px solid #e0e5ed;
+      border-radius: 100px;
+      color: #666;
+      font-size: 0.78rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sub-pill:hover {
+      color: #333;
+      border-color: #c5cdd8;
+    }
+
+    .sub-pill.active {
+      background: #eef2ff;
+      border-color: #c5d1f0;
+      color: #4a63b0;
+    }
+
+    /* ---- Results Bar ---- */
+    .results-bar {
+      position: relative;
+      z-index: 1;
+      padding: 0.25rem 0 0.75rem;
+    }
+
+    .results-count {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 500;
+    }
+
+    /* ---- Card Grid ---- */
+    .ai-grid-section {
+      position: relative;
+      z-index: 1;
     }
 
     .ai-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .ai-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .ai-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--hover-shadow);
-    }
-
-    .ai-icon {
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--light-color);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .favicon {
-      width: 64px;
-      height: 64px;
-      object-fit: contain;
-      border-radius: 12px;
-      transition: transform 0.3s ease;
-    }
-
-    .ai-card:hover .favicon {
-      transform: scale(1.1);
-    }
-
-    .ai-content {
-      padding: 1.5rem;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .ai-meta {
-      margin-bottom: 0.75rem;
-    }
-
-    .ai-category {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      background-color: rgba(99, 124, 206, 0.1);
-      color: var(--primary-color);
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .ai-content h3 {
-      font-size: 1.4rem;
-      color: var(--dark-color);
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-
-    .ai-desc {
-      color: #666;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-      font-size: 0.9rem;
-      flex-grow: 1;
-    }
-
-    .ai-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--primary-color);
-      font-weight: 600;
-      transition: gap 0.3s ease;
-    }
-
-    .ai-card:hover .ai-link {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 0.75rem;
     }
 
-    .ai-footer {
+    /* ---- AI Card — matches .project-card style ---- */
+    .ai-card {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 14px;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      animation: cardFadeIn 0.35s ease-out both;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .ai-card:hover {
+      border-color: rgba(99, 124, 206, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(99, 124, 206, 0.12);
+    }
+
+    .ai-card.hidden {
+      display: none !important;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-favicon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: #f5f7ff;
+      padding: 2px;
+    }
+
+    .card-subcategory {
+      padding: 0.2rem 0.55rem;
+      background: #f1f5f9;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #777;
+    }
+
+    .card-body {
+      flex: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 0.2rem;
+      line-height: 1.3;
+    }
+
+    .card-domain {
+      font-size: 0.78rem;
+      color: #999;
+      line-height: 1.4;
+    }
+
+    .card-action {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #637cce;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: all 0.2s ease;
+    }
+
+    .ai-card:hover .card-action {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ---- No Results ---- */
+    .no-results {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .ai-stats {
-      width: 100%;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 16px;
-      box-shadow: var(--card-shadow);
-    }
-
-    .ai-stats h3 {
-      font-size: 1.5rem;
-      color: var(--dark-color);
-      margin-bottom: 1.5rem;
+      justify-content: center;
+      padding: 4rem 2rem;
+      color: #999;
       text-align: center;
+      gap: 0.5rem;
     }
 
-    .stats-container {
+    .no-results p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .no-results span {
+      font-size: 0.85rem;
+    }
+
+    /* ---- Footer ---- */
+    .ai-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-stats {
       display: flex;
       justify-content: center;
-      gap: 2rem;
+      gap: 2.5rem;
     }
 
-    .stat-item {
+    .footer-stat {
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
+      gap: 0.15rem;
     }
 
-    .stat-number {
-      font-size: 2rem;
+    .footer-stat-num {
+      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: 0.25rem;
     }
 
-    .stat-label {
-      color: #666;
-      font-size: 0.9rem;
+    .footer-stat-label {
+      font-size: 0.78rem;
+      color: #888;
+      font-weight: 500;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 992px) {
-      .ai-header {
-        flex-direction: column;
-        align-items: flex-start;
+    /* ---- Animations ---- */
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
       }
-
-      .header-decoration {
-        margin-top: 1rem;
-        justify-content: flex-start;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .ai-card {
+        animation: none;
+      }
+      .ai-card:hover {
+        transform: none;
+      }
+      .card-action {
+        transition: none;
+      }
+    }
+
+    /* ---- Responsive ---- */
     @media (max-width: 768px) {
-      .ai-container {
-        padding: 1.5rem;
+      .ai-title {
+        font-size: 2rem;
       }
 
-      .ai-header h1 {
-        font-size: 2.5rem;
-      }
-
-      .category-buttons {
-        gap: 0.35rem;
-        padding: 0.4rem;
-      }
-
-      .category-btn {
-        padding: 0.4rem 0.7rem;
-        gap: 0.3rem;
-      }
-
-      .btn-text {
-        display: none;
-      }
-
-      .btn-icon {
+      .ai-subtitle {
         font-size: 0.9rem;
       }
 
-      .btn-count {
-        font-size: 0.7rem;
-        padding: 0.1rem 0.4rem;
+      .category-tabs {
+        gap: 0.25rem;
+        padding: 0.25rem;
+      }
+
+      .category-tab {
+        padding: 0.5rem 0.6rem;
+        gap: 0.3rem;
+        font-size: 0.8rem;
+      }
+
+      .tab-name {
+        display: none;
       }
 
       .ai-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.6rem;
       }
 
-      .stats-container {
-        flex-wrap: wrap;
+      .footer-stats {
         gap: 1.5rem;
       }
     }
 
     @media (max-width: 480px) {
-      .ai-header h1 {
-        font-size: 2rem;
+      .ai-title {
+        font-size: 1.75rem;
       }
 
       .ai-grid {
         grid-template-columns: 1fr;
       }
 
-      .ai-icon {
-        height: 100px;
+      .search-input {
+        font-size: 16px; /* Prevent iOS zoom */
       }
 
-      .favicon {
-        width: 48px;
-        height: 48px;
+      .footer-stats {
+        gap: 1rem;
+      }
+
+      .footer-stat-num {
+        font-size: 1.25rem;
       }
     }
   </style>

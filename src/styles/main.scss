@@ -22,9 +22,67 @@ body {
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
   color: $text;
-  background: linear-gradient(140deg, #a9ccf1f3 0%, #f7bdbddc 100%);
+  background-color: #0d1320;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
 
+.site-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: #0d1320;
+}
+
+.site-background-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+}
+
+.site-background--fallback {
+  background-image: url('/assets/background/forza_background_poster.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.site-background--fallback .site-background-video {
+  display: none;
+}
+
+.site-background-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 12, 20, 0.52);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-background-overlay {
+    background: rgba(8, 12, 20, 0.62);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-background {
+    background-image: url('/assets/background/forza_background_poster.jpg');
+    background-position: center;
+    background-size: cover;
+  }
+
+  .site-background-video {
+    display: none;
+  }
+
+  .site-background-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .container {
@@ -34,6 +92,8 @@ body {
   background: $bg-alt;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
 }
 
 
